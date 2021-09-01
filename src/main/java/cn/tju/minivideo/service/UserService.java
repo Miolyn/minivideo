@@ -4,6 +4,10 @@ import cn.tju.minivideo.entity.User;
 
 public interface UserService {
 
+    public interface FollowUserAction {
+        Integer followUser = 1;
+        Integer unFollowUser = 2;
+    }
 
     int deleteByPrimaryKey(String userId);
 
@@ -22,10 +26,6 @@ public interface UserService {
     User checkUsernameAndPassword(String username, String password);
 
     int updateUserFollowNumByAction(String userId, Integer action);
-    public interface FollowUserAction {
-        Integer followUser = 1;
-        Integer unFollowUser = 2;
-    }
 
     User getUserByUserIdWithRedis(String userId);
 }

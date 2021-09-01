@@ -1,6 +1,7 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.Video;
+import com.github.pagehelper.PageInfo;
 
 public interface VideoService {
 
@@ -17,6 +18,9 @@ public interface VideoService {
 
     int updateByPrimaryKey(Video record);
 
+    PageInfo<Video> getVideosByUserIdWithPaginator(String userId, Integer page, Integer pageSize);
+
+    int addVideoPlayNumByVideoId(Integer videoId);
 }
 
 

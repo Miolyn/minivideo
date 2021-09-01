@@ -26,6 +26,8 @@ public enum MsgEnums implements BaseEnum<Integer, String> {
     // -500
     RELATION_HAS_EXIST(-500, "relation has existed"),
     RELATION_NOT_EXIST(-501, "relation not exist"),
+    // -600
+    VIDEO_NOT_FOUND(-600, "video not found"),
     ;
     private Integer code;
     private String desc;

@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @ToString
@@ -14,6 +16,7 @@ import org.hibernate.validator.constraints.Range;
 @NoArgsConstructor
 public class VideoDto {
 
+    @NotNull(message = "视频Id不能为空", groups = ValidationGroups.IdForm.class)
     private Integer videoId;
 
     /**

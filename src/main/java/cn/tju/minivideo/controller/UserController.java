@@ -9,6 +9,7 @@ import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.JwtUtil;
+import cn.tju.minivideo.core.util.Paginators;
 import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.dto.UserDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
@@ -106,7 +107,7 @@ public class UserController {
     @ApiOperation("关注用户")
     @AuthRequired
     @Transactional
-    public Result followUser(@RequestBody @Validated({ValidationGroups.UserIdForm.class}) UserDto userDto, BindingResult bindingResult){
+    public Result followUser(@RequestBody @Validated({ValidationGroups.IdForm.class}) UserDto userDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
             throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
@@ -126,7 +127,7 @@ public class UserController {
     @ApiOperation("取消关注用户")
     @AuthRequired
     @Transactional
-    public Result unFollowUser(@RequestBody @Validated({ValidationGroups.UserIdForm.class}) UserDto userDto, BindingResult bindingResult){
+    public Result unFollowUser(@RequestBody @Validated({ValidationGroups.IdForm.class}) UserDto userDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
             throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
@@ -152,8 +153,8 @@ public class UserController {
         List<Relation> relations = pageInfo.getList();
         List<String> userIds = new ArrayList<>();
         relations.forEach((relation -> userIds.add(relation.getToId())));
-        Paginator paginator = new Paginator(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getSize(), pageInfo.getPages(), userIds);
-        return Results.OkWithData(paginator);
+//        Paginator paginator = new Paginator(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getSize(), pageInfo.getPages(), userIds);
+        return Results.OkWithData(Paginators.paginator(pageInfo, userIds));
     }
 
     @GetMapping("is_follow")

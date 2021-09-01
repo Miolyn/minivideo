@@ -16,7 +16,7 @@ public class UserDto {
     /**
      * 用户id
      */
-    @NotBlank(message = "用户id不能为空", groups = ValidationGroups.UserIdForm.class)
+    @NotBlank(message = "用户id不能为空", groups = ValidationGroups.IdForm.class)
     private String userId;
 
     /**

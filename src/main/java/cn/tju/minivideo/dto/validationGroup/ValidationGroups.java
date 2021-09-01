@@ -8,8 +8,8 @@ public class ValidationGroups {
     public interface Update {
 
     }
-    // user
-    public interface UserIdForm{
+    // idForm
+    public interface IdForm {
 
     }
 }

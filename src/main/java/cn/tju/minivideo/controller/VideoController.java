@@ -4,10 +4,12 @@ import cn.tju.minivideo.core.annotation.AuthRequired;
 import cn.tju.minivideo.core.base.Result;
 import cn.tju.minivideo.core.config.UploadConfig;
 import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.handler.NonStaticResourceHttpRequestHandler;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.FileUtil;
+import cn.tju.minivideo.core.util.Paginators;
 import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.core.util.VideoUtils;
 import cn.tju.minivideo.dto.VideoDto;
@@ -17,12 +19,14 @@ import cn.tju.minivideo.entity.Video;
 import cn.tju.minivideo.service.DynamicService;
 import cn.tju.minivideo.service.MediaService;
 import cn.tju.minivideo.service.VideoService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +38,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -56,7 +62,8 @@ public class VideoController {
     private ModelMapper modelMapper;
 
     // video 元素支持三种视频格式： MP4, WebM, 和 Ogg:
-    @GetMapping("play")
+    // TODO 增加视频播放量
+    @GetMapping("play_tmp")
     @ApiOperation("播放视频")
     public void videoPlayerTmp(@RequestParam("name") String path, HttpServletRequest request, HttpServletResponse response) {
 //        String path = request.getParameter("name");
@@ -85,9 +92,53 @@ public class VideoController {
         }
     }
 
+    @GetMapping("play")
+    @ApiOperation("播放指定videoId的视频")
+    public void videoPlayer(@RequestParam("videoId") Integer videoId, HttpServletRequest request, HttpServletResponse response){
+        Video video = videoService.selectByPrimaryKey(videoId);
+        if (video == null){
+            throw new ControllerException(MsgEnums.VIDEO_NOT_FOUND);
+        }
+        String path = FileUtil.getUploadFilePath(video.getVideoFile());
+        Path filePath = Paths.get(path);
+        if (Files.exists(filePath)) {
+            String mimeType;
+            try {
+                mimeType = Files.probeContentType(filePath);
+            } catch (IOException e) {
+                throw new ControllerException(MsgEnums.INTERNAL_ERROR);
+            }
+            if (!StringUtils.isEmpty(mimeType)) {
+                response.setContentType(mimeType);
+            }
+            request.setAttribute(NonStaticResourceHttpRequestHandler.ATTR_FILE, filePath);
+            videoService.addVideoPlayNumByVideoId(videoId);
+            try {
+                nonStaticResourceHttpRequestHandler.handleRequest(request, response);
+            } catch (ServletException | IOException e) {
+                // 经常会有 pipe broken
+                log.warn(e.getMessage());
+//                e.printStackTrace();
+//                throw new ControllerException(MsgEnums.INTERNAL_ERROR);
+            }
+        }
+    }
+
+    @PostMapping("add_play_num")
+    @ApiOperation("增加1视频播放量")
+    public Result addVideoPlayNum(@RequestBody @Validated(ValidationGroups.IdForm.class) VideoDto videoDto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
+        }
+        videoService.addVideoPlayNumByVideoId(videoDto.getVideoId());
+        return Results.Ok();
+    }
+
     @PostMapping("create_video")
     @ApiOperation("创建视频")
     @AuthRequired
+    @Transactional
     public Result createVideo(@RequestBody @Validated(ValidationGroups.Insert.class) VideoDto videoDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
@@ -106,10 +157,26 @@ public class VideoController {
         return Results.OkWithData(video.getVideoId());
     }
 
+    @PostMapping("update_video")
+    @ApiOperation("更新视频信息")
+    public Result updateVideoProfile(@RequestBody @Validated(ValidationGroups.Update.class) VideoDto videoDto){
+
+        return Results.Ok();
+    }
+
     @GetMapping("video")
     @ApiOperation("获取单个视频详情")
-    public Result getVideoInfo(@RequestParam(value = "videoId") Integer videoId){
+    public Result getVideoInfo(@RequestParam(value = "videoId") Integer videoId) {
         Video video = videoService.selectByPrimaryKey(videoId);
         return Results.OkWithData(video);
+    }
+
+    @GetMapping("user_videos")
+    @ApiOperation("获取用户发布的视频列表")
+    public Result getUserVideos(@RequestParam(value = "userId") String userId, @RequestParam(value = "page") Integer page) {
+        PageInfo<Video> pageInfo = videoService.getVideosByUserIdWithPaginator(userId, page, ProjectConstant.PageSize);
+        List<Integer> videoIds = new ArrayList<>();
+        pageInfo.getList().forEach(video -> videoIds.add(video.getVideoId()));
+        return Results.OkWithData(Paginators.paginator(pageInfo, videoIds));
     }
 }

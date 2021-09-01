@@ -1,7 +1,12 @@
 package cn.tju.minivideo.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import cn.tju.minivideo.entity.Video;
 import cn.tju.minivideo.dao.VideoMapper;
 import cn.tju.minivideo.service.VideoService;
@@ -41,6 +46,19 @@ public class VideoServiceImpl implements VideoService {
     public int updateByPrimaryKey(Video record) {
         return videoMapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public PageInfo<Video> getVideosByUserIdWithPaginator(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return new PageInfo<>(videoMapper.findByUserId(userId));
+    }
+
+    @Override
+    public int addVideoPlayNumByVideoId(Integer videoId) {
+        return videoMapper.updatePlayNumByVideoId(videoId);
+
+    }
+
 
 }
 
