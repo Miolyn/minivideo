@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.LikeMapMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.LikeMap">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.like_map-->
+    <id column="like_map_id" property="likeMapId" />
+    <result column="from_id" property="fromId" />
+    <result column="to_id" property="toId" />
+    <result column="like_type" property="likeType" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    like_map_id, from_id, to_id, like_type, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.like_map
+    where like_map_id = #{likeMapId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.like_map
+    where like_map_id = #{likeMapId}
+  </delete>
+  <insert id="insert" keyColumn="like_map_id" keyProperty="likeMapId" parameterType="cn.tju.minivideo.entity.LikeMap" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.like_map (from_id, to_id, like_type, created_at, updated_at, is_deleted
+      )
+    values (#{fromId}, #{toId}, #{likeType}, #{createdAt}, #{updatedAt}, #{isDeleted}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="like_map_id" keyProperty="likeMapId" parameterType="cn.tju.minivideo.entity.LikeMap" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.like_map
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fromId != null">
+        from_id,
+      </if>
+      <if test="toId != null">
+        to_id,
+      </if>
+      <if test="likeType != null">
+        like_type,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fromId != null">
+        #{fromId},
+      </if>
+      <if test="toId != null">
+        #{toId},
+      </if>
+      <if test="likeType != null">
+        #{likeType},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.LikeMap">
+    <!--@mbg.generated-->
+    update minivideo.like_map
+    <set>
+      <if test="fromId != null">
+        from_id = #{fromId},
+      </if>
+      <if test="toId != null">
+        to_id = #{toId},
+      </if>
+      <if test="likeType != null">
+        like_type = #{likeType},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where like_map_id = #{likeMapId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.LikeMap">
+    <!--@mbg.generated-->
+    update minivideo.like_map
+    set from_id = #{fromId},
+      to_id = #{toId},
+      like_type = #{likeType},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where like_map_id = #{likeMapId}
+  </update>
+</mapper>

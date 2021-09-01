@@ -5,8 +5,10 @@ import cn.tju.minivideo.core.config.UploadConfig;
 import cn.tju.minivideo.core.util.FileUtil;
 import cn.tju.minivideo.core.util.JwtUtil;
 import cn.tju.minivideo.core.util.VideoUtils;
+import cn.tju.minivideo.dao.DynamicMapper;
 import cn.tju.minivideo.dao.StudentMapper;
 import cn.tju.minivideo.dao.UserMapper;
+import cn.tju.minivideo.entity.Dynamic;
 import cn.tju.minivideo.entity.Student;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.RedisService;
@@ -106,6 +108,15 @@ class MinivideoApplicationTests {
         File file = new File("src/main/resources/static/videos/4.mp4");
         int duration = VideoUtils.getVideoDuration(file);
         System.out.println(duration);
+
+    }
+
+    @Autowired
+    private DynamicMapper dynamicMapper;
+
+    @Test
+    void testInsertId(){
+
 
     }
 }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.CollectionMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Collection">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.collections-->
+    <id column="collection_id" property="collectionId" />
+    <result column="item_id" property="itemId" />
+    <result column="user_id" property="userId" />
+    <result column="item_type" property="itemType" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    collection_id, item_id, user_id, item_type, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.collections
+    where collection_id = #{collectionId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.collections
+    where collection_id = #{collectionId}
+  </delete>
+  <insert id="insert" keyColumn="collection_id" keyProperty="collectionId" parameterType="cn.tju.minivideo.entity.Collection" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.collections (item_id, user_id, item_type, created_at, updated_at, is_deleted
+      )
+    values (#{itemId}, #{userId}, #{itemType}, #{createdAt}, #{updatedAt}, #{isDeleted}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="collection_id" keyProperty="collectionId" parameterType="cn.tju.minivideo.entity.Collection" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.collections
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="itemId != null">
+        item_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="itemType != null">
+        item_type,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="itemId != null">
+        #{itemId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="itemType != null">
+        #{itemType},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Collection">
+    <!--@mbg.generated-->
+    update minivideo.collections
+    <set>
+      <if test="itemId != null">
+        item_id = #{itemId},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="itemType != null">
+        item_type = #{itemType},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where collection_id = #{collectionId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Collection">
+    <!--@mbg.generated-->
+    update minivideo.collections
+    set item_id = #{itemId},
+      user_id = #{userId},
+      item_type = #{itemType},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where collection_id = #{collectionId}
+  </update>
+</mapper>

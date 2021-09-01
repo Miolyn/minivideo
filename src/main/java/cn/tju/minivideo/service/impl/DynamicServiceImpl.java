@@ -41,4 +41,12 @@ public class DynamicServiceImpl implements DynamicService{
         return dynamicMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public int createVideoAutoDynamic(String userId, Integer videoId) {
+        Dynamic dynamic = new Dynamic();
+        dynamic.setUserId(userId);
+        dynamic.setContent(String.valueOf(videoId));
+        return 0;
+    }
+
 }

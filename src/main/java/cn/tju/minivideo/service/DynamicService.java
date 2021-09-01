@@ -16,4 +16,5 @@ public interface DynamicService{
 
     int updateByPrimaryKey(Dynamic record);
 
+    int createVideoAutoDynamic(String userId, Integer videoId);
 }
