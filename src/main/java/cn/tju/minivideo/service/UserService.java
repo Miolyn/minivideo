@@ -26,6 +26,8 @@ public interface UserService {
         Integer followUser = 1;
         Integer unFollowUser = 2;
     }
+
+    User getUserByUserIdWithRedis(String userId);
 }
 
 

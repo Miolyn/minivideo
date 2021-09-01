@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.tju.minivideo.dao.CollectionMapper">
-  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Collection">
+<mapper namespace="cn.tju.minivideo.dao.CollectionsMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Collections">
     <!--@mbg.generated-->
     <!--@Table minivideo.collections-->
     <id column="collection_id" property="collectionId" />
@@ -28,14 +28,14 @@
     delete from minivideo.collections
     where collection_id = #{collectionId}
   </delete>
-  <insert id="insert" keyColumn="collection_id" keyProperty="collectionId" parameterType="cn.tju.minivideo.entity.Collection" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="collection_id" keyProperty="collectionId" parameterType="cn.tju.minivideo.entity.Collections" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into minivideo.collections (item_id, user_id, item_type, created_at, updated_at, is_deleted
       )
     values (#{itemId}, #{userId}, #{itemType}, #{createdAt}, #{updatedAt}, #{isDeleted}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="collection_id" keyProperty="collectionId" parameterType="cn.tju.minivideo.entity.Collection" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="collection_id" keyProperty="collectionId" parameterType="cn.tju.minivideo.entity.Collections" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into minivideo.collections
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -79,7 +79,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Collection">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Collections">
     <!--@mbg.generated-->
     update minivideo.collections
     <set>
@@ -104,7 +104,7 @@
     </set>
     where collection_id = #{collectionId}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Collection">
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Collections">
     <!--@mbg.generated-->
     update minivideo.collections
     set item_id = #{itemId},

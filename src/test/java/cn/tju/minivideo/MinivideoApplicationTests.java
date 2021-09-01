@@ -98,8 +98,11 @@ class MinivideoApplicationTests {
 
     @Test
     void testRedis(){
-        redisService.set("test", "test123");
-        String ret = (String) redisService.get("test");
+        User user = new User();
+        user.setUserId("123456");
+        user.setUsername("username");
+        redisService.set(user.getUserId(), user);
+        User ret = (User) redisService.get(user.getUserId());
         System.out.println(ret);
     }
 

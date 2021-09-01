@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Collection implements Serializable {
+public class Collections implements Serializable {
     private Integer collectionId;
 
     /**

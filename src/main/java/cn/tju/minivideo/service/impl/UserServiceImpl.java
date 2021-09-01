@@ -1,7 +1,11 @@
 package cn.tju.minivideo.service.impl;
 
 import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ServiceException;
+import cn.tju.minivideo.service.RedisService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.UserMapper;
@@ -9,10 +13,14 @@ import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.UserService;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Autowired
+    private RedisService redisService;
 
     @Override
     public int deleteByPrimaryKey(String userId) {
@@ -75,6 +83,17 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
         }
         return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public User getUserByUserIdWithRedis(String userId) {
+        User user = (User) redisService.get(userId);
+        log.info("user from redis:" + user);
+        if (user == null){
+            user = selectByPrimaryKey(userId);
+            redisService.set(userId, user, ProjectConstant.ExpireTime);
+        }
+        return user;
     }
 }
 

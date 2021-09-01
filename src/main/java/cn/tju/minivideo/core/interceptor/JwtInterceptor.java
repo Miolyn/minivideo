@@ -55,7 +55,8 @@ public class JwtInterceptor implements HandlerInterceptor {
                 Claim claim = map.get(JwtConfig.UserId);
                 String userId = claim.asString();
                 log.info(userId);
-                User user = userService.selectByPrimaryKey(userId);
+                User user = userService.getUserByUserIdWithRedis(userId);
+//                User user = userService.selectByPrimaryKey(userId);
                 if (user == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
