@@ -106,7 +106,11 @@ public class UserController {
     @ApiOperation("关注用户")
     @AuthRequired
     @Transactional
-    public Result followUser(@RequestBody @Validated({ValidationGroups.UserIdForm.class}) UserDto userDto){
+    public Result followUser(@RequestBody @Validated({ValidationGroups.UserIdForm.class}) UserDto userDto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
+        }
         User toUser = modelMapper.map(userDto, User.class);
         String fromId = JwtInterceptor.getUser().getUserId();
         if (relationService.isExistRelation(fromId, toUser.getUserId(), Constants.RelationConst.FollowRelation)){
@@ -122,7 +126,11 @@ public class UserController {
     @ApiOperation("取消关注用户")
     @AuthRequired
     @Transactional
-    public Result unFollowUser(@RequestBody @Validated({ValidationGroups.UserIdForm.class}) UserDto userDto){
+    public Result unFollowUser(@RequestBody @Validated({ValidationGroups.UserIdForm.class}) UserDto userDto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
+        }
         User toUser = modelMapper.map(userDto, User.class);
         String fromId = JwtInterceptor.getUser().getUserId();
         if (!relationService.isExistRelation(fromId, toUser.getUserId(), Constants.RelationConst.FollowRelation)){

@@ -14,6 +14,7 @@ import cn.tju.minivideo.dto.VideoDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.entity.Video;
+import cn.tju.minivideo.service.DynamicService;
 import cn.tju.minivideo.service.MediaService;
 import cn.tju.minivideo.service.VideoService;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("video")
@@ -45,6 +48,9 @@ public class VideoController {
 
     @Autowired
     private MediaService mediaService;
+
+    @Autowired
+    private DynamicService dynamicService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -82,7 +88,11 @@ public class VideoController {
     @PostMapping("create_video")
     @ApiOperation("创建视频")
     @AuthRequired
-    public Result createVideo(@RequestBody @Validated(ValidationGroups.Insert.class) VideoDto videoDto) {
+    public Result createVideo(@RequestBody @Validated(ValidationGroups.Insert.class) VideoDto videoDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
+        }
         Video video = modelMapper.map(videoDto, Video.class);
         User user = JwtInterceptor.getUser();
         video.setUserId(user.getUserId());
@@ -92,7 +102,14 @@ public class VideoController {
         video.setFileSize(FileUtil.getFileSizeByUrl(video.getVideoFile()));
         video.setVideoSize(VideoUtils.getVideoDuration(video.getVideoFile()));
         videoService.insertSelective(video);
+        dynamicService.createVideoAutoDynamic(user.getUserId(), video.getVideoId());
         return Results.OkWithData(video.getVideoId());
     }
 
+    @GetMapping("video")
+    @ApiOperation("获取单个视频详情")
+    public Result getVideoInfo(@RequestParam(value = "videoId") Integer videoId){
+        Video video = videoService.selectByPrimaryKey(videoId);
+        return Results.OkWithData(video);
+    }
 }

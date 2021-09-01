@@ -1,5 +1,6 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.Constants;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.DynamicMapper;
@@ -46,7 +47,8 @@ public class DynamicServiceImpl implements DynamicService{
         Dynamic dynamic = new Dynamic();
         dynamic.setUserId(userId);
         dynamic.setContent(String.valueOf(videoId));
-        return 0;
+        dynamic.setDynamicType(Constants.DynamicConst.AutoDynamicType);
+        return dynamicMapper.insertSelective(dynamic);
     }
 
 }

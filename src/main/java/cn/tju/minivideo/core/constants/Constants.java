@@ -40,4 +40,9 @@ public class Constants {
         Integer VideoFoodType = 1;
     }
 
+    public interface DynamicConst {
+        Integer NormalDynamicType = 1;
+        Integer AutoDynamicType = 2;
+    }
+
 }
