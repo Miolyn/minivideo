@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.LoginRecordMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.LoginRecord">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.login_records-->
+    <id column="login_record_id" property="loginRecordId" />
+    <result column="user_id" property="userId" />
+    <result column="token" property="token" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    login_record_id, user_id, token, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.login_records
+    where login_record_id = #{loginRecordId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.login_records
+    where login_record_id = #{loginRecordId}
+  </delete>
+  <insert id="insert" keyColumn="login_record_id" keyProperty="loginRecordId" parameterType="cn.tju.minivideo.entity.LoginRecord" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.login_records (user_id, token, created_at, updated_at, is_deleted)
+    values (#{userId}, #{token}, #{createdAt}, #{updatedAt}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="login_record_id" keyProperty="loginRecordId" parameterType="cn.tju.minivideo.entity.LoginRecord" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.login_records
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="token != null">
+        #{token},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.LoginRecord">
+    <!--@mbg.generated-->
+    update minivideo.login_records
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="token != null">
+        token = #{token},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where login_record_id = #{loginRecordId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.LoginRecord">
+    <!--@mbg.generated-->
+    update minivideo.login_records
+    set user_id = #{userId},
+      token = #{token},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where login_record_id = #{loginRecordId}
+  </update>
+</mapper>

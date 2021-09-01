@@ -1,0 +1,15 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: minivideo-demo
+  datasource:
+    url: jdbc:mysql://localhost:3306/minivideo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 0520SBLI
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    type: com.alibaba.druid.pool.DruidDataSource
+    connectionProperties: druid.stat.mergeSql=true
+mybatis:
+  type-aliases-package: cn.tju.minivideo.entity
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Comment">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.comments-->
+    <id column="comment_id" property="commentId" />
+    <result column="content" property="content" />
+    <result column="from_id" property="fromId" />
+    <result column="to_id" property="toId" />
+    <result column="comment_type" property="commentType" />
+    <result column="like_num" property="likeNum" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    comment_id, content, from_id, to_id, comment_type, like_num, created_at, updated_at, 
+    is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.comments
+    where comment_id = #{commentId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.comments
+    where comment_id = #{commentId}
+  </delete>
+  <insert id="insert" keyColumn="comment_id" keyProperty="commentId" parameterType="cn.tju.minivideo.entity.Comment" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.comments (content, from_id, to_id, comment_type, like_num, created_at, 
+      updated_at, is_deleted)
+    values (#{content}, #{fromId}, #{toId}, #{commentType}, #{likeNum}, #{createdAt}, 
+      #{updatedAt}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="cn.tju.minivideo.entity.Comment" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.comments
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        content,
+      </if>
+      <if test="fromId != null">
+        from_id,
+      </if>
+      <if test="toId != null">
+        to_id,
+      </if>
+      <if test="commentType != null">
+        comment_type,
+      </if>
+      <if test="likeNum != null">
+        like_num,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        #{content},
+      </if>
+      <if test="fromId != null">
+        #{fromId},
+      </if>
+      <if test="toId != null">
+        #{toId},
+      </if>
+      <if test="commentType != null">
+        #{commentType},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Comment">
+    <!--@mbg.generated-->
+    update minivideo.comments
+    <set>
+      <if test="content != null">
+        content = #{content},
+      </if>
+      <if test="fromId != null">
+        from_id = #{fromId},
+      </if>
+      <if test="toId != null">
+        to_id = #{toId},
+      </if>
+      <if test="commentType != null">
+        comment_type = #{commentType},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where comment_id = #{commentId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Comment">
+    <!--@mbg.generated-->
+    update minivideo.comments
+    set content = #{content},
+      from_id = #{fromId},
+      to_id = #{toId},
+      comment_type = #{commentType},
+      like_num = #{likeNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where comment_id = #{commentId}
+  </update>
+</mapper>

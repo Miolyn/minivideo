@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.DynamicMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Dynamic">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.dynamics-->
+    <id column="dynamic_id" property="dynamicId" />
+    <result column="user_id" property="userId" />
+    <result column="content" property="content" />
+    <result column="dynamic_type" property="dynamicType" />
+    <result column="like_num" property="likeNum" />
+    <result column="comment_num" property="commentNum" />
+    <result column="collect_num" property="collectNum" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    dynamic_id, user_id, content, dynamic_type, like_num, comment_num, collect_num, created_at, 
+    updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.dynamics
+    where dynamic_id = #{dynamicId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.dynamics
+    where dynamic_id = #{dynamicId}
+  </delete>
+  <insert id="insert" keyColumn="dynamic_id" keyProperty="dynamicId" parameterType="cn.tju.minivideo.entity.Dynamic" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.dynamics (user_id, content, dynamic_type, like_num, comment_num, collect_num, 
+      created_at, updated_at, is_deleted)
+    values (#{userId}, #{content}, #{dynamicType}, #{likeNum}, #{commentNum}, #{collectNum}, 
+      #{createdAt}, #{updatedAt}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="dynamic_id" keyProperty="dynamicId" parameterType="cn.tju.minivideo.entity.Dynamic" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.dynamics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="dynamicType != null">
+        dynamic_type,
+      </if>
+      <if test="likeNum != null">
+        like_num,
+      </if>
+      <if test="commentNum != null">
+        comment_num,
+      </if>
+      <if test="collectNum != null">
+        collect_num,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="content != null">
+        #{content},
+      </if>
+      <if test="dynamicType != null">
+        #{dynamicType},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum},
+      </if>
+      <if test="commentNum != null">
+        #{commentNum},
+      </if>
+      <if test="collectNum != null">
+        #{collectNum},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Dynamic">
+    <!--@mbg.generated-->
+    update minivideo.dynamics
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="content != null">
+        content = #{content},
+      </if>
+      <if test="dynamicType != null">
+        dynamic_type = #{dynamicType},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum},
+      </if>
+      <if test="commentNum != null">
+        comment_num = #{commentNum},
+      </if>
+      <if test="collectNum != null">
+        collect_num = #{collectNum},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where dynamic_id = #{dynamicId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Dynamic">
+    <!--@mbg.generated-->
+    update minivideo.dynamics
+    set user_id = #{userId},
+      content = #{content},
+      dynamic_type = #{dynamicType},
+      like_num = #{likeNum},
+      comment_num = #{commentNum},
+      collect_num = #{collectNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where dynamic_id = #{dynamicId}
+  </update>
+</mapper>

@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: minivideo-demo
+  profiles:
+    active: dev
+
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+#  web:
+#    resources:
+#      add-mappings: false
+
+mybatis:
+  type-aliases-package: cn.tju.minivideo.entity
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml
+debug: true

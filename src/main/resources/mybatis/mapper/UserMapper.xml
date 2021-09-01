@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.User">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.users-->
+    <id column="user_id" property="userId" />
+    <result column="avatar" property="avatar" />
+    <result column="username" property="username" />
+    <result column="password" property="password" />
+    <result column="introduction" property="introduction" />
+    <result column="status" property="status" />
+    <result column="sex" property="sex" />
+    <result column="follow_num" property="followNum" />
+    <result column="fans_num" property="fansNum" />
+    <result column="like_num" property="likeNum" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, avatar, username, `password`, introduction, `status`, sex, follow_num, fans_num, 
+    like_num, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.users
+    where user_id = #{userId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from minivideo.users
+    where user_id = #{userId}
+  </delete>
+  <insert id="insert" parameterType="cn.tju.minivideo.entity.User">
+    <!--@mbg.generated-->
+    insert into minivideo.users (user_id, avatar, username, `password`, introduction, `status`, 
+      sex, follow_num, fans_num, like_num, created_at, updated_at, is_deleted
+      )
+    values (#{userId}, #{avatar}, #{username}, #{password}, #{introduction}, #{status}, 
+      #{sex}, #{followNum}, #{fansNum}, #{likeNum}, #{createdAt}, #{updatedAt}, #{isDeleted}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.tju.minivideo.entity.User">
+    <!--@mbg.generated-->
+    insert into minivideo.users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="introduction != null">
+        introduction,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="followNum != null">
+        follow_num,
+      </if>
+      <if test="fansNum != null">
+        fans_num,
+      </if>
+      <if test="likeNum != null">
+        like_num,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="avatar != null">
+        #{avatar},
+      </if>
+      <if test="username != null">
+        #{username},
+      </if>
+      <if test="password != null">
+        #{password},
+      </if>
+      <if test="introduction != null">
+        #{introduction},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="sex != null">
+        #{sex},
+      </if>
+      <if test="followNum != null">
+        #{followNum},
+      </if>
+      <if test="fansNum != null">
+        #{fansNum},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.User">
+    <!--@mbg.generated-->
+    update minivideo.users
+    <set>
+      <if test="avatar != null">
+        avatar = #{avatar},
+      </if>
+      <if test="username != null">
+        username = #{username},
+      </if>
+      <if test="password != null">
+        `password` = #{password},
+      </if>
+      <if test="introduction != null">
+        introduction = #{introduction},
+      </if>
+      <if test="status != null">
+        `status` = #{status},
+      </if>
+      <if test="sex != null">
+        sex = #{sex},
+      </if>
+      <if test="followNum != null">
+        follow_num = #{followNum},
+      </if>
+      <if test="fansNum != null">
+        fans_num = #{fansNum},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where user_id = #{userId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.User">
+    <!--@mbg.generated-->
+    update minivideo.users
+    set avatar = #{avatar},
+      username = #{username},
+      `password` = #{password},
+      introduction = #{introduction},
+      `status` = #{status},
+      sex = #{sex},
+      follow_num = #{followNum},
+      fans_num = #{fansNum},
+      like_num = #{likeNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where user_id = #{userId}
+  </update>
+<!--auto generated by MybatisCodeHelper on 2021-08-25-->
+  <select id="findByUsername" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from minivideo.users
+    where username=#{username}
+  </select>
+<!--auto generated by MybatisCodeHelper on 2021-08-26-->
+  <select id="findByUsernameAndPassword" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from minivideo.users
+    where username=#{username} and `password`=#{password}
+  </select>
+</mapper>
