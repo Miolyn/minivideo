@@ -44,9 +44,9 @@ public class Video implements Serializable {
     private String introduction;
 
     /**
-     * 视频文件大小
+     * 视频文件大小 单位MB
      */
-    private String fileSize;
+    private Integer fileSize;
 
     /**
      * 视频长度 单位秒

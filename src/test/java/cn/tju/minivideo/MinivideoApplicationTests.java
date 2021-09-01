@@ -108,9 +108,9 @@ class MinivideoApplicationTests {
 
     @Test
     void testVideoTime(){
-        File file = new File("src/main/resources/static/videos/4.mp4");
-        int duration = VideoUtils.getVideoDuration(file);
-        System.out.println(duration);
+//        File file = new File("src/main/resources/static/videos/4.mp4");
+//        int duration = VideoUtils.getVideoDuration(file);
+//        System.out.println(duration);
 
     }
 

@@ -288,7 +288,7 @@ CREATE TABLE `videos`  (
   `user_id` varchar(50) NOT NULL COMMENT '发布人的id',
   `introduction` varchar(255) NOT NULL COMMENT '简介',
   `video_type` integer NOT NULL COMMENT '视频类型，1美食类',
-  `file_size` varchar(50) NULL COMMENT '视频文件大小',
+  `file_size` integer NULL COMMENT '视频文件大小 单位为MB',
   `video_size` integer NULL COMMENT '视频长度 单位秒',
   `play_num` int NULL DEFAULT 0 COMMENT '播放数量',
   `like_num` int NULL DEFAULT 0 COMMENT '点赞数量',

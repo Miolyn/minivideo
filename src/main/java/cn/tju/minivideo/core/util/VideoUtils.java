@@ -18,7 +18,8 @@ public class VideoUtils {
     /**
      * 获取视频时长 * @param file 视频文件
      * @return 时长（秒）
-     */ public static int getVideoDuration(File file){
+     */ public static int getVideoDuration(String url){
+         File file = new File(FileUtil.getUploadFilePath(url));
         int duration = 0;
         try{
             MultimediaObject multimediaObject = new MultimediaObject(file);
@@ -54,39 +55,5 @@ public class VideoUtils {
         return 1;
     }
 
-    /**
-     * 获取文件后缀
-     *
-     * @param fileName
-     * @return java.lang.String
-     * @author zxzhang
-     * @date 2019/12/10
-     */
-    public String getExt(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
 
-    /**
-     * 获取文件所在目录
-     *
-     * @param filePath
-     * @return java.lang.String
-     * @author zxzhang
-     * @date 2019/12/10
-     */
-    public String getFileDir(String filePath) {
-        return filePath.substring(0, filePath.lastIndexOf("."));
-    }
-
-    /**
-     * 获取文件名
-     *
-     * @param filePath
-     * @return java.lang.String
-     * @author zxzhang
-     * @date 2019/12/10
-     */
-    public String getFileName(String filePath) {
-        return filePath.substring(filePath.lastIndexOf(".") + 1, filePath.lastIndexOf("."));
-    }
 }

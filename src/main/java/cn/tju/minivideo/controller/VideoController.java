@@ -7,7 +7,9 @@ import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.handler.NonStaticResourceHttpRequestHandler;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
+import cn.tju.minivideo.core.util.FileUtil;
 import cn.tju.minivideo.core.util.Results;
+import cn.tju.minivideo.core.util.VideoUtils;
 import cn.tju.minivideo.dto.VideoDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.User;
@@ -20,11 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +52,7 @@ public class VideoController {
     // video 元素支持三种视频格式： MP4, WebM, 和 Ogg:
     @GetMapping("play")
     @ApiOperation("播放视频")
-    public void videoPlayer(@RequestParam("name") String path, HttpServletRequest request, HttpServletResponse response) {
+    public void videoPlayerTmp(@RequestParam("name") String path, HttpServletRequest request, HttpServletResponse response) {
 //        String path = request.getParameter("name");
         log.info(path);
         Path filePath = Paths.get(UploadConfig.videoPath + "/" + path);
@@ -87,11 +86,13 @@ public class VideoController {
         Video video = modelMapper.map(videoDto, Video.class);
         User user = JwtInterceptor.getUser();
         video.setUserId(user.getUserId());
-        if (!mediaService.isExistByMediaUrl(video.getAvatar()) || !mediaService.isExistByMediaUrl(video.getVideoFile())){
+        if (!mediaService.isExistByMediaUrlAndTrueFile(video.getAvatar()) || !mediaService.isExistByMediaUrlAndTrueFile(video.getVideoFile())) {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
-
-        return Results.Ok();
+        video.setFileSize(FileUtil.getFileSizeByUrl(video.getVideoFile()));
+        video.setVideoSize(VideoUtils.getVideoDuration(video.getVideoFile()));
+        videoService.insertSelective(video);
+        return Results.OkWithData(video.getVideoId());
     }
 
 }
