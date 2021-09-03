@@ -38,4 +38,4 @@ build/
 pkg
 nginx-minivideo.conf
 logs
-target
+font/
