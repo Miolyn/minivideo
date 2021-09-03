@@ -1,13 +1,13 @@
 package cn.tju.minivideo.controller;
 
 import cn.tju.minivideo.core.annotation.AuthRequired;
-import cn.tju.minivideo.core.base.Paginator;
 import cn.tju.minivideo.core.base.Result;
 import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
+import cn.tju.minivideo.core.util.BindUtil;
 import cn.tju.minivideo.core.util.JwtUtil;
 import cn.tju.minivideo.core.util.Paginators;
 import cn.tju.minivideo.core.util.Results;
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -54,11 +53,7 @@ public class UserController {
     @PostMapping("register")
     @ApiOperation("用户注册")
     public Result register(@RequestBody @Validated(ValidationGroups.Insert.class) UserDto userDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-//            FieldError error = bindingResult.getFieldError();
-            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
-            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
-        }
+        BindUtil.checkBindValid(bindingResult);
         if (userService.isExistByUsername(userDto.getUsername())) {
             throw new ControllerException(MsgEnums.USERNAME_EXIST.code(), MsgEnums.USERNAME_EXIST.desc());
         }
@@ -73,10 +68,7 @@ public class UserController {
     @PostMapping("login")
     @ApiOperation("用户登陆")
     public Result login(@RequestBody @Validated(ValidationGroups.Insert.class) UserDto userDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
-            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
-        }
+        BindUtil.checkBindValid(bindingResult);
         User user = userService.checkUsernameAndPassword(userDto.getUsername(), userDto.getPassword());
         String token = JwtUtil.createToken(user);
         loginRecordService.insertSelective(new LoginRecord(user.getUserId(), token));
@@ -87,10 +79,7 @@ public class UserController {
     @AuthRequired
     @ApiOperation("修改用户信息")
     public Result updateUserProfile(@RequestBody @Validated({ValidationGroups.Update.class}) UserDto userDto, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
-            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
-        }
+        BindUtil.checkBindValid(bindingResult);
         User user = modelMapper.map(userDto, User.class);
         String userId = JwtInterceptor.getUser().getUserId();
         user.setUserId(userId);
@@ -103,15 +92,13 @@ public class UserController {
         return Results.OkWithData(user);
     }
 
+
     @PostMapping("follow")
     @ApiOperation("关注用户")
     @AuthRequired
     @Transactional
     public Result followUser(@RequestBody @Validated({ValidationGroups.IdForm.class}) UserDto userDto, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
-            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
-        }
+        BindUtil.checkBindValid(bindingResult);
         User toUser = modelMapper.map(userDto, User.class);
         String fromId = JwtInterceptor.getUser().getUserId();
         if (relationService.isExistRelation(fromId, toUser.getUserId(), Constants.RelationConst.FollowRelation)){
@@ -120,6 +107,7 @@ public class UserController {
         Relation relation = new Relation(fromId, toUser.getUserId(), Constants.RelationConst.FollowRelation);
         relationService.insertSelective(relation);
         userService.updateUserFollowNumByAction(toUser.getUserId(), UserService.FollowUserAction.followUser);
+        userService.updateUserFansNumByAction(fromId, UserService.FollowUserAction.followUser);
         return Results.Ok();
     }
 
@@ -128,19 +116,17 @@ public class UserController {
     @AuthRequired
     @Transactional
     public Result unFollowUser(@RequestBody @Validated({ValidationGroups.IdForm.class}) UserDto userDto, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            String defaultError = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
-            throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), defaultError);
-        }
+        BindUtil.checkBindValid(bindingResult);
         User toUser = modelMapper.map(userDto, User.class);
         String fromId = JwtInterceptor.getUser().getUserId();
         if (!relationService.isExistRelation(fromId, toUser.getUserId(), Constants.RelationConst.FollowRelation)){
             throw new ControllerException(MsgEnums.RELATION_NOT_EXIST);
         }
-        if (relationService.deleteRelationByFromIdAndToIdAndRelationType(fromId, toUser.getUserId(), Constants.RelationConst.FollowRelation) != 1){
+        if (relationService.deleteRelationByFromIdAndToIdAndRelationTypeLogical(fromId, toUser.getUserId(), Constants.RelationConst.FollowRelation) != 1){
             throw new ControllerException(MsgEnums.INTERNAL_ERROR);
         }
         userService.updateUserFollowNumByAction(toUser.getUserId(), UserService.FollowUserAction.unFollowUser);
+        userService.updateUserFansNumByAction(fromId, UserService.FollowUserAction.unFollowUser);
         return Results.Ok();
     }
 
@@ -167,5 +153,16 @@ public class UserController {
         String fromId = JwtInterceptor.getUser().getUserId();
         boolean isExist = relationService.isExistRelation(fromId, userId, Constants.RelationConst.FollowRelation);
         return Results.OkWithData(isExist);
+    }
+
+    @GetMapping("fans")
+    @ApiOperation("获取粉丝列表")
+    @AuthRequired
+    public Result getUserFans(@RequestParam(value = "page", defaultValue = "1") Integer page){
+        User user = JwtInterceptor.getUser();
+        PageInfo<Relation> pageInfo = relationService.findRelationsByToIdAndRelationTypeWithPaginator(user.getUserId(), Constants.RelationConst.FollowRelation, page, ProjectConstant.PageSize);
+        List<String> userIds = new ArrayList<>();
+        pageInfo.getList().forEach(relation -> userIds.add(relation.getFromId()));
+        return Results.OkWithData(Paginators.paginator(pageInfo, userIds));
     }
 }

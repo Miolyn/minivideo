@@ -22,5 +22,8 @@ public interface RelationService{
 
     PageInfo<Relation> findRelationsByFromIdAndRelationTypeWithPaginator(String fromId, Integer relationType, Integer page, Integer pageSize);
 
-    int deleteRelationByFromIdAndToIdAndRelationType(String fromId, String toId, Integer relationType);
+    PageInfo<Relation> findRelationsByToIdAndRelationTypeWithPaginator(String toId, Integer relationType, Integer page, Integer pageSize);
+
+
+    int deleteRelationByFromIdAndToIdAndRelationTypeLogical(String fromId, String toId, Integer relationType);
 }

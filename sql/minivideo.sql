@@ -17,6 +17,7 @@ CREATE TABLE `address`  (
   `user_id` varchar(50) NOT NULL COMMENT '用户id',
   `true_name` varchar(20) NOT NULL COMMENT '真实姓名',
   `addr` varchar(255) NOT NULL COMMENT '地址',
+  `phone` varchar(20) NOT NULL COMMENT '联系方式',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` integer default 0,
@@ -165,7 +166,7 @@ CREATE TABLE `like_map`  (
   `like_map_id` int NOT NULL AUTO_INCREMENT,
   `from_id` varchar(50) not NULL COMMENT '点赞人id',
   `to_id` int not NULL COMMENT '点赞对象id',
-  `like_type` int not NULL COMMENT '点赞对象类型 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品',
+  `like_type` int not NULL COMMENT '点赞对象类型 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品 5点赞评论',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` integer default 0,
@@ -283,6 +284,7 @@ CREATE TABLE `video_goods_recommends`  (
 
 CREATE TABLE `videos`  (
   `video_id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL COMMENT '视频标题',
   `avatar` varchar(255) NOT NULL COMMENT '视频',
   `video_file` varchar(255) NOT NULL COMMENT '存储视频的路径',
   `user_id` varchar(50) NOT NULL COMMENT '发布人的id',

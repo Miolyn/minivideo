@@ -1,13 +1,14 @@
-package cn.tju.minivideo.entity;
+package cn.tju.minivideo.dto;
 
-import java.io.Serializable;
+import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -15,7 +16,8 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Video implements Serializable {
+public class SimpleVideoDto {
+
     private Integer videoId;
 
     /**
@@ -29,19 +31,9 @@ public class Video implements Serializable {
     private String avatar;
 
     /**
-     * 存储视频的路径
-     */
-    private String videoFile;
-
-    /**
      * 发布人的id
      */
     private String userId;
-
-    /**
-     * 视频类型 1美食类......
-     */
-    private Integer videoType;
 
     /**
      * 简介
@@ -49,9 +41,9 @@ public class Video implements Serializable {
     private String introduction;
 
     /**
-     * 视频文件大小 单位MB
+     * 视频类型 1美食类......
      */
-    private Integer fileSize;
+    private Integer videoType;
 
     /**
      * 视频长度 单位秒
@@ -77,13 +69,4 @@ public class Video implements Serializable {
      * 创建时间
      */
     private LocalDateTime createdAt;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updatedAt;
-
-    private Integer isDeleted;
-
-    private static final long serialVersionUID = 1L;
 }

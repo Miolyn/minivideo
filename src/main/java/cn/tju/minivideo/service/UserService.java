@@ -27,6 +27,8 @@ public interface UserService {
 
     int updateUserFollowNumByAction(String userId, Integer action);
 
+    int updateUserFansNumByAction(String userId, Integer action);
+
     User getUserByUserIdWithRedis(String userId);
 }
 

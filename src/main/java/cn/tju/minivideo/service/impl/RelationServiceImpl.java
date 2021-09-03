@@ -58,7 +58,14 @@ public class RelationServiceImpl implements RelationService{
     }
 
     @Override
-    public int deleteRelationByFromIdAndToIdAndRelationType(String fromId, String toId, Integer relationType){
+    public PageInfo<Relation> findRelationsByToIdAndRelationTypeWithPaginator(String toId, Integer relationType, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        PageInfo<Relation> pageInfo = new PageInfo<>(relationMapper.findByToIdAndRelationType(toId, relationType));
+        return pageInfo;
+    }
+
+    @Override
+    public int deleteRelationByFromIdAndToIdAndRelationTypeLogical(String fromId, String toId, Integer relationType){
         return relationMapper.deleteByFromIdAndToIdAndRelationType(fromId, toId, relationType);
     }
 }

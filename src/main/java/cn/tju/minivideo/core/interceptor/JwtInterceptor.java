@@ -62,6 +62,21 @@ public class JwtInterceptor implements HandlerInterceptor {
                 }
                 tl.set(user);
                 return true;
+            } else if (token != null){
+                // 获取 token 中的 user id
+                Map<String, Claim> map = JwtUtil.verifyToken(token);
+                Claim claim = map.get(JwtConfig.UserId);
+                String userId = claim.asString();
+                log.info(userId);
+                User user = userService.getUserByUserIdWithRedis(userId);
+//                User user = userService.selectByPrimaryKey(userId);
+                if (user == null) {
+                    throw new RuntimeException("用户不存在，请重新登录");
+                }
+                tl.set(user);
+                return true;
+            } else{
+                tl.set(null);
             }
         }
         return true;

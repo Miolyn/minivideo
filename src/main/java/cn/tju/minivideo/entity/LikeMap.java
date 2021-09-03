@@ -29,7 +29,7 @@ public class LikeMap implements Serializable {
     private Integer toId;
 
     /**
-    * 点赞对象类型 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品
+    * 点赞对象类型 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品 5点赞评论
     */
     private Integer likeType;
 

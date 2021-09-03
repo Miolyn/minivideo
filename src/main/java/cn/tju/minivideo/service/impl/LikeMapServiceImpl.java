@@ -41,4 +41,9 @@ public class LikeMapServiceImpl implements LikeMapService{
         return likeMapMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public boolean isExistByFromIdAndToIdAndLikeType(String fromId, Integer toId, Integer likeType) {
+        return likeMapMapper.findByFromIdAndToIdAndLikeType(fromId, toId, likeType) != null;
+    }
+
 }

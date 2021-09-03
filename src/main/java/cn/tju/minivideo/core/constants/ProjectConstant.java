@@ -28,6 +28,7 @@ public class ProjectConstant {
             "classpath:/static/", "classpath:/public/" };
 
     public static final Integer PageSize = 10;
+    public static final Integer SmallPageSize = 3;
 
     // redis 过期时间 5分钟=300秒
     public static final Integer ExpireTime = 300;

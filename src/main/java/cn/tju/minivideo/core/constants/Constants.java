@@ -45,4 +45,18 @@ public class Constants {
         Integer AutoDynamicType = 2;
     }
 
+    public interface CommentConst {
+        Integer CommentOnVideo = 1;
+        Integer CommentOnComment = 2;
+        Integer CommentOnActivity = 3;
+    }
+
+    // 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品 5点赞评论
+    public interface LikeConst{
+        Integer LikeOnVideo = 1;
+        Integer LikeOnActivity = 2;
+        Integer LikeOnBulletScreen = 3;
+        Integer LikeOnGoods = 4;
+        Integer LikeOnComment = 5;
+    }
 }

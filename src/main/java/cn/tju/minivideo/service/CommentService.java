@@ -1,6 +1,10 @@
 package cn.tju.minivideo.service;
 
+import cn.tju.minivideo.dto.CommentDto;
 import cn.tju.minivideo.entity.Comment;
+
+import java.util.List;
+
 public interface CommentService{
 
 
@@ -16,4 +20,9 @@ public interface CommentService{
 
     int updateByPrimaryKey(Comment record);
 
+    boolean isCommentExistByCommentId(Integer commentId);
+
+    int addCommentLikeNumByCommentId(Integer commentId);
+
+    List<CommentDto> getCommentsByItemIdAndItemTypeWithPaginator(Integer itemId, Integer itemType, Integer page, Integer pageSize);
 }

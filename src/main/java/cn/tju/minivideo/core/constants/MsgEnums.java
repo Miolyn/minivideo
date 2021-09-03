@@ -9,6 +9,8 @@ public enum MsgEnums implements BaseEnum<Integer, String> {
     NO_HANDLER_FOUND(-2, "no handler found 未找到对应的接口"),
     INTERNAL_ERROR(-3, "exception error"),
     ACTION_NOT_FOUND(-4, "action not found"),
+    PERMISSION_ERROR(-5, "permission error"),
+    ITEM_NOT_EXIST(-6, "item not found"),
     // Jwt -100
     TOKEN_NOT_FOUND(-100, "token not found"),
     TOKEN_VERIFY_ERROR(-101, "token verify error"),
@@ -23,11 +25,12 @@ public enum MsgEnums implements BaseEnum<Integer, String> {
     UPLOAD_FILE_IS_EMPTY(-400, "file is empty"),
     UPLOAD_FORMAT_ERROR(-401, "file format error"),
     UPLOAD_SAVE_FILE_ERROR(-402, "save file error"),
-    // -500
+    // -500 relation and action
     RELATION_HAS_EXIST(-500, "relation has existed"),
     RELATION_NOT_EXIST(-501, "relation not exist"),
     // -600
     VIDEO_NOT_FOUND(-600, "video not found"),
+
     ;
     private Integer code;
     private String desc;

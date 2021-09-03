@@ -86,6 +86,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int updateUserFansNumByAction(String userId, Integer action) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null){
+            throw new ServiceException(MsgEnums.USER_NOT_EXIST);
+        }
+        if (action.equals(FollowUserAction.followUser)){
+            user.setFansNum(user.getFansNum() + 1);
+        } else if (action.equals(FollowUserAction.unFollowUser)){
+            if (user.getFansNum() == 0) return 1;
+            user.setFansNum(user.getFansNum() - 1);
+        } else {
+            throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+        }
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
     public User getUserByUserIdWithRedis(String userId) {
         User user = (User) redisService.get(userId);
         log.info("user from redis:" + user);

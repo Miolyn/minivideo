@@ -25,6 +25,9 @@ public interface RelationMapper {
 
     List<Relation> findByFromIdAndRelationType(@Param("fromId") String fromId, @Param("relationType") Integer relationType);
 
+    List<Relation> findByToIdAndRelationType(@Param("toId") String toId, @Param("relationType") Integer relationType);
+
+
     int deleteByFromIdAndToIdAndRelationType(@Param("fromId") String fromId, @Param("toId") String toId, @Param("relationType") Integer relationType);
 
 }

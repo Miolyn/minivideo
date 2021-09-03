@@ -16,4 +16,5 @@ public interface LikeMapService{
 
     int updateByPrimaryKey(LikeMap record);
 
+    boolean isExistByFromIdAndToIdAndLikeType(String fromId, Integer toId, Integer likeType);
 }

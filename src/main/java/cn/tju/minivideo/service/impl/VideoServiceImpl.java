@@ -1,6 +1,7 @@
 package cn.tju.minivideo.service.impl;
 
-import com.github.pagehelper.Page;
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -48,9 +49,27 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public PageInfo<Video> getVideosByUserIdWithPaginator(String userId, Integer page, Integer pageSize) {
+    public PageInfo<Video> getVideosByUserIdWithPaginatorOrderByCreatedAtDesc(String userId, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
-        return new PageInfo<>(videoMapper.findByUserId(userId));
+        return new PageInfo<>(videoMapper.findByUserIdOrderByCreatedAt(userId));
+    }
+
+    @Override
+    public PageInfo<Video> getVideosByUserIdWithPaginatorOrderByPlayNum(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return new PageInfo<>(videoMapper.findByUserIdOrderByPlayNum(userId));
+    }
+
+    @Override
+    public PageInfo<Video> getVideosByUserIdWithPaginatorSortByMethod(String userId, Integer page, Integer pageSize, Integer sortMethod) {
+        PageHelper.startPage(page, pageSize);
+        if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
+            return new PageInfo<>(videoMapper.findByUserIdOrderByCreatedAt(userId));
+        } else if (sortMethod.equals(SortMethod.SortByPlayNumDesc)) {
+            return new PageInfo<>(videoMapper.findByUserIdOrderByPlayNum(userId));
+        } else {
+            throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+        }
     }
 
     @Override
@@ -59,8 +78,34 @@ public class VideoServiceImpl implements VideoService {
 
     }
 
+    @Override
+    public int addVideoLikeNumByVideoId(Integer videoId) {
+        return videoMapper.updateLikeNumByVideoId(videoId);
+    }
+
+    @Override
+    public boolean checkPermissionToUpdateVideoProfile(Integer videoId, String userId) {
+        Video video = videoMapper.selectByPrimaryKey(videoId);
+        if (video == null || !video.getUserId().equals(userId)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int deleteVideoByVideoIdLogical(Integer videoId) {
+        return videoMapper.deleteByVideoIdLogical(videoId);
+    }
+
+    @Override
+    public boolean isVideoExistByVideoId(Integer videoId) {
+        return videoMapper.selectByPrimaryKey(videoId) != null;
+    }
+
 
 }
+
+
 
 
 

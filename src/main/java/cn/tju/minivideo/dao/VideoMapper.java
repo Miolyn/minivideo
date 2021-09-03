@@ -1,9 +1,7 @@
 package cn.tju.minivideo.dao;
-import org.apache.ibatis.annotations.Param;
-import java.util.List;
 
 import cn.tju.minivideo.entity.Video;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 @Mapper
 public interface VideoMapper {
@@ -19,12 +17,15 @@ public interface VideoMapper {
 
     int updateByPrimaryKey(Video record);
 
-    List<Video> findByUserId(@Param("userId")String userId);
+    List<Video> findByUserId(@Param("userId") String userId);
 
-    int updatePlayNumByVideoId(@Param("videoId")Integer videoId);
+    List<Video> findByUserIdOrderByCreatedAt(@Param("userId") String userId);
 
+    List<Video> findByUserIdOrderByPlayNum(@Param("userId") String userId);
 
+    int updatePlayNumByVideoId(@Param("videoId") Integer videoId);
 
+    int updateLikeNumByVideoId(@Param("videoId") Integer videoId);
 
-
+    int deleteByVideoIdLogical(@Param("videoId") Integer videoId);
 }

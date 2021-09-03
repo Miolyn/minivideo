@@ -5,6 +5,10 @@ import com.github.pagehelper.PageInfo;
 
 public interface VideoService {
 
+    public interface SortMethod {
+        Integer SortByTimeDesc = 1;
+        Integer SortByPlayNumDesc = 2;
+    }
 
     int deleteByPrimaryKey(Integer videoId);
 
@@ -18,10 +22,25 @@ public interface VideoService {
 
     int updateByPrimaryKey(Video record);
 
-    PageInfo<Video> getVideosByUserIdWithPaginator(String userId, Integer page, Integer pageSize);
+
+    PageInfo<Video> getVideosByUserIdWithPaginatorOrderByCreatedAtDesc(String userId, Integer page, Integer pageSize);
+
+    PageInfo<Video> getVideosByUserIdWithPaginatorOrderByPlayNum(String userId, Integer page, Integer pageSize);
+
+    PageInfo<Video> getVideosByUserIdWithPaginatorSortByMethod(String userId, Integer page, Integer pageSize, Integer sortMethod);
 
     int addVideoPlayNumByVideoId(Integer videoId);
+
+    int addVideoLikeNumByVideoId(Integer videoId);
+
+    boolean checkPermissionToUpdateVideoProfile(Integer videoId, String userId);
+
+    int deleteVideoByVideoIdLogical(Integer videoId);
+
+    boolean isVideoExistByVideoId(Integer videoId);
 }
+
+
 
 
 

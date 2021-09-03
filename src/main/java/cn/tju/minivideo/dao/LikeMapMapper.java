@@ -1,4 +1,6 @@
 package cn.tju.minivideo.dao;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.tju.minivideo.entity.LikeMap;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +18,8 @@ public interface LikeMapMapper {
     int updateByPrimaryKeySelective(LikeMap record);
 
     int updateByPrimaryKey(LikeMap record);
+
+    LikeMap findByFromIdAndToIdAndLikeType(@Param("fromId")String fromId,@Param("toId")Integer toId,@Param("likeType")Integer likeType);
+
+
 }
