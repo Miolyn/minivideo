@@ -84,6 +84,12 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    public int addVideoCommentNumByVideoId(Integer videoId) {
+
+        return videoMapper.updateCommentNumByVideoId(videoId);
+    }
+
+    @Override
     public boolean checkPermissionToUpdateVideoProfile(Integer videoId, String userId) {
         Video video = videoMapper.selectByPrimaryKey(videoId);
         if (video == null || !video.getUserId().equals(userId)) {
@@ -104,6 +110,7 @@ public class VideoServiceImpl implements VideoService {
 
 
 }
+
 
 
 

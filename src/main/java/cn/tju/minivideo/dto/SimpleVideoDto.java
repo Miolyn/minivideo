@@ -66,6 +66,11 @@ public class SimpleVideoDto {
     private Integer collectNum;
 
     /**
+     * 评论数量
+     */
+    private Integer commentNum;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createdAt;

@@ -55,6 +55,9 @@ public class CommentController {
         ){
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
+        if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnVideo)){
+            videoService.addVideoCommentNumByVideoId(commentDto.getToId());
+        }
         commentService.insertSelective(comment);
         return Results.OkWithData(comment.getCommentId());
     }

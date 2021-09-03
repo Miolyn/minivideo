@@ -33,12 +33,15 @@ public interface VideoService {
 
     int addVideoLikeNumByVideoId(Integer videoId);
 
+    int addVideoCommentNumByVideoId(Integer videoId);
+
     boolean checkPermissionToUpdateVideoProfile(Integer videoId, String userId);
 
     int deleteVideoByVideoIdLogical(Integer videoId);
 
     boolean isVideoExistByVideoId(Integer videoId);
 }
+
 
 
 

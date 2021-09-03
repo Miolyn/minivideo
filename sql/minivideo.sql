@@ -295,6 +295,7 @@ CREATE TABLE `videos`  (
   `play_num` int NULL DEFAULT 0 COMMENT '播放数量',
   `like_num` int NULL DEFAULT 0 COMMENT '点赞数量',
   `collect_num` int NULL DEFAULT 0 COMMENT '收藏数',
+  `comment_num` int NULL DEFAULT 0 COMMENT '收藏数',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` integer default 0,

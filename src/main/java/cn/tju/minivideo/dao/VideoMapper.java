@@ -1,7 +1,10 @@
 package cn.tju.minivideo.dao;
 
 import cn.tju.minivideo.entity.Video;
-import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface VideoMapper {
@@ -26,6 +29,9 @@ public interface VideoMapper {
     int updatePlayNumByVideoId(@Param("videoId") Integer videoId);
 
     int updateLikeNumByVideoId(@Param("videoId") Integer videoId);
+
+    int updateCommentNumByVideoId(@Param("videoId") Integer videoId);
+
 
     int deleteByVideoIdLogical(@Param("videoId") Integer videoId);
 }
