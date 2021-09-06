@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Goods">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.goods-->
+    <id column="goods_id" property="goodsId" />
+    <result column="title" property="title" />
+    <result column="avatar" property="avatar" />
+    <result column="goods_type" property="goodsType" />
+    <result column="introduction" property="introduction" />
+    <result column="imgs" property="imgs" />
+    <result column="like_num" property="likeNum" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.tju.minivideo.entity.Goods">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.goods-->
+    <result column="content" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    goods_id, title, avatar, goods_type, introduction, imgs, like_num, created_at, updated_at, 
+    is_deleted
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--@mbg.generated-->
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from minivideo.goods
+    where goods_id = #{goodsId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.goods
+    where goods_id = #{goodsId}
+  </delete>
+  <insert id="insert" keyColumn="goods_id" keyProperty="goodsId" parameterType="cn.tju.minivideo.entity.Goods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.goods (title, avatar, goods_type, introduction, imgs, like_num, 
+      created_at, updated_at, is_deleted, content)
+    values (#{title}, #{avatar}, #{goodsType}, #{introduction}, #{imgs}, #{likeNum}, 
+      #{createdAt}, #{updatedAt}, #{isDeleted}, #{content})
+  </insert>
+  <insert id="insertSelective" keyColumn="goods_id" keyProperty="goodsId" parameterType="cn.tju.minivideo.entity.Goods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="goodsType != null">
+        goods_type,
+      </if>
+      <if test="introduction != null">
+        introduction,
+      </if>
+      <if test="imgs != null">
+        imgs,
+      </if>
+      <if test="likeNum != null">
+        like_num,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title},
+      </if>
+      <if test="avatar != null">
+        #{avatar},
+      </if>
+      <if test="goodsType != null">
+        #{goodsType},
+      </if>
+      <if test="introduction != null">
+        #{introduction},
+      </if>
+      <if test="imgs != null">
+        #{imgs},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+      <if test="content != null">
+        #{content},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Goods">
+    <!--@mbg.generated-->
+    update minivideo.goods
+    <set>
+      <if test="title != null">
+        title = #{title},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar},
+      </if>
+      <if test="goodsType != null">
+        goods_type = #{goodsType},
+      </if>
+      <if test="introduction != null">
+        introduction = #{introduction},
+      </if>
+      <if test="imgs != null">
+        imgs = #{imgs},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+      <if test="content != null">
+        content = #{content},
+      </if>
+    </set>
+    where goods_id = #{goodsId}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.tju.minivideo.entity.Goods">
+    <!--@mbg.generated-->
+    update minivideo.goods
+    set title = #{title},
+      avatar = #{avatar},
+      goods_type = #{goodsType},
+      introduction = #{introduction},
+      imgs = #{imgs},
+      like_num = #{likeNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted},
+      content = #{content}
+    where goods_id = #{goodsId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Goods">
+    <!--@mbg.generated-->
+    update minivideo.goods
+    set title = #{title},
+      avatar = #{avatar},
+      goods_type = #{goodsType},
+      introduction = #{introduction},
+      imgs = #{imgs},
+      like_num = #{likeNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where goods_id = #{goodsId}
+  </update>
+</mapper>

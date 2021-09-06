@@ -11,6 +11,7 @@ import cn.tju.minivideo.core.util.BindUtil;
 import cn.tju.minivideo.core.util.JwtUtil;
 import cn.tju.minivideo.core.util.Paginators;
 import cn.tju.minivideo.core.util.Results;
+import cn.tju.minivideo.dto.AddressDto;
 import cn.tju.minivideo.dto.UserDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.LoginRecord;
@@ -165,4 +166,21 @@ public class UserController {
         pageInfo.getList().forEach(relation -> userIds.add(relation.getFromId()));
         return Results.OkWithData(Paginators.paginator(pageInfo, userIds));
     }
+
+    @PostMapping("add_address")
+    @ApiOperation("添加地址")
+    @AuthRequired
+    public Result addAddress(@RequestBody @Validated(ValidationGroups.Insert.class)AddressDto addressDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        return Results.Ok();
+    }
+
+
+    @GetMapping("address")
+    @ApiOperation("获取该用户所有地址，分页")
+    @AuthRequired
+    public Result getAddress(@RequestParam(value = "page", defaultValue = "1") Integer page){
+        return Results.Ok();
+    }
+
 }

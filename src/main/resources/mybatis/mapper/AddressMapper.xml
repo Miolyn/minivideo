@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.AddressMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Address">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.address-->
+    <id column="address_id" property="addressId" />
+    <result column="user_id" property="userId" />
+    <result column="true_name" property="trueName" />
+    <result column="addr" property="addr" />
+    <result column="phone" property="phone" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    address_id, user_id, true_name, addr, phone, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.address
+    where address_id = #{addressId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.address
+    where address_id = #{addressId}
+  </delete>
+  <insert id="insert" keyColumn="address_id" keyProperty="addressId" parameterType="cn.tju.minivideo.entity.Address" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.address (user_id, true_name, addr, phone, created_at, updated_at, is_deleted
+      )
+    values (#{userId}, #{trueName}, #{addr}, #{phone}, #{createdAt}, #{updatedAt}, #{isDeleted}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="address_id" keyProperty="addressId" parameterType="cn.tju.minivideo.entity.Address" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="trueName != null">
+        true_name,
+      </if>
+      <if test="addr != null">
+        addr,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="trueName != null">
+        #{trueName},
+      </if>
+      <if test="addr != null">
+        #{addr},
+      </if>
+      <if test="phone != null">
+        #{phone},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Address">
+    <!--@mbg.generated-->
+    update minivideo.address
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="trueName != null">
+        true_name = #{trueName},
+      </if>
+      <if test="addr != null">
+        addr = #{addr},
+      </if>
+      <if test="phone != null">
+        phone = #{phone},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where address_id = #{addressId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Address">
+    <!--@mbg.generated-->
+    update minivideo.address
+    set user_id = #{userId},
+      true_name = #{trueName},
+      addr = #{addr},
+      phone = #{phone},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where address_id = #{addressId}
+  </update>
+</mapper>

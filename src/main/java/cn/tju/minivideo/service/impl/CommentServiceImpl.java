@@ -1,7 +1,9 @@
 package cn.tju.minivideo.service.impl;
 
 import cn.tju.minivideo.core.constants.Constants;
+import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
+import cn.tju.minivideo.core.exception.ServiceException;
 import cn.tju.minivideo.dto.CommentDto;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -86,6 +88,14 @@ public class CommentServiceImpl implements CommentService {
             commentDtos.add(commentDto);
         }
         return commentDtos;
+    }
+
+    @Override
+    public void lockCommentByCommentId(Integer commentId) {
+        Comment comment = commentMapper.findByCommentIdForUpdate(commentId);
+        if (comment == null){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
     }
 
 

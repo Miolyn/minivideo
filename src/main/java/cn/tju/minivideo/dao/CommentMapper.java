@@ -23,4 +23,7 @@ public interface CommentMapper {
 
     int updateLikeNumByCommentId(@Param("commentId")Integer commentId);
 
+    Comment findByCommentIdForUpdate(@Param("commentId")Integer commentId);
+
+
 }

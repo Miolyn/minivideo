@@ -59,4 +59,9 @@ public class Constants {
         Integer LikeOnGoods = 4;
         Integer LikeOnComment = 5;
     }
+
+    public interface CollectionConst{
+        Integer CollectOnVideo = 1;
+        Integer CollectOnActivity = 2;
+    }
 }

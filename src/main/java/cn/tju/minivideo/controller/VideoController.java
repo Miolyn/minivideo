@@ -9,9 +9,11 @@ import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.handler.NonStaticResourceHttpRequestHandler;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.*;
+import cn.tju.minivideo.dto.BulletScreenDto;
 import cn.tju.minivideo.dto.SimpleVideoDto;
 import cn.tju.minivideo.dto.VideoDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
+import cn.tju.minivideo.entity.BulletScreen;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.entity.Video;
 import cn.tju.minivideo.service.DynamicService;
@@ -36,7 +38,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -229,4 +233,20 @@ public class VideoController {
     public Result modifyVideoGoodsRecommends() {
         return Results.Ok();
     }
+
+    @PostMapping("bullet_screen")
+    @ApiOperation("创建弹幕")
+    public Result sendBulletScreen(@RequestBody BulletScreenDto bulletScreenDto){
+        log.info(bulletScreenDto.toString());
+        return Results.Ok();
+    }
+
+    @GetMapping("bullet_screen")
+    @ApiOperation("获取弹幕")
+    public Result getBulletScreens(){
+        return Results.OkWithData(new ArrayList<BulletScreenDto>(Arrays.asList(
+                new BulletScreenDto(0, "测试测试测试", "www", 1, 11, "#ffffff", 1, 1, 1,  LocalDateTime.now())
+        )));
+    }
+
 }

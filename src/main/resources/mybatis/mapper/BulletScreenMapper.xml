@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.BulletScreenMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.BulletScreen">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.bullet_screens-->
+    <id column="bullet_screen_id" property="bulletScreenId" />
+    <result column="content" property="content" />
+    <result column="user_id" property="userId" />
+    <result column="video_id" property="videoId" />
+    <result column="video_time" property="videoTime" />
+    <result column="color" property="color" />
+    <result column="size" property="size" />
+    <result column="position" property="position" />
+    <result column="like_num" property="likeNum" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    bullet_screen_id, content, user_id, video_id, video_time, color, `size`, `position`, 
+    like_num, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.bullet_screens
+    where bullet_screen_id = #{bulletScreenId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.bullet_screens
+    where bullet_screen_id = #{bulletScreenId}
+  </delete>
+  <insert id="insert" keyColumn="bullet_screen_id" keyProperty="bulletScreenId" parameterType="cn.tju.minivideo.entity.BulletScreen" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.bullet_screens (content, user_id, video_id, video_time, color, `size`, `position`, 
+      like_num, created_at, updated_at, is_deleted)
+    values (#{content}, #{userId}, #{videoId}, #{videoTime}, #{color}, #{size}, #{position}, 
+      #{likeNum}, #{createdAt}, #{updatedAt}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="bullet_screen_id" keyProperty="bulletScreenId" parameterType="cn.tju.minivideo.entity.BulletScreen" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.bullet_screens
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        content,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="videoId != null">
+        video_id,
+      </if>
+      <if test="videoTime != null">
+        video_time,
+      </if>
+      <if test="color != null">
+        color,
+      </if>
+      <if test="size != null">
+        `size`,
+      </if>
+      <if test="position != null">
+        `position`,
+      </if>
+      <if test="likeNum != null">
+        like_num,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        #{content},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="videoId != null">
+        #{videoId},
+      </if>
+      <if test="videoTime != null">
+        #{videoTime},
+      </if>
+      <if test="color != null">
+        #{color},
+      </if>
+      <if test="size != null">
+        #{size},
+      </if>
+      <if test="position != null">
+        #{position},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.BulletScreen">
+    <!--@mbg.generated-->
+    update minivideo.bullet_screens
+    <set>
+      <if test="content != null">
+        content = #{content},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="videoId != null">
+        video_id = #{videoId},
+      </if>
+      <if test="videoTime != null">
+        video_time = #{videoTime},
+      </if>
+      <if test="color != null">
+        color = #{color},
+      </if>
+      <if test="size != null">
+        `size` = #{size},
+      </if>
+      <if test="position != null">
+        `position` = #{position},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where bullet_screen_id = #{bulletScreenId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.BulletScreen">
+    <!--@mbg.generated-->
+    update minivideo.bullet_screens
+    set content = #{content},
+      user_id = #{userId},
+      video_id = #{videoId},
+      video_time = #{videoTime},
+      color = #{color},
+      `size` = #{size},
+      `position` = #{position},
+      like_num = #{likeNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where bullet_screen_id = #{bulletScreenId}
+  </update>
+</mapper>

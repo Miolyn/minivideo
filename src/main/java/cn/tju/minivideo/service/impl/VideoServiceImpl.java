@@ -90,6 +90,11 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    public int addVideoCollectNumByVideoId(Integer videoId) {
+        return videoMapper.updateCollectNumByVideoId(videoId);
+    }
+
+    @Override
     public boolean checkPermissionToUpdateVideoProfile(Integer videoId, String userId) {
         Video video = videoMapper.selectByPrimaryKey(videoId);
         if (video == null || !video.getUserId().equals(userId)) {
@@ -108,8 +113,17 @@ public class VideoServiceImpl implements VideoService {
         return videoMapper.selectByPrimaryKey(videoId) != null;
     }
 
+    @Override
+    public void lockVideoByVideoId(Integer videoId) {
+        Video video = videoMapper.findByVideoIdForUpdate(videoId);
+        if (video == null) {
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+    }
+
 
 }
+
 
 
 

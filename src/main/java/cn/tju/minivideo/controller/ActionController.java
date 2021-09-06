@@ -1,21 +1,29 @@
 package cn.tju.minivideo.controller;
 
 import cn.tju.minivideo.core.annotation.AuthRequired;
+import cn.tju.minivideo.core.base.Paginator;
 import cn.tju.minivideo.core.base.Result;
 import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.BindUtil;
+import cn.tju.minivideo.core.util.Paginators;
 import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.dto.CollectionDto;
 import cn.tju.minivideo.dto.LikeMapDto;
+import cn.tju.minivideo.dto.SimpleVideoDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
+import cn.tju.minivideo.entity.Collections;
 import cn.tju.minivideo.entity.LikeMap;
 import cn.tju.minivideo.entity.User;
+import cn.tju.minivideo.entity.Video;
+import cn.tju.minivideo.service.CollectionsService;
 import cn.tju.minivideo.service.CommentService;
 import cn.tju.minivideo.service.LikeMapService;
 import cn.tju.minivideo.service.VideoService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -24,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("action")
@@ -41,6 +52,9 @@ public class ActionController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CollectionsService collectionsService;
 
     // 这个点赞接口就包括了所有类型的点赞了，通过likeType区分
     @PostMapping("like")
@@ -65,8 +79,10 @@ public class ActionController {
         }
         likeMapService.insertSelective(likeMap);
         if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnVideo)) {
+            videoService.lockVideoByVideoId(likeMap.getToId());
             videoService.addVideoLikeNumByVideoId(likeMap.getToId());
         } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnComment)) {
+            commentService.lockCommentByCommentId(likeMap.getToId());
             commentService.addCommentLikeNumByCommentId(likeMap.getToId());
         }
         return Results.Ok();
@@ -75,14 +91,49 @@ public class ActionController {
     // 收藏同样也是包含了所有类型的收藏了，按收藏类型区分
     @PostMapping("collect")
     @ApiOperation("收藏")
-    public Result collectItem(@RequestBody @Validated(ValidationGroups.Insert.class) CollectionDto collectionDto) {
+    @AuthRequired
+    public Result collectItem(@RequestBody @Validated(ValidationGroups.Insert.class) CollectionDto collectionDto, BindingResult bindingResult) {
+        BindUtil.checkBindValid(bindingResult);
+        Collections collections = modelMapper.map(collectionDto, Collections.class);
+        String userId = JwtInterceptor.getUser().getUserId();
+        collections.setUserId(userId);
+        if ((collections.getItemType().equals(Constants.CollectionConst.CollectOnVideo) && !videoService.isVideoExistByVideoId(collections.getItemId()))
+                || (collections.getItemType().equals(Constants.CollectionConst.CollectOnVideo) && !commentService.isCommentExistByCommentId(collections.getItemId()))
+        ) {
+            throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        if (collectionsService.isExistByItemIdAndUserIdAnItemType(collections.getItemId(), userId, collections.getItemType())){
+            throw new ControllerException(MsgEnums.RELATION_HAS_EXIST);
+        }
+        collectionsService.insertSelective(collections);
+        if(collections.getItemType().equals(Constants.CollectionConst.CollectOnVideo)){
+            videoService.lockVideoByVideoId(collections.getItemId());
+            videoService.addVideoCollectNumByVideoId(collections.getItemId());
+        } else if (collections.getItemType().equals(Constants.CollectionConst.CollectOnActivity)){
+
+        }
         return Results.Ok();
     }
 
-    @GetMapping("video_collections")
+    @GetMapping("collections")
     @AuthRequired
     @ApiOperation("获取用户的收藏")
-    public Result getCollections(){
+    public Result getCollections(@RequestParam(value = "itemType", defaultValue = "-1") Integer itemType,
+                                 @RequestParam(value = "page", defaultValue = "1") Integer page) {
+        if(itemType.equals(-1)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        String userId = JwtInterceptor.getUser().getUserId();
+        PageInfo<Collections> pageInfo = collectionsService.getCollectionsByItemTypeAndUserIdWithPaginator(itemType, userId, page, ProjectConstant.PageSize);
+        if (itemType.equals(Constants.CollectionConst.CollectOnVideo)){
+            List<SimpleVideoDto> simpleVideoDtos = new ArrayList<>();
+            for (Collections collections : pageInfo.getList()) {
+                Video video = videoService.selectByPrimaryKey(collections.getItemId());
+                SimpleVideoDto simpleVideoDto = modelMapper.map(video, SimpleVideoDto.class);
+                simpleVideoDtos.add(simpleVideoDto);
+            }
+            return Results.OkWithData(Paginators.paginator(pageInfo, simpleVideoDtos));
+        }
         return Results.Ok();
     }
 }

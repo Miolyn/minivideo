@@ -1,6 +1,8 @@
 package cn.tju.minivideo.service.impl;
 
 import cn.tju.minivideo.service.CollectionsService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.entity.Collections;
@@ -40,6 +42,19 @@ public class CollectionsServiceImpl implements CollectionsService {
     @Override
     public int updateByPrimaryKey(Collections record) {
         return collectionsMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public boolean isExistByItemIdAndUserIdAnItemType(Integer itemId, String userId, Integer itemType) {
+
+        return collectionsMapper.findByItemIdAndUserIdAndItemType(itemId, userId, itemType) != null;
+    }
+
+    @Override
+    public PageInfo<Collections> getCollectionsByItemTypeAndUserIdWithPaginator(Integer itemType, String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        PageInfo<Collections> collectionsPageInfo = new PageInfo<>(collectionsMapper.findByItemTypeAndUserId(itemType, userId));
+        return collectionsPageInfo;
     }
 
 }

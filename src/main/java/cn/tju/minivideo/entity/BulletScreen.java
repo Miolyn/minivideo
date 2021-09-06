@@ -15,73 +15,51 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Video implements Serializable {
-    private Integer videoId;
-
+public class BulletScreen implements Serializable {
     /**
-     * 视频标题
+     * 弹幕id
      */
-    private String title;
+    private Integer bulletScreenId;
 
     /**
-     * 视频
+     * 弹幕内容
      */
-    private String avatar;
+    private String content;
 
     /**
-     * 存储视频的路径
-     */
-    private String videoFile;
-
-    /**
-     * 发布人的id
+     * 发布人id
      */
     private String userId;
 
     /**
-     * 视频类型 1美食类......
+     * 发弹幕的video_id
      */
-    private Integer videoType;
+    private Integer videoId;
 
     /**
-     * 简介
+     * 在视频中发弹幕的时间
      */
-    private String introduction;
+    private Integer videoTime;
 
     /**
-     * 视频文件大小 单位MB
+     * 弹幕颜色
      */
-    private Integer fileSize;
+    private String color;
 
     /**
-     * 视频长度 单位秒
+     * 弹幕大小
      */
-    private Integer videoSize;
+    private Integer size;
 
     /**
-     * 播放数量
+     * 弹幕位置
      */
-    private Integer playNum;
+    private Integer position;
 
     /**
      * 点赞数量
      */
     private Integer likeNum;
-
-    /**
-     * 收藏数
-     */
-    private Integer collectNum;
-
-    /**
-     * 评论数量
-     */
-    private Integer commentNum;
-
-    /**
-     * 弹幕数量
-     */
-    private Integer bulletScreenNum;
 
     /**
      * 创建时间
