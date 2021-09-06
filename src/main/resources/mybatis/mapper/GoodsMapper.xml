@@ -5,6 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table minivideo.goods-->
     <id column="goods_id" property="goodsId" />
+    <result column="user_id" property="userId" />
     <result column="title" property="title" />
     <result column="avatar" property="avatar" />
     <result column="goods_type" property="goodsType" />
@@ -22,8 +23,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    goods_id, title, avatar, goods_type, introduction, imgs, like_num, created_at, updated_at, 
-    is_deleted
+    goods_id, user_id, title, avatar, goods_type, introduction, imgs, like_num, created_at, 
+    updated_at, is_deleted
   </sql>
   <sql id="Blob_Column_List">
     <!--@mbg.generated-->
@@ -45,15 +46,18 @@
   </delete>
   <insert id="insert" keyColumn="goods_id" keyProperty="goodsId" parameterType="cn.tju.minivideo.entity.Goods" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into minivideo.goods (title, avatar, goods_type, introduction, imgs, like_num, 
+    insert into minivideo.goods (user_id, title, avatar, goods_type, introduction, imgs, like_num, 
       created_at, updated_at, is_deleted, content)
-    values (#{title}, #{avatar}, #{goodsType}, #{introduction}, #{imgs}, #{likeNum}, 
+    values (#{userId}, #{title}, #{avatar}, #{goodsType}, #{introduction}, #{imgs}, #{likeNum}, 
       #{createdAt}, #{updatedAt}, #{isDeleted}, #{content})
   </insert>
   <insert id="insertSelective" keyColumn="goods_id" keyProperty="goodsId" parameterType="cn.tju.minivideo.entity.Goods" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into minivideo.goods
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
       <if test="title != null">
         title,
       </if>
@@ -86,6 +90,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
       <if test="title != null">
         #{title},
       </if>
@@ -122,6 +129,9 @@
     <!--@mbg.generated-->
     update minivideo.goods
     <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
       <if test="title != null">
         title = #{title},
       </if>
@@ -158,7 +168,8 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.tju.minivideo.entity.Goods">
     <!--@mbg.generated-->
     update minivideo.goods
-    set title = #{title},
+    set user_id = #{userId},
+      title = #{title},
       avatar = #{avatar},
       goods_type = #{goodsType},
       introduction = #{introduction},
@@ -173,7 +184,8 @@
   <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Goods">
     <!--@mbg.generated-->
     update minivideo.goods
-    set title = #{title},
+    set user_id = #{userId},
+      title = #{title},
       avatar = #{avatar},
       goods_type = #{goodsType},
       introduction = #{introduction},

@@ -16,6 +16,7 @@ import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.BulletScreen;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.entity.Video;
+import cn.tju.minivideo.service.BulletScreenService;
 import cn.tju.minivideo.service.DynamicService;
 import cn.tju.minivideo.service.MediaService;
 import cn.tju.minivideo.service.VideoService;
@@ -58,6 +59,9 @@ public class VideoController {
 
     @Autowired
     private DynamicService dynamicService;
+
+    @Autowired
+    private BulletScreenService bulletScreenService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -236,17 +240,38 @@ public class VideoController {
 
     @PostMapping("bullet_screen")
     @ApiOperation("创建弹幕")
-    public Result sendBulletScreen(@RequestBody BulletScreenDto bulletScreenDto){
-        log.info(bulletScreenDto.toString());
+    @AuthRequired
+    public Result sendBulletScreen(@RequestBody @Validated(ValidationGroups.Insert.class) BulletScreenDto bulletScreenDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        String userId = JwtInterceptor.getUser().getUserId();
+        BulletScreen bulletScreen = modelMapper.map(bulletScreenDto, BulletScreen.class);
+        bulletScreen.setUserId(userId);
+        bulletScreenService.insertSelective(bulletScreen);
         return Results.Ok();
     }
 
     @GetMapping("bullet_screen")
     @ApiOperation("获取弹幕")
-    public Result getBulletScreens(){
-        return Results.OkWithData(new ArrayList<BulletScreenDto>(Arrays.asList(
-                new BulletScreenDto(0, "测试测试测试", "www", 1, 11, "#ffffff", 1, 1, 1,  LocalDateTime.now())
-        )));
+    public Result getBulletScreens(@RequestParam(value = "videoId") Integer videoId){
+        if (!videoService.isVideoExistByVideoId(videoId)){
+            throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        List<BulletScreen> list = bulletScreenService.findAllByVideoId(videoId);
+        List<BulletScreenDto> data = new ArrayList<>();
+        list.forEach(bulletScreen -> data.add(modelMapper.map(bulletScreen, BulletScreenDto.class)));
+        return Results.OkWithData(data);
     }
 
+    @GetMapping("bullet_screen_page")
+    @ApiOperation("按分页获取弹幕信息")
+    public Result getBulletScreensByWithPaginator(@RequestParam(value = "videoId") Integer videoId,
+                                                  @RequestParam(value = "page") Integer page){
+        if (!videoService.isVideoExistByVideoId(videoId)){
+            throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        PageInfo<BulletScreen> pageInfo = bulletScreenService.findByVideoIdWithPaginator(videoId, page, ProjectConstant.PageSize);
+        List<BulletScreenDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(bulletScreen -> data.add(modelMapper.map(bulletScreen, BulletScreenDto.class)));
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
 }

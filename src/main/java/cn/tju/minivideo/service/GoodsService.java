@@ -1,7 +1,8 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.Goods;
-public interface GoodsService{
+
+public interface GoodsService {
 
 
     int deleteByPrimaryKey(Integer goodsId);
@@ -19,3 +20,5 @@ public interface GoodsService{
     int updateByPrimaryKey(Goods record);
 
 }
+
+

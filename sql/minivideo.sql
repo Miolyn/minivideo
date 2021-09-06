@@ -131,6 +131,7 @@ CREATE TABLE `dynamics`  (
 
 CREATE TABLE `goods`  (
   `goods_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(50) NOT NULL COMMENT '用户id',
   `title` varchar(255) NOT NULL COMMENT '商品标题',
   `avatar` varchar(255) NOT NULL COMMENT '商品图标',
   `goods_type` integer NOT NULL COMMENT '商品类别',

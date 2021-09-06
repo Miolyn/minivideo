@@ -1,6 +1,9 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.BulletScreen;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 public interface BulletScreenService {
 
@@ -17,6 +20,9 @@ public interface BulletScreenService {
 
     int updateByPrimaryKey(BulletScreen record);
 
+    List<BulletScreen> findAllByVideoId(Integer videoId);
+
+    PageInfo<BulletScreen> findByVideoIdWithPaginator(Integer videoId, Integer page, Integer pageSize);
 }
 
 

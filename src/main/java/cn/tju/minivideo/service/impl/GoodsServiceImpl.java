@@ -5,8 +5,9 @@ import javax.annotation.Resource;
 import cn.tju.minivideo.dao.GoodsMapper;
 import cn.tju.minivideo.entity.Goods;
 import cn.tju.minivideo.service.GoodsService;
+
 @Service
-public class GoodsServiceImpl implements GoodsService{
+public class GoodsServiceImpl implements GoodsService {
 
     @Resource
     private GoodsMapper goodsMapper;
@@ -47,3 +48,5 @@ public class GoodsServiceImpl implements GoodsService{
     }
 
 }
+
+

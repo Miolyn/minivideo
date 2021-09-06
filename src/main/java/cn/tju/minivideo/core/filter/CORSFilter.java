@@ -22,8 +22,8 @@ public class CORSFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) servletResponse;
         res.addHeader("Access-Control-Allow-Credentials", "true");
         res.addHeader("Access-Control-Allow-Origin", "*");
-        res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-        res.addHeader("Access-Control-Allow-Headers", "Content-Type,X-CAF-Authorization-Token,sessionToken,X-TOKEN");
+        res.addHeader("Access-Control-Allow-Methods", "*");
+        res.addHeader("Access-Control-Allow-Headers", "Content-Type,X-CAF-Authorization-Token,sessionToken,X-TOKEN,token");
         if (((HttpServletRequest) servletRequest).getMethod().equals("OPTIONS")) {
             servletResponse.getWriter().println("ok");
             return;

@@ -1,4 +1,6 @@
 package cn.tju.minivideo.dao;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.tju.minivideo.entity.BulletScreen;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +18,9 @@ public interface BulletScreenMapper {
     int updateByPrimaryKeySelective(BulletScreen record);
 
     int updateByPrimaryKey(BulletScreen record);
+
+
+    List<BulletScreen> findByVideoId(@Param("videoId")Integer videoId);
+
+
 }

@@ -45,23 +45,26 @@ public class BulletScreenDto {
     /**
      * 在视频中发弹幕的时间
      */
-    @NotNull(message = "弹幕在视频中的时间不能为空", groups = ValidationGroups.Insert.class)
+    @NotNull(message = "弹幕在视频中的时间不能为空，单位为分秒？", groups = ValidationGroups.Insert.class)
     @JsonProperty(value = "time")
     private Integer videoTime;
 
     /**
      * 弹幕颜色
      */
+    @NotNull(message = "弹幕颜色不能为空", groups = ValidationGroups.Insert.class)
     private String color;
 
     /**
      * 弹幕大小
      */
+    @NotNull(message = "弹幕大小不能为空", groups = ValidationGroups.Insert.class)
     private Integer size;
 
     /**
      * 弹幕位置
      */
+    @NotNull
     private Integer position;
 
     /**
