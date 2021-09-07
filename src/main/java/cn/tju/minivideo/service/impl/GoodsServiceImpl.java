@@ -55,20 +55,20 @@ public class GoodsServiceImpl implements GoodsService {
     public PageInfo<Goods> getGoodsByUserIdOrGoodsTypeWithPaginatorSortByMethod(String userId, Integer goodsType, Integer page, Integer pageSize, Integer sortMethod) {
         PageHelper.startPage(page, pageSize);
         PageInfo<Goods> pageInfo;
-        if(goodsType.equals(-1)){
-            if (sortMethod.equals(SortMethod.SortByTimeDesc)){
+        if (goodsType.equals(-1)) {
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
                 pageInfo = new PageInfo<>(goodsMapper.findByUserIdOrderByCreatedAt(userId));
-            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)) {
                 pageInfo = new PageInfo<>(goodsMapper.findByUserIdOrderByLikeNum(userId));
-            } else{
+            } else {
                 throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
             }
-        } else{
-            if (sortMethod.equals(SortMethod.SortByTimeDesc)){
+        } else {
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
                 pageInfo = new PageInfo<>(goodsMapper.findByUserIdAndGoodsTypeOrderByCreatedAt(userId, goodsType));
-            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)) {
                 pageInfo = new PageInfo<>(goodsMapper.findByUserIdAndGoodsTypeOrderByLikeNum(userId, goodsType));
-            }else{
+            } else {
                 throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
             }
         }
@@ -80,4 +80,16 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.findByUserIdAndGoodsId(userId, goodsId) != null;
     }
 
+    @Override
+    public Goods getGoodsByGoodsIdWithContent(Integer goodsId) {
+        Goods goods = goodsMapper.findByGoodsIdWithContent(goodsId);
+        if (goods == null) {
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return goods;
+    }
+
 }
+
+
+

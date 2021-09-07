@@ -26,7 +26,13 @@ public interface GoodsService {
     PageInfo<Goods> getGoodsByUserIdOrGoodsTypeWithPaginatorSortByMethod(String userId, Integer goodsType, Integer page, Integer pageSize, Integer sortMethod);
 
     boolean checkPermissionToUpdateGoodsInfo(Integer goodsId, String userId);
+
+    Goods getGoodsByGoodsIdWithContent(Integer goodsId);
 }
+
+
+
+
 
 
 

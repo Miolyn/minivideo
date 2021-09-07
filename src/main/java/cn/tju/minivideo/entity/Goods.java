@@ -1,6 +1,7 @@
 package cn.tju.minivideo.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,11 @@ public class Goods implements Serializable {
      * 商品标题
      */
     private String title;
+
+    /**
+     * 商品价格
+     */
+    private BigDecimal price;
 
     /**
      * 商品图标

@@ -2,7 +2,6 @@ package cn.tju.minivideo.controller;
 
 import cn.tju.minivideo.core.annotation.AuthRequired;
 import cn.tju.minivideo.core.base.Result;
-import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
@@ -15,12 +14,9 @@ import cn.tju.minivideo.entity.Goods;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.GoodsService;
 import cn.tju.minivideo.service.MediaService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -120,7 +116,18 @@ public class GoodsController {
         if (goodsId.equals(-1)){
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
+        Goods goods = goodsService.getGoodsByGoodsIdWithContent(goodsId);
+        log.info(goods.toString());
+        GoodsDto goodsDto = modelMapper.map(goods, GoodsDto.class);
+        goodsDto.setImgs(JsonUtil.String2List(goods.getImgs(), String.class));
+        log.info(goodsDto.toString());
+        return Results.OkWithData(goodsDto);
+    }
 
+    @PostMapping("buy_goods")
+    @ApiOperation("购买商品")
+    @AuthRequired
+    public Result buyGoods(){
         return Results.Ok();
     }
 }

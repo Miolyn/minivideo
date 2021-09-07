@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class SimpleGoodsDto {
      * 商品标题
      */
     private String title;
+
+    /**
+     * 商品价格
+     */
+    private BigDecimal price;
 
     /**
      * 商品图标

@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,6 +34,12 @@ public class GoodsDto {
     @NotBlank(message = "商品标题不能为空", groups = {ValidationGroups.Insert.class})
     @Length(min = 1, max = 255, message = "商品标题长度范围1-255", groups = {ValidationGroups.Insert.class, ValidationGroups.Update.class})
     private String title;
+
+    /**
+     * 商品价格
+     */
+    @NotNull(message = "商品价格不能为空", groups = {ValidationGroups.Insert.class})
+    private BigDecimal price;
 
     /**
      * 商品图标

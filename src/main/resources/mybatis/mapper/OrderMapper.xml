@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Order">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.orders-->
+    <id column="order_id" property="orderId" />
+    <result column="pay_price" property="payPrice" />
+    <result column="status" property="status" />
+    <result column="user_id" property="userId" />
+    <result column="address_id" property="addressId" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    order_id, pay_price, `status`, user_id, address_id, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.orders
+    where order_id = #{orderId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.orders
+    where order_id = #{orderId}
+  </delete>
+  <insert id="insert" keyColumn="order_id" keyProperty="orderId" parameterType="cn.tju.minivideo.entity.Order" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.orders (pay_price, `status`, user_id, address_id, created_at, updated_at, 
+      is_deleted)
+    values (#{payPrice}, #{status}, #{userId}, #{addressId}, #{createdAt}, #{updatedAt}, 
+      #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="order_id" keyProperty="orderId" parameterType="cn.tju.minivideo.entity.Order" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="payPrice != null">
+        pay_price,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="addressId != null">
+        address_id,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="payPrice != null">
+        #{payPrice},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="addressId != null">
+        #{addressId},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Order">
+    <!--@mbg.generated-->
+    update minivideo.orders
+    <set>
+      <if test="payPrice != null">
+        pay_price = #{payPrice},
+      </if>
+      <if test="status != null">
+        `status` = #{status},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="addressId != null">
+        address_id = #{addressId},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where order_id = #{orderId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Order">
+    <!--@mbg.generated-->
+    update minivideo.orders
+    set pay_price = #{payPrice},
+      `status` = #{status},
+      user_id = #{userId},
+      address_id = #{addressId},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where order_id = #{orderId}
+  </update>
+</mapper>
