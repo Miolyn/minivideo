@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.VideoGoodsRecommendMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.VideoGoodsRecommend">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.video_goods_recommends-->
+    <id column="video_goods_recommend_id" property="videoGoodsRecommendId" />
+    <result column="user_id" property="userId" />
+    <result column="video_id" property="videoId" />
+    <result column="goods_id" property="goodsId" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    video_goods_recommend_id, user_id, video_id, goods_id, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.video_goods_recommends
+    where video_goods_recommend_id = #{videoGoodsRecommendId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.video_goods_recommends
+    where video_goods_recommend_id = #{videoGoodsRecommendId}
+  </delete>
+  <insert id="insert" keyColumn="video_goods_recommend_id" keyProperty="videoGoodsRecommendId" parameterType="cn.tju.minivideo.entity.VideoGoodsRecommend" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.video_goods_recommends (user_id, video_id, goods_id, created_at, updated_at, is_deleted
+      )
+    values (#{userId}, #{videoId}, #{goodsId}, #{createdAt}, #{updatedAt}, #{isDeleted}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="video_goods_recommend_id" keyProperty="videoGoodsRecommendId" parameterType="cn.tju.minivideo.entity.VideoGoodsRecommend" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.video_goods_recommends
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="videoId != null">
+        video_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="videoId != null">
+        #{videoId},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.VideoGoodsRecommend">
+    <!--@mbg.generated-->
+    update minivideo.video_goods_recommends
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="videoId != null">
+        video_id = #{videoId},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where video_goods_recommend_id = #{videoGoodsRecommendId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.VideoGoodsRecommend">
+    <!--@mbg.generated-->
+    update minivideo.video_goods_recommends
+    set user_id = #{userId},
+      video_id = #{videoId},
+      goods_id = #{goodsId},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where video_goods_recommend_id = #{videoGoodsRecommendId}
+  </update>
+</mapper>

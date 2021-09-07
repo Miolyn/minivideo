@@ -1,9 +1,13 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.Goods;
+import com.github.pagehelper.PageInfo;
 
 public interface GoodsService {
-
+    interface SortMethod {
+        Integer SortByTimeDesc = 1;
+        Integer SortByLikeNumDesc = 2;
+    }
 
     int deleteByPrimaryKey(Integer goodsId);
 
@@ -19,6 +23,10 @@ public interface GoodsService {
 
     int updateByPrimaryKey(Goods record);
 
+    PageInfo<Goods> getGoodsByUserIdOrGoodsTypeWithPaginatorSortByMethod(String userId, Integer goodsType, Integer page, Integer pageSize, Integer sortMethod);
+
+    boolean checkPermissionToUpdateGoodsInfo(Integer goodsId, String userId);
 }
+
 
 

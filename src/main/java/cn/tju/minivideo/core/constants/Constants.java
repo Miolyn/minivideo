@@ -2,7 +2,10 @@ package cn.tju.minivideo.core.constants;
 
 import com.google.common.base.Charsets;
 
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Constants {
     public static final String APP_NAME = "miniVideo";
@@ -11,57 +14,79 @@ public class Constants {
 
 
     public interface Flag {
-        Integer YES = 1;
-        Integer NO = 2;
+        int YES = 1;
+        int NO = 2;
     }
 
     // user
     public interface UserConst {
         // status 1正常 2封号
-        Integer StatusNormal = 1;
-        Integer StatusBanned = 2;
-        Integer SexMale = 1;
-        Integer SexFemale = 2;
+        int StatusNormal = 1;
+        int StatusBanned = 2;
+        int SexMale = 1;
+        int SexFemale = 2;
 
     }
 
     public interface RelationConst {
-        Integer FollowRelation = 1;
+        int FollowRelation = 1;
 
     }
 
-
     public interface UploadConst {
-        Integer UploadImgType = 1;
-        Integer UploadVideoType = 2;
+        int UploadImgType = 1;
+        int UploadVideoType = 2;
     }
 
     public interface VideoConst {
-        Integer VideoFoodType = 1;
+        int VideoFoodType = 1;
     }
 
     public interface DynamicConst {
-        Integer NormalDynamicType = 1;
-        Integer AutoDynamicType = 2;
+        int NormalDynamicType = 1;
+        int AutoDynamicType = 2;
     }
 
     public interface CommentConst {
-        Integer CommentOnVideo = 1;
-        Integer CommentOnComment = 2;
-        Integer CommentOnActivity = 3;
+        int CommentOnVideo = 1;
+        int CommentOnComment = 2;
+        int CommentOnActivity = 3;
     }
 
     // 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品 5点赞评论
-    public interface LikeConst{
-        Integer LikeOnVideo = 1;
-        Integer LikeOnActivity = 2;
-        Integer LikeOnBulletScreen = 3;
-        Integer LikeOnGoods = 4;
-        Integer LikeOnComment = 5;
+    public interface LikeConst {
+        int LikeOnVideo = 1;
+        int LikeOnActivity = 2;
+        int LikeOnBulletScreen = 3;
+        int LikeOnGoods = 4;
+        int LikeOnComment = 5;
     }
 
-    public interface CollectionConst{
-        Integer CollectOnVideo = 1;
-        Integer CollectOnActivity = 2;
+    public interface CollectionConst {
+        int CollectOnVideo = 1;
+        int CollectOnActivity = 2;
+    }
+
+    // 商品
+    public interface GoodsConst {
+        // 商品类型
+        final int GoodsFoodType = 1; // 食品类
+
+    }
+
+    public static Map<Integer, String> goodsTypeMap = new HashMap<>();
+
+    static {
+        Field[] fields = Constants.GoodsConst.class.getFields();
+        for (Field f : fields) {
+            try {
+                goodsTypeMap.put(f.getInt(f.getName()), f.getName());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static boolean isGoodsTypeValid(Integer goodsType){
+        return goodsTypeMap.containsKey(goodsType);
     }
 }

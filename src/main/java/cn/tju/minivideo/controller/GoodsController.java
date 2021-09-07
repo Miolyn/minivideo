@@ -2,15 +2,21 @@ package cn.tju.minivideo.controller;
 
 import cn.tju.minivideo.core.annotation.AuthRequired;
 import cn.tju.minivideo.core.base.Result;
-import cn.tju.minivideo.core.util.BindUtil;
-import cn.tju.minivideo.core.util.JsonUtil;
-import cn.tju.minivideo.core.util.Results;
+import cn.tju.minivideo.core.constants.Constants;
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.constants.ProjectConstant;
+import cn.tju.minivideo.core.exception.ControllerException;
+import cn.tju.minivideo.core.interceptor.JwtInterceptor;
+import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dto.GoodsDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Goods;
+import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.GoodsService;
+import cn.tju.minivideo.service.MediaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +24,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -34,15 +40,78 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+    @Autowired
+    private MediaService mediaService;
+
     @PostMapping("goods")
     @ApiOperation("上传商品")
     @AuthRequired
     public Result createGoods(@RequestBody @Validated(ValidationGroups.Insert.class) GoodsDto goodsDto, BindingResult bindingResult){
         BindUtil.checkBindValid(bindingResult);
         Goods goods = modelMapper.map(goodsDto, Goods.class);
-
+        if(!ConstUtil.isGoodsTypeValid(goodsDto.getGoodsType()) || !mediaService.isExistByMediaUrlAndTrueFile(goodsDto.getAvatar())){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        for (String img : goodsDto.getImgs()) {
+            if(!mediaService.isExistByMediaUrlAndTrueFile(img)){
+                throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+            }
+        }
+//        if(!mediaService.isExistByMediaUrlAndTrueFile(goodsDto.getAvatar())){
+//            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+//        }
         String imgs = JsonUtil.List2String(goodsDto.getImgs());
         goods.setImgs(imgs);
+        String userId = JwtInterceptor.getUser().getUserId();
+        goods.setUserId(userId);
+        goodsService.insertSelective(goods);
+        log.info(goods.toString());
         return Results.Ok();
+    }
+
+    @PostMapping("update_goods")
+    @ApiOperation("更新商品信息")
+    @AuthRequired
+    public Result updateGoodsProfile(@RequestBody @Validated(ValidationGroups.Update.class) GoodsDto goodsDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        Goods goods = modelMapper.map(goodsDto, Goods.class);
+        String userId = JwtInterceptor.getUser().getUserId();
+        if(!goodsService.checkPermissionToUpdateGoodsInfo(goods.getGoodsId(), userId)){
+            throw new ControllerException(MsgEnums.PERMISSION_ERROR);
+        }
+        if(goodsDto.getImgs() != null){
+            goods.setImgs(JsonUtil.List2String(goodsDto.getImgs()));
+        }
+        goodsService.updateByPrimaryKeySelective(goods);
+        return Results.Ok();
+    }
+
+    @GetMapping("goods")
+    @ApiOperation("获取用户的商品列表")
+    @AuthRequired(required = false)
+    public Result getUserGoods(@RequestParam(value = "userId", defaultValue = "") String userId,
+                               @RequestParam(value = "goodsType", defaultValue = "-1") Integer goodsType,
+                               @RequestParam(value = "page", defaultValue = "1") Integer page,
+                               @RequestParam(value = "sort", defaultValue = "1") Integer sortMethod){
+        if(userId.equals("")){
+            User user = JwtInterceptor.getUser();
+            if (user == null){
+                throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+            }
+            userId = user.getUserId();
+        }
+        log.info(userId);
+        if(!goodsType.equals(-1) &&!ConstUtil.isGoodsTypeValid(goodsType)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        PageInfo<Goods> pageInfo = goodsService.getGoodsByUserIdOrGoodsTypeWithPaginatorSortByMethod(userId, goodsType, page, ProjectConstant.PageSize, sortMethod);
+        List<GoodsDto> data = new ArrayList<>();
+        for (Goods goods : pageInfo.getList()) {
+            GoodsDto goodsDto = modelMapper.map(goods, GoodsDto.class);
+            List<String> imgs = JsonUtil.String2List(goods.getImgs(), String.class);
+            goodsDto.setImgs(imgs);
+            data.add(goodsDto);
+        }
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
     }
 }

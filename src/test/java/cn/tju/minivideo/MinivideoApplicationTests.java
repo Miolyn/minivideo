@@ -2,6 +2,7 @@ package cn.tju.minivideo;
 
 import cn.tju.minivideo.core.config.JwtConfig;
 import cn.tju.minivideo.core.config.UploadConfig;
+import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.util.FileUtil;
 import cn.tju.minivideo.core.util.JwtUtil;
 import cn.tju.minivideo.core.util.VideoUtils;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Map;
 
@@ -118,8 +120,8 @@ class MinivideoApplicationTests {
     private DynamicMapper dynamicMapper;
 
     @Test
-    void testInsertId(){
-
+    void testField() throws IllegalAccessException {
+        System.out.println(Constants.isGoodsTypeValid(1));
 
     }
 }

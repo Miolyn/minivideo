@@ -1,5 +1,9 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.GoodsMapper;
@@ -47,6 +51,33 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public PageInfo<Goods> getGoodsByUserIdOrGoodsTypeWithPaginatorSortByMethod(String userId, Integer goodsType, Integer page, Integer pageSize, Integer sortMethod) {
+        PageHelper.startPage(page, pageSize);
+        PageInfo<Goods> pageInfo;
+        if(goodsType.equals(-1)){
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)){
+                pageInfo = new PageInfo<>(goodsMapper.findByUserIdOrderByCreatedAt(userId));
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+                pageInfo = new PageInfo<>(goodsMapper.findByUserIdOrderByLikeNum(userId));
+            } else{
+                throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+            }
+        } else{
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)){
+                pageInfo = new PageInfo<>(goodsMapper.findByUserIdAndGoodsTypeOrderByCreatedAt(userId, goodsType));
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+                pageInfo = new PageInfo<>(goodsMapper.findByUserIdAndGoodsTypeOrderByLikeNum(userId, goodsType));
+            }else{
+                throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+            }
+        }
+        return pageInfo;
+    }
+
+    @Override
+    public boolean checkPermissionToUpdateGoodsInfo(Integer goodsId, String userId) {
+        return goodsMapper.findByUserIdAndGoodsId(userId, goodsId) != null;
+    }
+
 }
-
-

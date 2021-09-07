@@ -49,14 +49,19 @@ public class Goods implements Serializable {
     private String imgs;
 
     /**
-     * 内容，可以用markdown表示
-     */
-    private String content;
-
-    /**
      * 点赞数量
      */
     private Integer likeNum;
+
+    /**
+     * 收藏数量
+     */
+    private Integer collectNum;
+
+    /**
+     * 销售数量
+     */
+    private Integer saleNum;
 
     /**
      * 创建时间
@@ -70,7 +75,10 @@ public class Goods implements Serializable {
 
     private Integer isDeleted;
 
-
+    /**
+     * 内容，可以用markdown表示
+     */
+    private String content;
 
     private static final long serialVersionUID = 1L;
 }

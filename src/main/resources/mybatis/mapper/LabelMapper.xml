@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.LabelMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Label">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.labels-->
+    <id column="label_id" property="labelId" />
+    <result column="label_name" property="labelName" />
+    <result column="label_type" property="labelType" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    label_id, label_name, label_type, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.labels
+    where label_id = #{labelId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.labels
+    where label_id = #{labelId}
+  </delete>
+  <insert id="insert" keyColumn="label_id" keyProperty="labelId" parameterType="cn.tju.minivideo.entity.Label" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.labels (label_name, label_type, created_at, updated_at, is_deleted)
+    values (#{labelName}, #{labelType}, #{createdAt}, #{updatedAt}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="label_id" keyProperty="labelId" parameterType="cn.tju.minivideo.entity.Label" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.labels
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="labelName != null">
+        label_name,
+      </if>
+      <if test="labelType != null">
+        label_type,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="labelName != null">
+        #{labelName},
+      </if>
+      <if test="labelType != null">
+        #{labelType},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Label">
+    <!--@mbg.generated-->
+    update minivideo.labels
+    <set>
+      <if test="labelName != null">
+        label_name = #{labelName},
+      </if>
+      <if test="labelType != null">
+        label_type = #{labelType},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where label_id = #{labelId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Label">
+    <!--@mbg.generated-->
+    update minivideo.labels
+    set label_name = #{labelName},
+      label_type = #{labelType},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where label_id = #{labelId}
+  </update>
+</mapper>

@@ -12,10 +12,12 @@ import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dto.BulletScreenDto;
 import cn.tju.minivideo.dto.SimpleVideoDto;
 import cn.tju.minivideo.dto.VideoDto;
+import cn.tju.minivideo.dto.VideoGoodsRecommendDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.BulletScreen;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.entity.Video;
+import cn.tju.minivideo.entity.VideoGoodsRecommend;
 import cn.tju.minivideo.service.BulletScreenService;
 import cn.tju.minivideo.service.DynamicService;
 import cn.tju.minivideo.service.MediaService;
@@ -232,16 +234,48 @@ public class VideoController {
         return Results.OkWithData(Paginators.paginator(pageInfo, simpleVideoDtos));
     }
 
-    @PostMapping("modify_video_goods_recommends")
-    @ApiOperation("修改商品推荐商品")
-    public Result modifyVideoGoodsRecommends() {
+    @GetMapping("video_goods_recommends")
+    @ApiOperation("获取视频对应的推荐商品")
+    public Result getVideoGoodsRecommends(@RequestParam("videoId") Integer videoId){
+
         return Results.Ok();
     }
+
+    // TODO: 添加
+    @PostMapping("add_video_goods_recommends")
+    @ApiOperation("添加视频商品推荐商品")
+    @AuthRequired
+    public Result addVideoGoodsRecommends(@RequestBody @Validated(ValidationGroups.Insert.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult) {
+        BindUtil.checkBindValid(bindingResult);
+
+        return Results.Ok();
+    }
+
+    // TODO: 根据推荐id修改
+    @PostMapping("update_video_goods_recommends")
+    @ApiOperation("修改视频商品推荐")
+    @AuthRequired
+    public Result modifyVideoGoodsRecommend(@RequestBody @Validated(ValidationGroups.Update.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+
+        return Results.Ok();
+    }
+
+
+    // TODO: 根据id软删除
+    @PostMapping("delete_video_goods_recommends")
+    @ApiOperation("删除视频商品推荐")
+    @AuthRequired
+    public Result deleteVideoGoodsRecommend(@RequestBody @Validated(ValidationGroups.IdForm.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        return Results.Ok();
+    }
+
 
     @PostMapping("bullet_screen")
     @ApiOperation("创建弹幕")
     @AuthRequired
-    public Result sendBulletScreen(@RequestBody @Validated(ValidationGroups.Insert.class) BulletScreenDto bulletScreenDto, BindingResult bindingResult){
+    public Result sendBulletScreen(@RequestBody @Validated(ValidationGroups.Insert.class) BulletScreenDto bulletScreenDto, BindingResult bindingResult) {
         BindUtil.checkBindValid(bindingResult);
         String userId = JwtInterceptor.getUser().getUserId();
         BulletScreen bulletScreen = modelMapper.map(bulletScreenDto, BulletScreen.class);
@@ -252,8 +286,8 @@ public class VideoController {
 
     @GetMapping("bullet_screen")
     @ApiOperation("获取弹幕")
-    public Result getBulletScreens(@RequestParam(value = "videoId") Integer videoId){
-        if (!videoService.isVideoExistByVideoId(videoId)){
+    public Result getBulletScreens(@RequestParam(value = "videoId") Integer videoId) {
+        if (!videoService.isVideoExistByVideoId(videoId)) {
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
         List<BulletScreen> list = bulletScreenService.findAllByVideoId(videoId);
@@ -265,8 +299,8 @@ public class VideoController {
     @GetMapping("bullet_screen_page")
     @ApiOperation("按分页获取弹幕信息")
     public Result getBulletScreensByWithPaginator(@RequestParam(value = "videoId") Integer videoId,
-                                                  @RequestParam(value = "page") Integer page){
-        if (!videoService.isVideoExistByVideoId(videoId)){
+                                                  @RequestParam(value = "page") Integer page) {
+        if (!videoService.isVideoExistByVideoId(videoId)) {
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
         PageInfo<BulletScreen> pageInfo = bulletScreenService.findByVideoIdWithPaginator(videoId, page, ProjectConstant.PageSize);
