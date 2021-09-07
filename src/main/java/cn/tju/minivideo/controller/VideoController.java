@@ -234,6 +234,7 @@ public class VideoController {
         return Results.OkWithData(Paginators.paginator(pageInfo, simpleVideoDtos));
     }
 
+    // TODO: 根据视频id获取推荐商品
     @GetMapping("video_goods_recommends")
     @ApiOperation("获取视频对应的推荐商品")
     public Result getVideoGoodsRecommends(@RequestParam("videoId") Integer videoId){

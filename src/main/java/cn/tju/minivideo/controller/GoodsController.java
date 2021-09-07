@@ -9,6 +9,7 @@ import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dto.GoodsDto;
+import cn.tju.minivideo.dto.SimpleGoodsDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Goods;
 import cn.tju.minivideo.entity.User;
@@ -86,7 +87,7 @@ public class GoodsController {
         return Results.Ok();
     }
 
-    @GetMapping("goods")
+    @GetMapping("user_goods_simple")
     @ApiOperation("获取用户的商品列表")
     @AuthRequired(required = false)
     public Result getUserGoods(@RequestParam(value = "userId", defaultValue = "") String userId,
@@ -105,13 +106,21 @@ public class GoodsController {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
         PageInfo<Goods> pageInfo = goodsService.getGoodsByUserIdOrGoodsTypeWithPaginatorSortByMethod(userId, goodsType, page, ProjectConstant.PageSize, sortMethod);
-        List<GoodsDto> data = new ArrayList<>();
+        List<SimpleGoodsDto> data = new ArrayList<>();
         for (Goods goods : pageInfo.getList()) {
-            GoodsDto goodsDto = modelMapper.map(goods, GoodsDto.class);
-            List<String> imgs = JsonUtil.String2List(goods.getImgs(), String.class);
-            goodsDto.setImgs(imgs);
-            data.add(goodsDto);
+            SimpleGoodsDto simpleGoodsDto = modelMapper.map(goods, SimpleGoodsDto.class);
+            data.add(simpleGoodsDto);
         }
         return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
+
+    @GetMapping("goods_detail")
+    @ApiOperation("获取商品详情")
+    public Result getGoodsDetail(@RequestParam(value = "goodsId", defaultValue = "-1") Integer goodsId){
+        if (goodsId.equals(-1)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+
+        return Results.Ok();
     }
 }
