@@ -21,18 +21,18 @@ public class Label implements Serializable {
     private String labelName;
 
     /**
-    * 标签类型 1up主标签 2视频分类标签 3系统标签 4自定义标签
-    */
+     * 标签类型 1up主标签 2视频分类标签 3系统标签 4自定义标签
+     */
     private Integer labelType;
 
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private LocalDateTime createdAt;
 
     /**
-    * 更新时间
-    */
+     * 更新时间
+     */
     private LocalDateTime updatedAt;
 
     private Integer isDeleted;

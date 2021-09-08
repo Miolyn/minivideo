@@ -25,6 +25,7 @@ public enum MsgEnums implements BaseEnum<Integer, String> {
     UPLOAD_FILE_IS_EMPTY(-400, "file is empty"),
     UPLOAD_FORMAT_ERROR(-401, "file format error"),
     UPLOAD_SAVE_FILE_ERROR(-402, "save file error"),
+    MEDIA_NOT_FOUND(-403, "media url not found and true file not found"),
     // -500 relation and action
     RELATION_HAS_EXIST(-500, "relation has existed"),
     RELATION_NOT_EXIST(-501, "relation not exist"),
@@ -32,6 +33,10 @@ public enum MsgEnums implements BaseEnum<Integer, String> {
     VIDEO_NOT_FOUND(-600, "video not found"),
     // -700 order
     ORDER_STATUS_ERROR(-700, "order status error"),
+    // -800
+    COMMUNITY_HAS_EXIST(-800, "community has exist 该up主类型社区已存在"),
+    COMMUNITY_LABEL_NOT_EXIT(-801, "community label not exist"),
+
 
     ;
     private Integer code;

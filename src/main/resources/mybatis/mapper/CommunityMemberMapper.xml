@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.CommunityMemberMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.CommunityMember">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.community_members-->
+    <id column="community_member_id" property="communityMemberId" />
+    <result column="user_id" property="userId" />
+    <result column="community_id" property="communityId" />
+    <result column="status" property="status" />
+    <result column="authority" property="authority" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    community_member_id, user_id, community_id, `status`, authority, created_at, updated_at, 
+    is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.community_members
+    where community_member_id = #{communityMemberId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.community_members
+    where community_member_id = #{communityMemberId}
+  </delete>
+  <insert id="insert" keyColumn="community_member_id" keyProperty="communityMemberId" parameterType="cn.tju.minivideo.entity.CommunityMember" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.community_members (user_id, community_id, `status`, authority, created_at, updated_at, 
+      is_deleted)
+    values (#{userId}, #{communityId}, #{status}, #{authority}, #{createdAt}, #{updatedAt}, 
+      #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="community_member_id" keyProperty="communityMemberId" parameterType="cn.tju.minivideo.entity.CommunityMember" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.community_members
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="communityId != null">
+        community_id,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="authority != null">
+        authority,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="communityId != null">
+        #{communityId},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="authority != null">
+        #{authority},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.CommunityMember">
+    <!--@mbg.generated-->
+    update minivideo.community_members
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="communityId != null">
+        community_id = #{communityId},
+      </if>
+      <if test="status != null">
+        `status` = #{status},
+      </if>
+      <if test="authority != null">
+        authority = #{authority},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where community_member_id = #{communityMemberId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.CommunityMember">
+    <!--@mbg.generated-->
+    update minivideo.community_members
+    set user_id = #{userId},
+      community_id = #{communityId},
+      `status` = #{status},
+      authority = #{authority},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where community_member_id = #{communityMemberId}
+  </update>
+</mapper>

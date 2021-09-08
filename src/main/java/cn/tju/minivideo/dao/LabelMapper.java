@@ -1,4 +1,6 @@
 package cn.tju.minivideo.dao;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.tju.minivideo.entity.Label;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +18,12 @@ public interface LabelMapper {
     int updateByPrimaryKeySelective(Label record);
 
     int updateByPrimaryKey(Label record);
+
+    Label findByLabelNameAndLabelType(@Param("labelName")String labelName,@Param("labelType")Integer labelType);
+
+    Label findByLabelId(@Param("labelId")Integer labelId);
+
+    List<Label> findByLabelType(@Param("labelType")Integer labelType);
+
+
 }

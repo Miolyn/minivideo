@@ -32,4 +32,7 @@ public class ProjectConstant {
 
     // redis 过期时间 5分钟=300秒
     public static final Integer ExpireTime = 300;
+
+    // 社区后缀
+    public static final String LabelUpMasterSuffix = "的社区";
 }

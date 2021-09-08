@@ -43,7 +43,7 @@ public class GoodsController {
     @Autowired
     private MediaService mediaService;
 
-    @PostMapping("goods")
+    @PostMapping("create_goods")
     @ApiOperation("上传商品")
     @AuthRequired
     public Result createGoods(@RequestBody @Validated(ValidationGroups.Insert.class) GoodsDto goodsDto, BindingResult bindingResult){

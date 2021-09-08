@@ -1,10 +1,13 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
 import cn.tju.minivideo.core.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.sql.rowset.serial.SerialException;
 
 import cn.tju.minivideo.dao.MediaMapper;
 import cn.tju.minivideo.entity.Media;
@@ -51,11 +54,11 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public boolean isExistByMediaUrlAndTrueFile(String mediaUrl) {
          if(mediaMapper.findByMediaUrl(mediaUrl) == null){
-             return false;
+             throw new ServiceException(MsgEnums.MEDIA_NOT_FOUND);
          }
          String path = FileUtil.getUploadFilePath(mediaUrl);
          if (!FileUtil.isFileExist(path)){
-             return false;
+             throw new ServiceException(MsgEnums.MEDIA_NOT_FOUND);
          }
          return true;
     }

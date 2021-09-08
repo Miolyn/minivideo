@@ -88,6 +88,19 @@ public class Constants {
         int OrderGoodsNormalStatus = 1;
     }
 
+    public interface LabelConst {
+        int LabelUpMasterLabelType = 1;
+        int LabelVideoLabelType = 2;
+        int LabelSystemLabelType = 3;
+        int LabelSelfDesignLabelType = 4;
+    }
+
+    public interface CommunityMemberConst{
+        int CommunityMemberStatusNormal = 1;
+        int CommunityMemberAdministratorAuthority = 1;
+        int CommunityMemberNormalAuthority = 2;
+    }
+
     public static Map<Integer, String> goodsTypeMap = new HashMap<>();
 
     static {

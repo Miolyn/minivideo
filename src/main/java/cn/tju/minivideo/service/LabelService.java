@@ -1,7 +1,10 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.Label;
-public interface LabelService{
+
+import java.util.List;
+
+public interface LabelService {
 
 
     int deleteByPrimaryKey(Integer labelId);
@@ -16,4 +19,12 @@ public interface LabelService{
 
     int updateByPrimaryKey(Label record);
 
+    boolean isExistByLabelNameAndLabelType(String labelName, Integer labelType);
+
+    boolean isExistByLabelId(Integer labelId);
+
+    List<Integer> getLabelIdOrInsert(List<Label> labels);
+
+    List<Label> getLabelByLabelType(Integer labelType);
 }
+
