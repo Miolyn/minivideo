@@ -30,7 +30,10 @@ public interface UserService {
     int updateUserFansNumByAction(String userId, Integer action);
 
     User getUserByUserIdWithRedis(String userId);
+
+    User findByUserId(String userId);
 }
+
 
 
 

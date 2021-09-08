@@ -1,11 +1,11 @@
 package cn.tju.minivideo.dao;
+import java.util.List;
 
 import cn.tju.minivideo.entity.User;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper {
     int deleteByPrimaryKey(String userId);
 
     int insert(User record);
@@ -21,4 +21,8 @@ public interface UserMapper extends BaseMapper<User> {
     User findByUsername(@Param("username") String username);
 
     User findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+
+    User findByUserId(@Param("userId")String userId);
+
+
 }

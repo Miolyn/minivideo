@@ -79,7 +79,7 @@ class MinivideoApplicationTests {
         User user = new User();
         user.setUserId("12345");
         user.setUsername("username1");
-        userMapper.deleteById("12345");
+//        userMapper.deleteById("12345");
     }
     @Test
     void testSelect(){

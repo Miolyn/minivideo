@@ -98,6 +98,22 @@ public class UserController {
         return Results.OkWithData(user);
     }
 
+    @GetMapping("user_info")
+    @ApiOperation("获取用户信息")
+    @AuthRequired(required = false)
+    public Result getUserInfo(@RequestParam(value = "userId", defaultValue = "") String userId){
+        if(userId.equals("")){
+            User user = JwtInterceptor.getUser();
+            if (user == null){
+                throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+            }
+            userId = user.getUserId();
+        }
+        User user = userService.findByUserId(userId);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        return Results.OkWithData(userDto);
+    }
+
 
     @PostMapping("follow")
     @ApiOperation("关注用户")

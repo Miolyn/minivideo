@@ -69,14 +69,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public int updateUserFollowNumByAction(String userId, Integer action){
+    public int updateUserFollowNumByAction(String userId, Integer action) {
         User user = userMapper.selectByPrimaryKey(userId);
-        if (user == null){
+        if (user == null) {
             throw new ServiceException(MsgEnums.USER_NOT_EXIST);
         }
-        if (action.equals(FollowUserAction.followUser)){
+        if (action.equals(FollowUserAction.followUser)) {
             user.setFollowNum(user.getFollowNum() + 1);
-        } else if (action.equals(FollowUserAction.unFollowUser)){
+        } else if (action.equals(FollowUserAction.unFollowUser)) {
             if (user.getFollowNum() == 0) return 1;
             user.setFollowNum(user.getFollowNum() - 1);
         } else {
@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUserFansNumByAction(String userId, Integer action) {
         User user = userMapper.selectByPrimaryKey(userId);
-        if (user == null){
+        if (user == null) {
             throw new ServiceException(MsgEnums.USER_NOT_EXIST);
         }
-        if (action.equals(FollowUserAction.followUser)){
+        if (action.equals(FollowUserAction.followUser)) {
             user.setFansNum(user.getFansNum() + 1);
-        } else if (action.equals(FollowUserAction.unFollowUser)){
+        } else if (action.equals(FollowUserAction.unFollowUser)) {
             if (user.getFansNum() == 0) return 1;
             user.setFansNum(user.getFansNum() - 1);
         } else {
@@ -106,13 +106,23 @@ public class UserServiceImpl implements UserService {
     public User getUserByUserIdWithRedis(String userId) {
         User user = (User) redisService.get(userId);
         log.info("user from redis:" + user);
-        if (user == null){
-            user = selectByPrimaryKey(userId);
+        if (user == null) {
+            user = findByUserId(userId);
             redisService.set(userId, user, ProjectConstant.ExpireTime);
         }
         return user;
     }
+
+    @Override
+    public User findByUserId(String userId) {
+        User user = userMapper.findByUserId(userId);
+        if (user == null){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return user;
+    }
 }
+
 
 
 

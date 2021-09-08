@@ -22,7 +22,7 @@ public class UserDto {
     /**
      * 头像
      */
-    @Length(min = 0, max = 255, message = "简介长度为0-255", groups = {ValidationGroups.Update.class})
+    @Length(min = 1, max = 255, message = "简介长度为1-255", groups = {ValidationGroups.Update.class})
     private String avatar;
 
     /**
@@ -43,9 +43,14 @@ public class UserDto {
     /**
      * 简介
      */
-    @Length(min = 0, max = 255, message = "简介长度为0-255", groups = {ValidationGroups.Update.class})
+    @Length(min = 1, max = 255, message = "简介长度为1-255", groups = {ValidationGroups.Update.class})
     private String introduction;
 
+    /**
+     * 个性签名
+     */
+    @Length(min = 1, max = 255, message = "简介长度为1-255", groups = {ValidationGroups.Update.class})
+    private String signature;
 
     /**
      * 性别 1男 2女

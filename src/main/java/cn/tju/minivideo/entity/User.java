@@ -2,11 +2,6 @@ package cn.tju.minivideo.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +19,6 @@ public class User implements Serializable {
     /**
      * 用户id
      */
-    @TableId
     private String userId;
 
     /**
@@ -48,14 +42,14 @@ public class User implements Serializable {
     private String introduction;
 
     /**
+     * 个性签名
+     */
+    private String signature;
+
+    /**
      * 状态 1正常 2封号
      */
     private Integer status;
-
-    /**
-     * 性别 1男 2女
-     */
-    private Integer sex;
 
     /**
      * 关注的数量
@@ -63,30 +57,31 @@ public class User implements Serializable {
     private Integer followNum;
 
     /**
+     * 性别 1男2女
+     */
+    private Integer sex;
+
+    /**
      * 粉丝的数量
      */
     private Integer fansNum;
 
-    /**
-     * 视频获得的点赞量总数
-     */
-    private Integer likeNum;
+    private Integer isDeleted;
 
     /**
      * 创建时间
      */
-    @TableField( fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @TableField( fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 
-    @TableLogic
-    @TableField( fill = FieldFill.INSERT)
-    private Integer isDeleted;
+    /**
+     * 视频获得的点赞量总数
+     */
+    private Integer likeNum;
 
     private static final long serialVersionUID = 1L;
 }
