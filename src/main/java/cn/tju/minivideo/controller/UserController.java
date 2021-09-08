@@ -14,9 +14,11 @@ import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.dto.AddressDto;
 import cn.tju.minivideo.dto.UserDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
+import cn.tju.minivideo.entity.Address;
 import cn.tju.minivideo.entity.LoginRecord;
 import cn.tju.minivideo.entity.Relation;
 import cn.tju.minivideo.entity.User;
+import cn.tju.minivideo.service.AddressService;
 import cn.tju.minivideo.service.LoginRecordService;
 import cn.tju.minivideo.service.RelationService;
 import cn.tju.minivideo.service.UserService;
@@ -50,6 +52,9 @@ public class UserController {
 
     @Autowired
     private RelationService relationService;
+
+    @Autowired
+    private AddressService addressService;
 
     @PostMapping("register")
     @ApiOperation("用户注册")
@@ -172,15 +177,22 @@ public class UserController {
     @AuthRequired
     public Result addAddress(@RequestBody @Validated(ValidationGroups.Insert.class)AddressDto addressDto, BindingResult bindingResult){
         BindUtil.checkBindValid(bindingResult);
-        return Results.Ok();
+        String userId = JwtInterceptor.getUser().getUserId();
+        Address address = modelMapper.map(addressDto, Address.class);
+        address.setUserId(userId);
+        addressService.insertSelective(address);
+        return Results.OkWithData(address.getAddressId());
     }
-
 
     @GetMapping("address")
     @ApiOperation("获取该用户所有地址，分页")
     @AuthRequired
     public Result getAddress(@RequestParam(value = "page", defaultValue = "1") Integer page){
-        return Results.Ok();
+        String userId = JwtInterceptor.getUser().getUserId();
+        PageInfo<Address> pageInfo = addressService.getAddressByUserIdWithPaginator(userId, page, ProjectConstant.PageSize);
+        List<AddressDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(address -> data.add(modelMapper.map(address, AddressDto.class)));
+        return Results.OkWithData(data);
     }
 
 }

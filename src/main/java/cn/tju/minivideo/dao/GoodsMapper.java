@@ -1,7 +1,10 @@
 package cn.tju.minivideo.dao;
 
 import cn.tju.minivideo.entity.Goods;
-import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface GoodsMapper {
@@ -32,4 +35,12 @@ public interface GoodsMapper {
     Goods findByUserIdAndGoodsId(@Param("userId") String userId, @Param("goodsId") Integer goodsId);
 
     Goods findByGoodsIdWithContent(@Param("goodsId") Integer goodsId);
+
+    Goods findByGoodsId(@Param("goodsId") Integer goodsId);
+
+    Goods findByGoodsIdForUpdate(@Param("goodsId") Integer goodsId);
+
+    int updateSaleNumByGoodsId(@Param("updatedSaleNum") Integer updatedSaleNum, @Param("goodsId") Integer goodsId);
+
+
 }

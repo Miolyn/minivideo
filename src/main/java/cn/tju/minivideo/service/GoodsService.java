@@ -28,6 +28,12 @@ public interface GoodsService {
     boolean checkPermissionToUpdateGoodsInfo(Integer goodsId, String userId);
 
     Goods getGoodsByGoodsIdWithContent(Integer goodsId);
+
+    Goods getGoodsByGoodsId(Integer goodsId);
+
+    int addGoodsSaleNum(Integer goodsId, Integer addNum);
+
+    void lockGoodsByGoodsId(Integer goodsId);
 }
 
 

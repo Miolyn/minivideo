@@ -216,7 +216,7 @@ CREATE TABLE `messages`  (
 CREATE TABLE `orders`  (
   `order_id` int NOT NULL AUTO_INCREMENT,
   `pay_price` decimal(8, 2) NOT NULL,
-  `status` int NOT NULL COMMENT '1待付款，2付款完成，3待发货，4待收货，5确认收货',
+  `status` int NOT NULL COMMENT '1待付款，2待发货，3待收货，4确认收货, 5订单完成',
   `user_id` varchar(50) NOT NULL,
   `address_id` int NOT NULL COMMENT '地址id',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -266,6 +266,7 @@ CREATE TABLE `users`  (
   `username` varchar(50) NOT NULL COMMENT '用户名',
   `password` varchar(255) NOT NULL COMMENT '密码',
   `introduction` varchar(255) NULL COMMENT '简介',
+  `signature` varchar(255) NULL COMMENT '个性签名',
   `status` integer NOT NULL COMMENT '状态 1正常 2封号',
   `follow_num` integer NULL DEFAULT 0 COMMENT '关注的数量',
   `sex` integer NULL  COMMENT '性别 1男2女',

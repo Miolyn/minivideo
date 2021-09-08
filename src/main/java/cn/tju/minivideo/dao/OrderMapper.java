@@ -1,4 +1,6 @@
 package cn.tju.minivideo.dao;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.tju.minivideo.entity.Order;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +18,7 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    Order findByOrderId(@Param("orderId")Integer orderId);
+
 }

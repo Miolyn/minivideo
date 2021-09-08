@@ -2,15 +2,18 @@ package cn.tju.minivideo.controller;
 
 import cn.tju.minivideo.core.annotation.AuthRequired;
 import cn.tju.minivideo.core.base.Result;
+import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dto.GoodsDto;
+import cn.tju.minivideo.dto.OrderDto;
 import cn.tju.minivideo.dto.SimpleGoodsDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Goods;
+import cn.tju.minivideo.entity.Order;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.GoodsService;
 import cn.tju.minivideo.service.MediaService;
@@ -124,10 +127,5 @@ public class GoodsController {
         return Results.OkWithData(goodsDto);
     }
 
-    @PostMapping("buy_goods")
-    @ApiOperation("购买商品")
-    @AuthRequired
-    public Result buyGoods(){
-        return Results.Ok();
-    }
+
 }

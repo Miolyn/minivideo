@@ -1,6 +1,7 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.Address;
+import com.github.pagehelper.PageInfo;
 
 public interface AddressService {
 
@@ -17,5 +18,8 @@ public interface AddressService {
 
     int updateByPrimaryKey(Address record);
 
+    PageInfo<Address> getAddressByUserIdWithPaginator(String userId, Integer page, Integer pageSize);
+
+    boolean isExistByAddressId(Integer addressId);
 }
 

@@ -16,4 +16,6 @@ public interface OrderService{
 
     int updateByPrimaryKey(Order record);
 
+    Order getOrderByOrderId(Integer orderId);
+
 }

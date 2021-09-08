@@ -1,5 +1,7 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.OrderMapper;
@@ -39,6 +41,15 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public int updateByPrimaryKey(Order record) {
         return orderMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public Order getOrderByOrderId(Integer orderId) {
+        Order order = orderMapper.findByOrderId(orderId);
+        if (order == null) {
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return order;
     }
 
 }

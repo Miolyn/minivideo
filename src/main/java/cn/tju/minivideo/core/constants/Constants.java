@@ -70,8 +70,22 @@ public class Constants {
     // 商品
     public interface GoodsConst {
         // 商品类型
-        final int GoodsFoodType = 1; // 食品类
+        int GoodsFoodType = 1; // 食品类
 
+    }
+
+
+    // 1待付款，2待发货，3等待确认收货, 4订单完成， 5订单取消
+    public interface OrderConst{
+        int OrderWaitForPayStatus = 1;
+        int OrderWaitForShipStatus = 2;
+        int OrderWaitForConfirmReceiptStatus = 3;
+        int OrderComplete = 4;
+        int OrderCancel = 5;
+    }
+
+    public interface OrderGoodsConst{
+        int OrderGoodsNormalStatus = 1;
     }
 
     public static Map<Integer, String> goodsTypeMap = new HashMap<>();
@@ -89,4 +103,5 @@ public class Constants {
     public static boolean isGoodsTypeValid(Integer goodsType){
         return goodsTypeMap.containsKey(goodsType);
     }
+
 }

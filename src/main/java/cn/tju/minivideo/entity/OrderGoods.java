@@ -16,22 +16,33 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order implements Serializable {
+public class OrderGoods implements Serializable {
+    private Integer orderGoodsId;
+
+    /**
+    * 订单号
+    */
     private Integer orderId;
 
-    private BigDecimal payPrice;
+    /**
+    * 商品id
+    */
+    private Integer goodsId;
 
     /**
-    * 1待付款，2待发货，3待收货，4确认收货, 5订单完成
+    * 该商品总价
+    */
+    private BigDecimal price;
+
+    /**
+    * 数量
+    */
+    private Integer number;
+
+    /**
+    * 1正常
     */
     private Integer status;
-
-    private String userId;
-
-    /**
-    * 地址id
-    */
-    private Integer addressId;
 
     /**
     * 创建时间
@@ -46,4 +57,12 @@ public class Order implements Serializable {
     private Integer isDeleted;
 
     private static final long serialVersionUID = 1L;
+
+    public OrderGoods(Integer orderId, Integer goodsId, BigDecimal price, Integer number, Integer status) {
+        this.orderId = orderId;
+        this.goodsId = goodsId;
+        this.price = price;
+        this.number = number;
+        this.status = status;
+    }
 }

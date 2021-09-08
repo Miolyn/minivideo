@@ -1,5 +1,7 @@
 package cn.tju.minivideo.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.entity.Address;
@@ -40,6 +42,18 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public int updateByPrimaryKey(Address record) {
         return addressMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public PageInfo<Address> getAddressByUserIdWithPaginator(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return new PageInfo<>(addressMapper.findByUserId(userId));
+    }
+
+    @Override
+    public boolean isExistByAddressId(Integer addressId) {
+
+        return addressMapper.findByAddressId(addressId) != null;
     }
 
 }
