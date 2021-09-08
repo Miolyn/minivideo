@@ -36,11 +36,11 @@
 <!--            <version>2.4.6</version>-->
 <!--        </dependency>-->
         <!-- window64位 FFmpeg -->
-<!--        <dependency>-->
-<!--            <groupId>ws.schild</groupId>-->
-<!--            <artifactId>jave-native-win64</artifactId>-->
-<!--            <version>2.4.6</version>-->
-<!--        </dependency>-->
+        <dependency>
+           <groupId>ws.schild</groupId>
+            <artifactId>jave-native-win64</artifactId>
+            <version>2.4.6</version>
+        </dependency>
         <!-- linux64位 FFmpeg -->
 <!--        <dependency>-->
 <!--            <groupId>ws.schild</groupId>-->
@@ -48,11 +48,12 @@
 <!--            <version>2.4.6</version>-->
 <!--        </dependency>-->
         <!-- macos64位 FFmpeg -->
-        <dependency>
+<!--        <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-osx64</artifactId>
             <version>2.4.6</version>
         </dependency>
+        -->
 
         <!-- Apache Commons -->
 <!--        <dependency>-->

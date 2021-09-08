@@ -1,0 +1,69 @@
+server:
+  port: 8090
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  application:
+    name: minivideo-demo
+  datasource:
+    url: jdbc:mysql://124.70.31.157:3306/minivideo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+#    url: jdbc:mysql://localhost:3306/minivideo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 0520SBLI
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    type: com.alibaba.druid.pool.DruidDataSource
+    connectionProperties: druid.stat.mergeSql=true
+  redis:
+    host: 124.70.31.157
+    port: 6379
+    timeout: 0
+    password: 0520SBLI
+    database: 0
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/templates/
+
+mybatis:
+  type-aliases-package: cn.tju.minivideo.entity
+  mapper-locations: classpath:mybatis/mapper/*.xml
+#全局逻辑删除字段值
+mybatis-plus:
+  type-aliases-package: cn.tju.minivideo.entity
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 开启sql打印
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  level:
+    root: debug
+#    cn.tju.minivideo.mapper: DEBUG
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  page-size-zero: true
+mapper:
+  identity: MYSQL
+  mappers: cn.tju.minivideo.core.universal.Mapper
+  not-empty: false
+
+jwt:
+  secret: miolyn
+  expiration: 604800
+  header: token
+
+upload:
+  base-path: src/main/resources/static/
+  img-path: src/main/resources/static/imgs/
+  video-path: src/main/resources/static/videos/
+  img-url-base: imgs
+  video-url-base: videos

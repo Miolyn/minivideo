@@ -9,9 +9,11 @@ import cn.tju.minivideo.core.util.VideoUtils;
 import cn.tju.minivideo.dao.DynamicMapper;
 import cn.tju.minivideo.dao.StudentMapper;
 import cn.tju.minivideo.dao.UserMapper;
+import cn.tju.minivideo.dao.VideoGoodsRecommendMapper;
 import cn.tju.minivideo.entity.Dynamic;
 import cn.tju.minivideo.entity.Student;
 import cn.tju.minivideo.entity.User;
+import cn.tju.minivideo.entity.VideoGoodsRecommend;
 import cn.tju.minivideo.service.RedisService;
 import cn.tju.minivideo.service.StudentService;
 import cn.tju.minivideo.service.UserService;
@@ -29,7 +31,6 @@ import java.util.Map;
 
 @SpringBootTest
 class MinivideoApplicationTests {
-
     @Test
     void contextLoads() {
     }
@@ -45,6 +46,10 @@ class MinivideoApplicationTests {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private VideoGoodsRecommendMapper videoGoodsRecommendMapper;
+
     @Test
     void test(){
         User user = new User();
@@ -123,5 +128,14 @@ class MinivideoApplicationTests {
     void testField() throws IllegalAccessException {
         System.out.println(Constants.isGoodsTypeValid(1));
 
+    }
+
+    @Test
+    void testVideoGoodsRecommendService() throws IllegalAccessException {
+        VideoGoodsRecommend record= new VideoGoodsRecommend();
+        record.setVideoGoodsRecommendId(1);
+        record.setVideoId(114514);
+        record.setGoodsId(1919810);
+        
     }
 }

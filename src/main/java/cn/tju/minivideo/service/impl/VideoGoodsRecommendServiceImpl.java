@@ -1,9 +1,11 @@
 package cn.tju.minivideo.service.impl;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.entity.VideoGoodsRecommend;
 import cn.tju.minivideo.dao.VideoGoodsRecommendMapper;
+import cn.tju.minivideo.dao.VideoMapper;
 import cn.tju.minivideo.service.VideoGoodsRecommendService;
 
 @Service
@@ -42,5 +44,9 @@ public class VideoGoodsRecommendServiceImpl implements VideoGoodsRecommendServic
         return videoGoodsRecommendMapper.updateByPrimaryKey(record);
     }
 
+    @Override 
+    public List<VideoGoodsRecommend> selectByVideoId(Integer videoId) {
+        return videoGoodsRecommendMapper.selectByVideoId(videoId);
+    }
 }
 

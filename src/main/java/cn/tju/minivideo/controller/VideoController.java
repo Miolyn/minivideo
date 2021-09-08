@@ -11,6 +11,7 @@ import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dto.BulletScreenDto;
 import cn.tju.minivideo.dto.SimpleVideoDto;
+import cn.tju.minivideo.dto.SimpleGoodsDto;
 import cn.tju.minivideo.dto.VideoDto;
 import cn.tju.minivideo.dto.VideoGoodsRecommendDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
@@ -20,8 +21,11 @@ import cn.tju.minivideo.entity.Video;
 import cn.tju.minivideo.entity.VideoGoodsRecommend;
 import cn.tju.minivideo.service.BulletScreenService;
 import cn.tju.minivideo.service.DynamicService;
+import cn.tju.minivideo.service.GoodsService;
 import cn.tju.minivideo.service.MediaService;
+import cn.tju.minivideo.service.VideoGoodsRecommendService;
 import cn.tju.minivideo.service.VideoService;
+
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -61,6 +65,12 @@ public class VideoController {
 
     @Autowired
     private DynamicService dynamicService;
+
+    @Autowired
+    private VideoGoodsRecommendService videoGoodsRecommendService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Autowired
     private BulletScreenService bulletScreenService;
@@ -235,40 +245,63 @@ public class VideoController {
     }
 
     // TODO: 根据视频id获取推荐商品
+    // Done
     @GetMapping("video_goods_recommends")
     @ApiOperation("获取视频对应的推荐商品")
     public Result getVideoGoodsRecommends(@RequestParam("videoId") Integer videoId){
-
-        return Results.Ok();
+        List<VideoGoodsRecommend> 全部推荐信息 = videoGoodsRecommendService.selectByVideoId(videoId);
+        List<SimpleGoodsDto> 商品简要信息列表 = new ArrayList<SimpleGoodsDto>();
+        for(VideoGoodsRecommend 推荐关系:全部推荐信息) {
+            SimpleGoodsDto 商品简要信息 = modelMapper.map(goodsService.getGoodsByGoodsIdWithContent(推荐关系.getGoodsId()),SimpleGoodsDto.class);
+            商品简要信息列表.add(商品简要信息);
+        }
+        return Results.OkWithData(商品简要信息列表);
     }
 
     // TODO: 添加
+    // Done
     @PostMapping("add_video_goods_recommends")
     @ApiOperation("添加视频商品推荐商品")
     @AuthRequired
     public Result addVideoGoodsRecommends(@RequestBody @Validated(ValidationGroups.Insert.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult) {
         BindUtil.checkBindValid(bindingResult);
-
+        VideoGoodsRecommend 推荐信息 = modelMapper.map(videoGoodsRecommendDto,VideoGoodsRecommend.class);
+        if(推荐信息==null) {
+            throw new ControllerException(MsgEnums.RELATION_NOT_EXIST);
+        }
+        videoGoodsRecommendService.insert(推荐信息);
         return Results.Ok();
     }
 
     // TODO: 根据推荐id修改
+    // Done
     @PostMapping("update_video_goods_recommends")
     @ApiOperation("修改视频商品推荐")
     @AuthRequired
     public Result modifyVideoGoodsRecommend(@RequestBody @Validated(ValidationGroups.Update.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult){
         BindUtil.checkBindValid(bindingResult);
-
+        VideoGoodsRecommend 推荐信息 = modelMapper.map(videoGoodsRecommendDto,VideoGoodsRecommend.class);
+        if(推荐信息==null) {
+            throw new ControllerException(MsgEnums.RELATION_NOT_EXIST);
+        }
+        videoGoodsRecommendService.updateByPrimaryKey(推荐信息);
         return Results.Ok();
     }
 
 
     // TODO: 根据id软删除
+    // Done
     @PostMapping("delete_video_goods_recommends")
     @ApiOperation("删除视频商品推荐")
     @AuthRequired
     public Result deleteVideoGoodsRecommend(@RequestBody @Validated(ValidationGroups.IdForm.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult){
         BindUtil.checkBindValid(bindingResult);
+        VideoGoodsRecommend 推荐信息 = modelMapper.map(videoGoodsRecommendDto,VideoGoodsRecommend.class);
+        if(推荐信息==null) {
+            throw new ControllerException(MsgEnums.RELATION_NOT_EXIST);
+        }
+        推荐信息.setIsDeleted(1);//已删除
+        videoGoodsRecommendService.updateByPrimaryKey(推荐信息);
         return Results.Ok();
     }
 
