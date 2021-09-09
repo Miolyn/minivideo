@@ -12,10 +12,9 @@ import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.dto.CommentDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Comment;
+import cn.tju.minivideo.entity.OrderGoods;
 import cn.tju.minivideo.entity.User;
-import cn.tju.minivideo.service.ActivityService;
-import cn.tju.minivideo.service.CommentService;
-import cn.tju.minivideo.service.VideoService;
+import cn.tju.minivideo.service.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -45,6 +44,15 @@ public class CommentController {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private GoodsService goodsService;
+
+    @Autowired
+    private OrderGoodsService orderGoodsService;
+
+    @Autowired
+    private OrderService orderService;
+
     @PostMapping("comment")
     @ApiOperation("评论某对象")
     @AuthRequired
@@ -53,21 +61,46 @@ public class CommentController {
         Comment comment = modelMapper.map(commentDto, Comment.class);
         User user = JwtInterceptor.getUser();
         comment.setFromId(user.getUserId());
+        commentDto.setFromId(user.getUserId());
         if (   (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnVideo)   && !videoService.isVideoExistByVideoId(commentDto.getToId()))
             || (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnComment) && !commentService.isCommentExistByCommentId(commentDto.getToId()))
             || (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnActivity) && !activityService.isActivityExistByActivityId(commentDto.getToId()))
+            || (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnGoods) && !goodsService.isExistGoodsByGoodsId(commentDto.getToId()))
         ){
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
+//        if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnVideo)){
+//            videoService.lockVideoByVideoId(commentDto.getToId());
+//            videoService.addVideoCommentNumByVideoId(commentDto.getToId());
+//        } else if(commentDto.getCommentType().equals(Constants.CommentConst.CommentOnActivity)){
+//            activityService.lockActivityByActivityId(commentDto.getToId());
+//            activityService.addCommentNumByActivityId(commentDto.getToId());
+//        }
+        addCommentNum(commentDto);
+        commentService.insertSelective(comment);
+        return Results.OkWithData(comment.getCommentId());
+    }
+
+    private void addCommentNum(CommentDto commentDto){
         if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnVideo)){
             videoService.lockVideoByVideoId(commentDto.getToId());
             videoService.addVideoCommentNumByVideoId(commentDto.getToId());
         } else if(commentDto.getCommentType().equals(Constants.CommentConst.CommentOnActivity)){
             activityService.lockActivityByActivityId(commentDto.getToId());
             activityService.addCommentNumByActivityId(commentDto.getToId());
+        } else if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnComment)){
+            Comment comment = commentService.getCommentByCommentId(commentDto.getToId());
+            CommentDto commentDto1 = modelMapper.map(comment, CommentDto.class);
+            addCommentNum(commentDto1);
+        } else if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnGoods)){
+            if(!orderService.checkPermissionToCommentOnGoods(commentDto.getToId(), commentDto.getFromId())){
+                throw new ControllerException(MsgEnums.PERMISSION_ERROR);
+            }
+            goodsService.lockGoodsByGoodsId(commentDto.getToId());
+            goodsService.addGoodsCommentNumByGoodsId(commentDto.getToId());
+        } else {
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
-        commentService.insertSelective(comment);
-        return Results.OkWithData(comment.getCommentId());
     }
 
 

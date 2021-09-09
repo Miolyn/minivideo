@@ -21,4 +21,5 @@ public interface OrderGoodsService{
     int updateByPrimaryKey(OrderGoods record);
 
     List<OrderGoods> getOrderGoodsByOrderId(Integer orderId);
+
 }

@@ -113,7 +113,6 @@ class MinivideoApplicationTests {
 
     @Test
     void testField() throws IllegalAccessException {
-        System.out.println(Constants.isGoodsTypeValid(1));
 
     }
 

@@ -98,5 +98,14 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    @Override
+    public Comment getCommentByCommentId(Integer commentId) {
+        Comment comment = commentMapper.findByCommentId(commentId);
+        if(comment == null){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return comment;
+    }
+
 
 }

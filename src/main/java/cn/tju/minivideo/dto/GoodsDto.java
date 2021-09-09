@@ -91,6 +91,12 @@ public class GoodsDto {
      */
     @Null(message = "没有权限修改销售数量", groups = {ValidationGroups.Insert.class, ValidationGroups.Update.class})
     private Integer saleNum;
+
+    /**
+     * 评论数量
+     */
+    private Integer commentNum;
+
     /**
      * 创建时间
      */

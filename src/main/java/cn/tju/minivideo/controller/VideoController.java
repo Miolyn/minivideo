@@ -3,6 +3,7 @@ package cn.tju.minivideo.controller;
 import cn.tju.minivideo.core.annotation.AuthRequired;
 import cn.tju.minivideo.core.base.Result;
 import cn.tju.minivideo.core.config.UploadConfig;
+import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
@@ -18,10 +19,7 @@ import cn.tju.minivideo.entity.BulletScreen;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.entity.Video;
 import cn.tju.minivideo.entity.VideoGoodsRecommend;
-import cn.tju.minivideo.service.BulletScreenService;
-import cn.tju.minivideo.service.DynamicService;
-import cn.tju.minivideo.service.MediaService;
-import cn.tju.minivideo.service.VideoService;
+import cn.tju.minivideo.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -67,6 +65,9 @@ public class VideoController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private HistoryService historyService;
 
     // video 元素支持三种视频格式： MP4, WebM, 和 Ogg:
     // TODO 增加视频播放量
@@ -196,6 +197,9 @@ public class VideoController {
             throw new ControllerException(MsgEnums.VIDEO_NOT_FOUND);
         }
         VideoDto videoDto = modelMapper.map(video, VideoDto.class);
+        if (JwtInterceptor.getUser() != null){
+            historyService.addHistory(JwtInterceptor.getUser().getUserId(), videoId, Constants.HistoryConst.HistoryVideoType);
+        }
         return Results.OkWithData(videoDto);
     }
 

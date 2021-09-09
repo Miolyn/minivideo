@@ -27,4 +27,6 @@ public interface CommentService{
     List<CommentDto> getCommentsByItemIdAndItemTypeWithPaginator(Integer itemId, Integer itemType, Integer page, Integer pageSize);
 
     void lockCommentByCommentId(Integer commentId);
+
+    Comment getCommentByCommentId(Integer commentId);
 }

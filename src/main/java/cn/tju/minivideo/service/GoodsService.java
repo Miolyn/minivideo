@@ -37,10 +37,13 @@ public interface GoodsService {
 
     int addGoodsCollectNumByGoodsId(Integer goodsId);
 
+    int addGoodsCommentNumByGoodsId(Integer goodsId);
+
     void lockGoodsByGoodsId(Integer goodsId);
 
     boolean isExistGoodsByGoodsId(Integer goodsId);
 }
+
 
 
 

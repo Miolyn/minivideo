@@ -7,21 +7,13 @@ import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
-import cn.tju.minivideo.core.util.BindUtil;
-import cn.tju.minivideo.core.util.JwtUtil;
-import cn.tju.minivideo.core.util.Paginators;
-import cn.tju.minivideo.core.util.Results;
+import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dto.AddressDto;
+import cn.tju.minivideo.dto.HistoryDto;
 import cn.tju.minivideo.dto.UserDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
-import cn.tju.minivideo.entity.Address;
-import cn.tju.minivideo.entity.LoginRecord;
-import cn.tju.minivideo.entity.Relation;
-import cn.tju.minivideo.entity.User;
-import cn.tju.minivideo.service.AddressService;
-import cn.tju.minivideo.service.LoginRecordService;
-import cn.tju.minivideo.service.RelationService;
-import cn.tju.minivideo.service.UserService;
+import cn.tju.minivideo.entity.*;
+import cn.tju.minivideo.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +47,9 @@ public class UserController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @PostMapping("register")
     @ApiOperation("用户注册")
@@ -211,4 +206,19 @@ public class UserController {
         return Results.OkWithData(data);
     }
 
+    // TODO: 返回id
+    @GetMapping("histories")
+    @ApiOperation("获取浏览历史")
+    @AuthRequired
+    public Result getHistories(@RequestParam(value = "itemType", defaultValue = "-1") Integer itemType,
+                               @RequestParam(value = "page", defaultValue = "1") Integer page){
+        if(itemType.equals(-1) || !ConstUtil.isHistoryTypeValid(itemType)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        String userId = JwtInterceptor.getUser().getUserId();
+        PageInfo<History> pageInfo = historyService.getHistoriesByItemIdAndUserIdWithPaginatorOrderByTimeDesc(itemType, userId, page, ProjectConstant.PageSize);
+        List<HistoryDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(history -> data.add(modelMapper.map(history, HistoryDto.class)));
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
 }

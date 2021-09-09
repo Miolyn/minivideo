@@ -25,5 +25,7 @@ public interface CommentMapper {
 
     Comment findByCommentIdForUpdate(@Param("commentId")Integer commentId);
 
+    Comment findByCommentId(@Param("commentId")Integer commentId);
+
 
 }

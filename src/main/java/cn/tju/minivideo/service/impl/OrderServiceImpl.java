@@ -52,4 +52,9 @@ public class OrderServiceImpl implements OrderService{
         return order;
     }
 
+    @Override
+    public boolean checkPermissionToCommentOnGoods(Integer goodsId, String userId) {
+        return orderMapper.countByUserIdAndGoodsId(userId, goodsId) != 0;
+    }
+
 }

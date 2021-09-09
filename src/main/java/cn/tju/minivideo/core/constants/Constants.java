@@ -51,6 +51,7 @@ public class Constants {
         int CommentOnVideo = 1;
         int CommentOnComment = 2;
         int CommentOnActivity = 3;
+        int CommentOnGoods = 4;
     }
 
     // 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品 5点赞评论
@@ -103,8 +104,15 @@ public class Constants {
         int CommunityMemberNormalAuthority = 2;
     }
 
+    public interface HistoryConst {
+        int HistoryVideoType = 1;
+        int HistoryActivityType = 2;
+        int HistoryGoodsType = 3;
+    }
+
     public static Map<Integer, String> goodsTypeMap = new HashMap<>();
 
+    public static Map<Integer, String> historyTypeMap = new HashMap<>();
     static {
         Field[] fields = Constants.GoodsConst.class.getFields();
         for (Field f : fields) {
@@ -114,9 +122,14 @@ public class Constants {
                 e.printStackTrace();
             }
         }
-    }
-    public static boolean isGoodsTypeValid(Integer goodsType){
-        return goodsTypeMap.containsKey(goodsType);
+        fields = Constants.HistoryConst.class.getFields();
+        for (Field f : fields) {
+            try {
+                historyTypeMap.put(f.getInt(f.getName()), f.getName());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

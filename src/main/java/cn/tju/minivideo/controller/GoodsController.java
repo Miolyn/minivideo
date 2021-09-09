@@ -16,6 +16,7 @@ import cn.tju.minivideo.entity.Goods;
 import cn.tju.minivideo.entity.Order;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.GoodsService;
+import cn.tju.minivideo.service.HistoryService;
 import cn.tju.minivideo.service.MediaService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +43,9 @@ public class GoodsController {
 
     @Autowired
     private MediaService mediaService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @PostMapping("create_goods")
     @ApiOperation("上传商品")
@@ -115,6 +119,7 @@ public class GoodsController {
 
     @GetMapping("goods_detail")
     @ApiOperation("获取商品详情")
+    @AuthRequired(required = false)
     public Result getGoodsDetail(@RequestParam(value = "goodsId", defaultValue = "-1") Integer goodsId){
         if (goodsId.equals(-1)){
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
@@ -123,7 +128,9 @@ public class GoodsController {
         log.info(goods.toString());
         GoodsDto goodsDto = modelMapper.map(goods, GoodsDto.class);
         goodsDto.setImgs(JsonUtil.String2List(goods.getImgs(), String.class));
-        log.info(goodsDto.toString());
+        if(JwtInterceptor.getUser() != null){
+            historyService.addHistory(JwtInterceptor.getUser().getUserId(), goodsId, Constants.HistoryConst.HistoryGoodsType);
+        }
         return Results.OkWithData(goodsDto);
     }
 

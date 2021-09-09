@@ -1,10 +1,7 @@
 package cn.tju.minivideo.dao;
 
 import cn.tju.minivideo.entity.Goods;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 @Mapper
 public interface GoodsMapper {
@@ -42,10 +39,11 @@ public interface GoodsMapper {
 
     int updateSaleNumByGoodsId(@Param("updatedSaleNum") Integer updatedSaleNum, @Param("goodsId") Integer goodsId);
 
-    int updateLikeNumByGoodsId(@Param("goodsId")Integer goodsId);
+    int updateLikeNumByGoodsId(@Param("goodsId") Integer goodsId);
 
-    int updateCollectNumByGoodsId(@Param("goodsId")Integer goodsId);
+    int updateCollectNumByGoodsId(@Param("goodsId") Integer goodsId);
 
+    int updateCommentNumByGoodsId(@Param("goodsId")Integer goodsId);
 
 
 }

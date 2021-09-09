@@ -60,6 +60,11 @@ public class SimpleGoodsDto {
      * 销售数量
      */
     private Integer saleNum;
+
+    /**
+     * 评论数量
+     */
+    private Integer commentNum;
     /**
      * 创建时间
      */

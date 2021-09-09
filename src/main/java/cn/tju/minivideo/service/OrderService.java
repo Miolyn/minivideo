@@ -18,4 +18,5 @@ public interface OrderService{
 
     Order getOrderByOrderId(Integer orderId);
 
+    boolean checkPermissionToCommentOnGoods(Integer goodsId, String userId);
 }

@@ -57,6 +57,8 @@ public class CommunityController {
     @Autowired
     private ActivityTopicService activityTopicService;
 
+    @Autowired
+    private HistoryService historyService;
 
     @PostMapping("create_community")
     @ApiOperation("创建社区")
@@ -183,13 +185,29 @@ public class CommunityController {
 
 
     @GetMapping("activity")
-    @ApiOperation("获取帖子详情")
+    @ApiOperation("获取帖子简易")
     public Result getActivity(@RequestParam(value = "activityId", defaultValue = "-1") Integer activityId){
         if(activityId.equals(-1)){
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
         Activity activity = activityService.getActivityByActivityId(activityId);
         ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+        return Results.OkWithData(activityDto);
+    }
+
+    // TODO: 增加历史
+    @GetMapping("activity_detail")
+    @ApiOperation("获取帖子详情")
+    @AuthRequired(required = false)
+    public Result getActivityDetail(@RequestParam(value = "activityId", defaultValue = "-1") Integer activityId){
+        if(activityId.equals(-1)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        Activity activity = activityService.getActivityByActivityId(activityId);
+        ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+        if(JwtInterceptor.getUser() != null){
+            historyService.addHistory(JwtInterceptor.getUser().getUserId(), activityId, Constants.HistoryConst.HistoryActivityType);
+        }
         return Results.OkWithData(activityDto);
     }
 
