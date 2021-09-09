@@ -1,13 +1,16 @@
 package cn.tju.minivideo.service.impl;
 
 import cn.tju.minivideo.core.constants.Constants;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.DynamicMapper;
 import cn.tju.minivideo.entity.Dynamic;
 import cn.tju.minivideo.service.DynamicService;
+
 @Service
-public class DynamicServiceImpl implements DynamicService{
+public class DynamicServiceImpl implements DynamicService {
 
     @Resource
     private DynamicMapper dynamicMapper;
@@ -51,4 +54,28 @@ public class DynamicServiceImpl implements DynamicService{
         return dynamicMapper.insertSelective(dynamic);
     }
 
+    @Override
+    public PageInfo<Dynamic> getDynamicsWhereUserIsFollowedWithPaginator(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return new PageInfo<>(dynamicMapper.findDynamicByFollowUserIdOrderByCreatedAt(userId));
+    }
+
+    @Override
+    public boolean isExistDynamicByDynamicId(Integer dynamicId) {
+        return dynamicMapper.findByDynamicId(dynamicId) != null;
+    }
+
+    @Override
+    public void lockDynamicByDynamicId(Integer dynamicId) {
+        dynamicMapper.findByDynamicIdForUpdate(dynamicId);
+    }
+
+    @Override
+    public int addDynamicLikeNumByDynamicId(Integer dynamicId) {
+        return dynamicMapper.updateLikeNumByDynamicId(dynamicId);
+    }
+
+
 }
+
+

@@ -1,5 +1,7 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.CommunityMapper;
@@ -39,6 +41,15 @@ public class CommunityServiceImpl implements CommunityService{
     @Override
     public int updateByPrimaryKey(Community record) {
         return communityMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public Community getCommunityByCommunityId(Integer communityId) {
+        Community community = communityMapper.findByCommunityId(communityId);
+        if (community == null){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return community;
     }
 
 }

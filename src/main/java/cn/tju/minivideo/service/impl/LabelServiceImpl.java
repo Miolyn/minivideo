@@ -1,7 +1,11 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import javax.sql.rowset.serial.SerialException;
+
 import cn.tju.minivideo.dao.LabelMapper;
 import cn.tju.minivideo.entity.Label;
 import cn.tju.minivideo.service.LabelService;
@@ -75,6 +79,15 @@ public class LabelServiceImpl implements LabelService {
     @Override
     public List<Label> getLabelByLabelType(Integer labelType) {
         return labelMapper.findByLabelType(labelType);
+    }
+
+    @Override
+    public Label getLabelByLabelId(Integer labelId) {
+        Label label = labelMapper.findByLabelId(labelId);
+        if (label == null){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return label;
     }
 
 

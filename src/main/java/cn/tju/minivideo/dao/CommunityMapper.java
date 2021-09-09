@@ -1,4 +1,6 @@
 package cn.tju.minivideo.dao;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.tju.minivideo.entity.Community;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +18,8 @@ public interface CommunityMapper {
     int updateByPrimaryKeySelective(Community record);
 
     int updateByPrimaryKey(Community record);
+
+    Community findByCommunityId(@Param("communityId")Integer communityId);
+
+
 }

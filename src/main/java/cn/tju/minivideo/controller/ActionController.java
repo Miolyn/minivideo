@@ -1,7 +1,6 @@
 package cn.tju.minivideo.controller;
 
 import cn.tju.minivideo.core.annotation.AuthRequired;
-import cn.tju.minivideo.core.base.Paginator;
 import cn.tju.minivideo.core.base.Result;
 import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
@@ -19,10 +18,7 @@ import cn.tju.minivideo.entity.Collections;
 import cn.tju.minivideo.entity.LikeMap;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.entity.Video;
-import cn.tju.minivideo.service.CollectionsService;
-import cn.tju.minivideo.service.CommentService;
-import cn.tju.minivideo.service.LikeMapService;
-import cn.tju.minivideo.service.VideoService;
+import cn.tju.minivideo.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +52,15 @@ public class ActionController {
     @Autowired
     private CollectionsService collectionsService;
 
+    @Autowired
+    private ActivityService activityService;
+
+    @Autowired
+    private GoodsService goodsService;
+
+    @Autowired
+    private DynamicService dynamicService;
+
     // 这个点赞接口就包括了所有类型的点赞了，通过likeType区分
     @PostMapping("like")
     @AuthRequired
@@ -68,9 +73,10 @@ public class ActionController {
         likeMap.setFromId(user.getUserId());
         if ((likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnVideo) && !videoService.isVideoExistByVideoId(likeMapDto.getToId()))
                 || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnComment) && !commentService.isCommentExistByCommentId(likeMapDto.getToId()))
-//                || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnActivity))
+                || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnActivity) && !activityService.isActivityExistByActivityId(likeMapDto.getToId()))
 //                || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnBulletScreen))
-//                || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnGoods))
+                || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnGoods) && !goodsService.isExistGoodsByGoodsId(likeMapDto.getToId()))
+                || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnDynamic) && !dynamicService.isExistDynamicByDynamicId(likeMapDto.getToId()))
         ) {
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
@@ -84,6 +90,15 @@ public class ActionController {
         } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnComment)) {
             commentService.lockCommentByCommentId(likeMap.getToId());
             commentService.addCommentLikeNumByCommentId(likeMap.getToId());
+        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnActivity)){
+            activityService.lockActivityByActivityId(likeMap.getToId());
+            activityService.addLikeNumByActivityId(likeMap.getToId());
+        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnGoods)){
+            goodsService.lockGoodsByGoodsId(likeMap.getToId());
+            goodsService.addGoodsLikeNumByGoodsId(likeMap.getToId());
+        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnDynamic)){
+            dynamicService.lockDynamicByDynamicId(likeMap.getToId());
+            dynamicService.addDynamicLikeNumByDynamicId(likeMap.getToId());
         }
         return Results.Ok();
     }
@@ -98,7 +113,8 @@ public class ActionController {
         String userId = JwtInterceptor.getUser().getUserId();
         collections.setUserId(userId);
         if ((collections.getItemType().equals(Constants.CollectionConst.CollectOnVideo) && !videoService.isVideoExistByVideoId(collections.getItemId()))
-                || (collections.getItemType().equals(Constants.CollectionConst.CollectOnVideo) && !commentService.isCommentExistByCommentId(collections.getItemId()))
+                || (collections.getItemType().equals(Constants.CollectionConst.CollectOnActivity) && !activityService.isActivityExistByActivityId(collections.getItemId()))
+                || (collections.getItemType().equals(Constants.CollectionConst.CollectOnGoods) && !goodsService.isExistGoodsByGoodsId(collections.getItemId()))
         ) {
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
@@ -110,7 +126,11 @@ public class ActionController {
             videoService.lockVideoByVideoId(collections.getItemId());
             videoService.addVideoCollectNumByVideoId(collections.getItemId());
         } else if (collections.getItemType().equals(Constants.CollectionConst.CollectOnActivity)){
-
+            activityService.lockActivityByActivityId(collections.getItemId());
+            activityService.addCollectNumByActivityId(collections.getItemId());
+        } else if (collections.getItemType().equals(Constants.CollectionConst.CollectOnGoods)){
+            goodsService.lockGoodsByGoodsId(collections.getItemId());
+            goodsService.addGoodsCollectNumByGoodsId(collections.getItemId());
         }
         return Results.Ok();
     }

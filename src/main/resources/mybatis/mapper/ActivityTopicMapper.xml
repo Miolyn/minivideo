@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.ActivityTopicMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.ActivityTopic">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.activity_topics-->
+    <id column="activity_topic_id" property="activityTopicId" />
+    <result column="topic_id" property="topicId" />
+    <result column="activity_id" property="activityId" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    activity_topic_id, topic_id, activity_id, created_at, updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.activity_topics
+    where activity_topic_id = #{activityTopicId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.activity_topics
+    where activity_topic_id = #{activityTopicId}
+  </delete>
+  <insert id="insert" keyColumn="activity_topic_id" keyProperty="activityTopicId" parameterType="cn.tju.minivideo.entity.ActivityTopic" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.activity_topics (topic_id, activity_id, created_at, updated_at, is_deleted)
+    values (#{topicId}, #{activityId}, #{createdAt}, #{updatedAt}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="activity_topic_id" keyProperty="activityTopicId" parameterType="cn.tju.minivideo.entity.ActivityTopic" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.activity_topics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="topicId != null">
+        topic_id,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="topicId != null">
+        #{topicId},
+      </if>
+      <if test="activityId != null">
+        #{activityId},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.ActivityTopic">
+    <!--@mbg.generated-->
+    update minivideo.activity_topics
+    <set>
+      <if test="topicId != null">
+        topic_id = #{topicId},
+      </if>
+      <if test="activityId != null">
+        activity_id = #{activityId},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where activity_topic_id = #{activityTopicId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.ActivityTopic">
+    <!--@mbg.generated-->
+    update minivideo.activity_topics
+    set topic_id = #{topicId},
+      activity_id = #{activityId},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where activity_topic_id = #{activityTopicId}
+  </update>
+</mapper>

@@ -1,6 +1,5 @@
 package cn.tju.minivideo.service.impl;
 
-import cn.tju.minivideo.entity.Student;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;

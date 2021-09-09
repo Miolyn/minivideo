@@ -16,4 +16,5 @@ public interface CommunityMemberService{
 
     int updateByPrimaryKey(CommunityMember record);
 
+    boolean isExistByUserIdAndCommunityId(String userId, Integer communityId);
 }

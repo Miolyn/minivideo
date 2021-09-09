@@ -60,11 +60,13 @@ public class Constants {
         int LikeOnBulletScreen = 3;
         int LikeOnGoods = 4;
         int LikeOnComment = 5;
+        int LikeOnDynamic = 6;
     }
 
     public interface CollectionConst {
         int CollectOnVideo = 1;
         int CollectOnActivity = 2;
+        int CollectOnGoods = 3;
     }
 
     // 商品

@@ -26,5 +26,7 @@ public interface LabelService {
     List<Integer> getLabelIdOrInsert(List<Label> labels);
 
     List<Label> getLabelByLabelType(Integer labelType);
+
+    Label getLabelByLabelId(Integer labelId);
 }
 

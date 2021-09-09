@@ -41,4 +41,11 @@ public class CommunityMemberServiceImpl implements CommunityMemberService{
         return communityMemberMapper.updateByPrimaryKey(record);
     }
 
+
+    @Override
+    public boolean isExistByUserIdAndCommunityId(String userId, Integer communityId) {
+
+        return communityMemberMapper.findByCommunityIdAndUserId(communityId, userId) != null;
+    }
+
 }

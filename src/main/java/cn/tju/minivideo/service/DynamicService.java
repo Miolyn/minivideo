@@ -1,7 +1,9 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.Dynamic;
-public interface DynamicService{
+import com.github.pagehelper.PageInfo;
+
+public interface DynamicService {
 
 
     int deleteByPrimaryKey(Integer dynamicId);
@@ -17,4 +19,14 @@ public interface DynamicService{
     int updateByPrimaryKey(Dynamic record);
 
     int createVideoAutoDynamic(String userId, Integer videoId);
+
+    PageInfo<Dynamic> getDynamicsWhereUserIsFollowedWithPaginator(String userId, Integer page, Integer pageSize);
+
+    boolean isExistDynamicByDynamicId(Integer dynamicId);
+
+    void lockDynamicByDynamicId(Integer dynamicId);
+
+    int addDynamicLikeNumByDynamicId(Integer dynamicId);
 }
+
+

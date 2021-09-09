@@ -16,4 +16,6 @@ public interface CommunityService{
 
     int updateByPrimaryKey(Community record);
 
+
+    Community getCommunityByCommunityId(Integer communityId);
 }

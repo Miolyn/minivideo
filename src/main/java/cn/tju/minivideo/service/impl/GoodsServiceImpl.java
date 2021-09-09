@@ -104,11 +104,26 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public int addGoodsLikeNumByGoodsId(Integer goodsId) {
+        return goodsMapper.updateLikeNumByGoodsId(goodsId);
+    }
+
+    @Override
+    public int addGoodsCollectNumByGoodsId(Integer goodsId) {
+        return goodsMapper.updateCollectNumByGoodsId(goodsId);
+    }
+
+    @Override
     public void lockGoodsByGoodsId(Integer goodsId) {
         Goods goods = goodsMapper.findByGoodsIdForUpdate(goodsId);
         if (goods == null){
             throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
         }
+    }
+
+    @Override
+    public boolean isExistGoodsByGoodsId(Integer goodsId) {
+        return goodsMapper.findByGoodsId(goodsId) != null;
     }
 }
 

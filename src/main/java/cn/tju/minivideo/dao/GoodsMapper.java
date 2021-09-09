@@ -42,5 +42,10 @@ public interface GoodsMapper {
 
     int updateSaleNumByGoodsId(@Param("updatedSaleNum") Integer updatedSaleNum, @Param("goodsId") Integer goodsId);
 
+    int updateLikeNumByGoodsId(@Param("goodsId")Integer goodsId);
+
+    int updateCollectNumByGoodsId(@Param("goodsId")Integer goodsId);
+
+
 
 }

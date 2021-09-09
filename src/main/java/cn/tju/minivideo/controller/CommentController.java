@@ -13,6 +13,7 @@ import cn.tju.minivideo.dto.CommentDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Comment;
 import cn.tju.minivideo.entity.User;
+import cn.tju.minivideo.service.ActivityService;
 import cn.tju.minivideo.service.CommentService;
 import cn.tju.minivideo.service.VideoService;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +42,9 @@ public class CommentController {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private ActivityService activityService;
+
     @PostMapping("comment")
     @ApiOperation("评论某对象")
     @AuthRequired
@@ -51,13 +55,16 @@ public class CommentController {
         comment.setFromId(user.getUserId());
         if (   (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnVideo)   && !videoService.isVideoExistByVideoId(commentDto.getToId()))
             || (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnComment) && !commentService.isCommentExistByCommentId(commentDto.getToId()))
-//            || (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnActivity) )
+            || (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnActivity) && !activityService.isActivityExistByActivityId(commentDto.getToId()))
         ){
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
         if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnVideo)){
             videoService.lockVideoByVideoId(commentDto.getToId());
             videoService.addVideoCommentNumByVideoId(commentDto.getToId());
+        } else if(commentDto.getCommentType().equals(Constants.CommentConst.CommentOnActivity)){
+            activityService.lockActivityByActivityId(commentDto.getToId());
+            activityService.addCommentNumByActivityId(commentDto.getToId());
         }
         commentService.insertSelective(comment);
         return Results.OkWithData(comment.getCommentId());

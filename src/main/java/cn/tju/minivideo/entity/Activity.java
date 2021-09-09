@@ -15,8 +15,8 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dynamic implements Serializable {
-    private Integer dynamicId;
+public class Activity implements Serializable {
+    private Integer activityId;
 
     /**
      * 用户id
@@ -24,20 +24,29 @@ public class Dynamic implements Serializable {
     private String userId;
 
     /**
-     * 内容 若为自动动态  则内容则填写视频id
+     * 社区id
      */
-    private String content;
+    private Integer communityId;
 
     /**
-     * 动态类型 1普通动态 2自动动态（up主发了视频）
+     * 话题ids
      */
-    private Integer dynamicType;
+    private String topicIds;
 
+    /**
+     * 点赞数量
+     */
     private Integer likeNum;
 
-    private Integer commentNum;
-
+    /**
+     * 收藏数量
+     */
     private Integer collectNum;
+
+    /**
+     * 评论数量
+     */
+    private Integer commentNum;
 
     /**
      * 创建时间
@@ -50,6 +59,11 @@ public class Dynamic implements Serializable {
     private LocalDateTime updatedAt;
 
     private Integer isDeleted;
+
+    /**
+     * 帖子内容
+     */
+    private String content;
 
     private static final long serialVersionUID = 1L;
 }

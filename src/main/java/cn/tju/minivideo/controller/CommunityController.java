@@ -7,20 +7,14 @@ import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
-import cn.tju.minivideo.core.util.BindUtil;
-import cn.tju.minivideo.core.util.JsonUtil;
-import cn.tju.minivideo.core.util.Results;
+import cn.tju.minivideo.core.util.*;
+import cn.tju.minivideo.dto.ActivityDto;
 import cn.tju.minivideo.dto.CommunityDto;
 import cn.tju.minivideo.dto.LabelDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
-import cn.tju.minivideo.entity.Community;
-import cn.tju.minivideo.entity.CommunityMember;
-import cn.tju.minivideo.entity.Label;
-import cn.tju.minivideo.entity.User;
-import cn.tju.minivideo.service.CommunityMemberService;
-import cn.tju.minivideo.service.CommunityService;
-import cn.tju.minivideo.service.LabelService;
-import cn.tju.minivideo.service.MediaService;
+import cn.tju.minivideo.entity.*;
+import cn.tju.minivideo.service.*;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RequestMapping("community")
 @RestController
@@ -52,6 +47,16 @@ public class CommunityController {
 
     @Autowired
     private MediaService mediaService;
+
+    @Autowired
+    private ActivityService activityService;
+
+    @Autowired
+    private TopicService topicService;
+
+    @Autowired
+    private ActivityTopicService activityTopicService;
+
 
     @PostMapping("create_community")
     @ApiOperation("创建社区")
@@ -119,4 +124,96 @@ public class CommunityController {
         return Results.OkWithData(data);
     }
 
+
+    @PostMapping("update_community")
+    @ApiOperation("更新社区信息")
+    @AuthRequired
+    public Result updateCommunityInfo(@RequestBody @Validated(ValidationGroups.Update.class) CommunityDto communityDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        Community community = communityService.getCommunityByCommunityId(communityDto.getCommunityId());
+        Label mainLabel = labelService.getLabelByLabelId(community.getMainLabelId());
+        log.info(mainLabel.toString());
+        if(mainLabel.getLabelType().equals(Constants.LabelConst.LabelUpMasterLabelType) && (communityDto.getCommunityName() != null && !communityDto.getCommunityName().isEmpty())){
+            throw new ControllerException(MsgEnums.COMMUNITY_CANT_MODIFY_COMMUNITY_NAME);
+        }
+        if(communityDto.getAvatar() != null && !communityDto.getAvatar().isEmpty()){
+            mediaService.isExistByMediaUrlAndTrueFile(communityDto.getAvatar());
+        }
+        community = modelMapper.map(communityDto, Community.class);
+        communityService.updateByPrimaryKeySelective(community);
+        return Results.Ok();
+    }
+
+    @PostMapping("join_community")
+    @ApiOperation("加入社区")
+    @AuthRequired
+    public Result joinInCommunity(@RequestBody @Validated(ValidationGroups.IdForm.class) CommunityDto communityDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        String userId = JwtInterceptor.getUser().getUserId();
+        if(!communityMemberService.isExistByUserIdAndCommunityId(userId, communityDto.getCommunityId())){
+            throw new ControllerException(MsgEnums.COMMUNITY_HAS_JOIN_COMMUNITY);
+        }
+        CommunityMember communityMember = new CommunityMember(userId, communityDto.getCommunityId(),
+                Constants.CommunityMemberConst.CommunityMemberStatusNormal,
+                Constants.CommunityMemberConst.CommunityMemberNormalAuthority);
+        communityMemberService.insertSelective(communityMember);
+        return Results.Ok();
+    }
+
+    @PostMapping("add_activity")
+    @ApiOperation("添加帖子")
+    @AuthRequired
+    @Transactional
+    public Result addActivity(@RequestBody @Validated(ValidationGroups.Insert.class)ActivityDto activityDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        String userId = JwtInterceptor.getUser().getUserId();
+        if(!communityMemberService.isExistByUserIdAndCommunityId(userId, activityDto.getCommunityId())){
+            throw new ControllerException(MsgEnums.PERMISSION_ERROR);
+        }
+        Activity activity = modelMapper.map(activityDto, Activity.class);
+        activity.setUserId(userId);
+        List<String> topics = StringUtil.getTopicList(activityDto.getContent());
+        List<Integer> topicIds = topicService.getTopicIdsOrInsert(topics, userId);
+        String ids = JsonUtil.List2String(topicIds);
+        activity.setTopicIds(ids);
+        activityService.insertSelective(activity);
+        activityTopicService.insertActivityTopicByTopicIdsAndActivityId(topicIds, activity.getActivityId());
+        return Results.OkWithData(activity.getActivityId());
+    }
+
+
+    @GetMapping("activity")
+    @ApiOperation("获取帖子详情")
+    public Result getActivity(@RequestParam(value = "activityId", defaultValue = "-1") Integer activityId){
+        if(activityId.equals(-1)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        Activity activity = activityService.getActivityByActivityId(activityId);
+        ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+        return Results.OkWithData(activityDto);
+    }
+
+    @GetMapping("community_activities")
+    @ApiOperation("获取社区中的帖子")
+    public Result getCommunityActivities(@RequestParam(value = "communityId", defaultValue = "-1") Integer communityId,
+                                         @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                         @RequestParam(value = "sort", defaultValue = "1") Integer sortMethod){
+        if(communityId.equals(-1)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        PageInfo<Activity> pageInfo = activityService.getCommunityActivitiesWithPaginatorSortByMethod(communityId, page, ProjectConstant.PageSize, sortMethod);
+        List<ActivityDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
+
+    @GetMapping("activity_main_tmp")
+    @ApiOperation("暂时的帖子首页，按顺序返回帖子，分页")
+    public Result getActivitiesByPage(@RequestParam(value = "page", defaultValue = "1") Integer page){
+        PageInfo<Activity> pageInfo = activityService.getActivitiesWithPaginator(page, ProjectConstant.PageSize);
+        List<ActivityDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
 }
+

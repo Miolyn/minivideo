@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.ActivityMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Activity">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.activities-->
+    <id column="activity_id" property="activityId" />
+    <result column="user_id" property="userId" />
+    <result column="community_id" property="communityId" />
+    <result column="topic_ids" property="topicIds" />
+    <result column="like_num" property="likeNum" />
+    <result column="collect_num" property="collectNum" />
+    <result column="comment_num" property="commentNum" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.tju.minivideo.entity.Activity">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.activities-->
+    <result column="content" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    activity_id, user_id, community_id, topic_ids, like_num, collect_num, comment_num, 
+    created_at, updated_at, is_deleted
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--@mbg.generated-->
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from minivideo.activities
+    where activity_id = #{activityId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.activities
+    where activity_id = #{activityId}
+  </delete>
+  <insert id="insert" keyColumn="activity_id" keyProperty="activityId" parameterType="cn.tju.minivideo.entity.Activity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.activities (user_id, community_id, topic_ids, like_num, collect_num, comment_num, 
+      created_at, updated_at, is_deleted, content)
+    values (#{userId}, #{communityId}, #{topicIds}, #{likeNum}, #{collectNum}, #{commentNum}, 
+      #{createdAt}, #{updatedAt}, #{isDeleted}, #{content})
+  </insert>
+  <insert id="insertSelective" keyColumn="activity_id" keyProperty="activityId" parameterType="cn.tju.minivideo.entity.Activity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.activities
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="communityId != null">
+        community_id,
+      </if>
+      <if test="topicIds != null">
+        topic_ids,
+      </if>
+      <if test="likeNum != null">
+        like_num,
+      </if>
+      <if test="collectNum != null">
+        collect_num,
+      </if>
+      <if test="commentNum != null">
+        comment_num,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="communityId != null">
+        #{communityId},
+      </if>
+      <if test="topicIds != null">
+        #{topicIds},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum},
+      </if>
+      <if test="collectNum != null">
+        #{collectNum},
+      </if>
+      <if test="commentNum != null">
+        #{commentNum},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+      <if test="content != null">
+        #{content},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Activity">
+    <!--@mbg.generated-->
+    update minivideo.activities
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="communityId != null">
+        community_id = #{communityId},
+      </if>
+      <if test="topicIds != null">
+        topic_ids = #{topicIds},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum},
+      </if>
+      <if test="collectNum != null">
+        collect_num = #{collectNum},
+      </if>
+      <if test="commentNum != null">
+        comment_num = #{commentNum},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+      <if test="content != null">
+        content = #{content},
+      </if>
+    </set>
+    where activity_id = #{activityId}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.tju.minivideo.entity.Activity">
+    <!--@mbg.generated-->
+    update minivideo.activities
+    set user_id = #{userId},
+      community_id = #{communityId},
+      topic_ids = #{topicIds},
+      like_num = #{likeNum},
+      collect_num = #{collectNum},
+      comment_num = #{commentNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted},
+      content = #{content}
+    where activity_id = #{activityId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Activity">
+    <!--@mbg.generated-->
+    update minivideo.activities
+    set user_id = #{userId},
+      community_id = #{communityId},
+      topic_ids = #{topicIds},
+      like_num = #{likeNum},
+      collect_num = #{collectNum},
+      comment_num = #{commentNum},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where activity_id = #{activityId}
+  </update>
+<!--auto generated by MybatisCodeHelper on 2021-09-09-->
+  <select id="findByActivityId" resultMap="ResultMapWithBLOBs">
+    select <include refid="Base_Column_List" />, <include refid="Blob_Column_List" />
+    from minivideo.activities
+    where activity_id=#{activityId} and is_deleted=0
+  </select>
+  <select id="findByActivityIdForUpdate" resultMap="ResultMapWithBLOBs">
+    select <include refid="Base_Column_List" />, <include refid="Blob_Column_List" />
+    from minivideo.activities
+    where activity_id=#{activityId} and is_deleted=0
+    for update
+  </select>
+<!--auto generated by MybatisCodeHelper on 2021-09-09-->
+  <update id="updateLikeNumByActivityId">
+    update minivideo.activities
+    set like_num=like_num+1
+    where activity_id=#{activityId} and is_deleted=0
+  </update>
+<!--auto generated by MybatisCodeHelper on 2021-09-09-->
+  <update id="updateCollectNumByActivityId">
+    update minivideo.activities
+    set collect_num=collect_num+1
+    where activity_id=#{activityId} and is_deleted=0
+  </update>
+<!--auto generated by MybatisCodeHelper on 2021-09-09-->
+  <update id="updateCommentNumByActivityId">
+    update minivideo.activities
+    set comment_num=comment_num+1
+    where activity_id=#{activityId} and is_deleted=0
+  </update>
+<!--auto generated by MybatisCodeHelper on 2021-09-09-->
+  <select id="findByCommunityIdOrderByCreatedAt" resultMap="ResultMapWithBLOBs">
+    select <include refid="Base_Column_List"/>, <include refid="Blob_Column_List" />
+    from minivideo.activities
+    where community_id=#{communityId} and is_deleted=0
+    order by created_at desc
+  </select>
+<!--auto generated by MybatisCodeHelper on 2021-09-09-->
+  <select id="findByCommunityIdOrderByLikeNum" resultMap="ResultMapWithBLOBs">
+    select <include refid="Base_Column_List"/>, <include refid="Blob_Column_List" />
+    from minivideo.activities
+    where community_id=#{communityId} and is_deleted=0 order by like_num desc
+  </select>
+<!--auto generated by MybatisCodeHelper on 2021-09-09-->
+  <select id="getAllOrderByCreatedAt" resultMap="ResultMapWithBLOBs">
+    select <include refid="Base_Column_List"/>, <include refid="Blob_Column_List" />
+    from minivideo.activities
+    where is_deleted=0
+    order by created_at desc
+  </select>
+</mapper>
