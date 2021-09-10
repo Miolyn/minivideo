@@ -59,4 +59,10 @@ public class TopicServiceImpl implements TopicService{
         return ids;
     }
 
+    @Override
+    public List<Topic> getHotTopic() {
+
+        return topicMapper.findOrderByActivityNum();
+    }
+
 }

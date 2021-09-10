@@ -105,6 +105,15 @@ public class ActivityServiceImpl implements ActivityService {
         return new PageInfo<>(activityMapper.getAllOrderByCreatedAt());
     }
 
+    @Override
+    public String getUserIdOfActivityByActivityId(Integer activityId) {
+        String userId = activityMapper.findUserIdByActivityId(activityId);
+        if(userId == null || userId.equals("")){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return userId;
+    }
+
 }
 
 

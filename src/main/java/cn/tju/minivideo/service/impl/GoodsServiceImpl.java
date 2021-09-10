@@ -130,6 +130,15 @@ public class GoodsServiceImpl implements GoodsService {
     public boolean isExistGoodsByGoodsId(Integer goodsId) {
         return goodsMapper.findByGoodsId(goodsId) != null;
     }
+
+    @Override
+    public String getUserIdOfGoodsByGoodsId(Integer goodsId) {
+        String userId = goodsMapper.findUserIdByGoodsId(goodsId);
+        if(userId == null || userId.equals("")){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return userId;
+    }
 }
 
 

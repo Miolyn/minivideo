@@ -21,4 +21,6 @@ public interface TopicService{
 
     List<Integer> getTopicIdsOrInsert(List<String> topics, String userId);
 
+    List<Topic> getHotTopic();
+
 }

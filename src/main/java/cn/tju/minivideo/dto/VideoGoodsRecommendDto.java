@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VideoGoodsRecommendDto {
+    @NotNull(message = "视频推荐商品的id不能为空", groups = {ValidationGroups.IdForm.class})
     private Integer videoGoodsRecommendId;
 
     /**

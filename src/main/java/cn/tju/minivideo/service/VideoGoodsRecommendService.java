@@ -2,6 +2,8 @@ package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.VideoGoodsRecommend;
 
+import java.util.List;
+
 public interface VideoGoodsRecommendService {
 
 
@@ -16,6 +18,10 @@ public interface VideoGoodsRecommendService {
     int updateByPrimaryKeySelective(VideoGoodsRecommend record);
 
     int updateByPrimaryKey(VideoGoodsRecommend record);
+
+    int deleteByPrimaryKeyLogical(Integer videoGoodsRecommendId);
+
+    List<VideoGoodsRecommend> getVideoGoodsRecommendsByVideoId(Integer videoId);
 
 }
 

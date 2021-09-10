@@ -24,4 +24,8 @@ public interface MediaMapper extends BaseMapper<Media> {
 
     Media findByMediaUrl(@Param("mediaUrl") String mediaUrl);
 
+    Media findByMediaUrlAndMediaType(@Param("mediaUrl")String mediaUrl,@Param("mediaType")Integer mediaType);
+
+
+
 }

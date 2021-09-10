@@ -1,5 +1,8 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.entity.Community;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.CommunityMemberMapper;
@@ -44,8 +47,13 @@ public class CommunityMemberServiceImpl implements CommunityMemberService{
 
     @Override
     public boolean isExistByUserIdAndCommunityId(String userId, Integer communityId) {
-
         return communityMemberMapper.findByCommunityIdAndUserId(communityId, userId) != null;
+    }
+
+    @Override
+    public PageInfo<CommunityMember> getCommunitiesByUserIdWithPaginator(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return new PageInfo<>(communityMemberMapper.findByUserIdOrderByCreatedAt(userId));
     }
 
 }

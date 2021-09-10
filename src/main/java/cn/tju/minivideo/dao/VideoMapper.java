@@ -23,6 +23,21 @@ public interface VideoMapper {
 
     List<Video> findByUserIdOrderByPlayNum(@Param("userId") String userId);
 
+    List<Video> findByVideoTypeOrderByCreatedAt(@Param("videoType")Integer videoType);
+
+	List<Video> findByVideoTypeOrderByLikeNum(@Param("videoType")Integer videoType);
+
+	List<Video> findByVideoTypeOrderByPlayNum(@Param("videoType")Integer videoType);
+
+	List<Video> findOrderByCreatedAt();
+
+	List<Video> findOrderByLikeNum();
+
+	List<Video> findOrderByPlayNum();
+
+
+
+
     int updatePlayNumByVideoId(@Param("videoId") Integer videoId);
 
     int updateLikeNumByVideoId(@Param("videoId") Integer videoId);
@@ -34,4 +49,8 @@ public interface VideoMapper {
     Video findByVideoIdForUpdate(@Param("videoId") Integer videoId);
 
     int deleteByVideoIdLogical(@Param("videoId") Integer videoId);
+
+    String getUserIdByVideoId(@Param("videoId")Integer videoId);
+
+
 }

@@ -14,10 +14,7 @@ import cn.tju.minivideo.dto.CollectionDto;
 import cn.tju.minivideo.dto.LikeMapDto;
 import cn.tju.minivideo.dto.SimpleVideoDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
-import cn.tju.minivideo.entity.Collections;
-import cn.tju.minivideo.entity.LikeMap;
-import cn.tju.minivideo.entity.User;
-import cn.tju.minivideo.entity.Video;
+import cn.tju.minivideo.entity.*;
 import cn.tju.minivideo.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
@@ -61,6 +58,9 @@ public class ActionController {
     @Autowired
     private DynamicService dynamicService;
 
+    @Autowired
+    private MessageService messageService;
+
     // 这个点赞接口就包括了所有类型的点赞了，通过likeType区分
     @PostMapping("like")
     @AuthRequired
@@ -87,18 +87,34 @@ public class ActionController {
         if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnVideo)) {
             videoService.lockVideoByVideoId(likeMap.getToId());
             videoService.addVideoLikeNumByVideoId(likeMap.getToId());
+            messageService.addSystemNotifyMessage(videoService.getUserIdOfrVideoByVideoId(likeMap.getToId()),
+                    Constants.MessageConst.MessageLikeNotify,
+                    messageService.getMsgDtoByObject(likeMap, Constants.MessageConst.ItemTypeVideo, Constants.MessageConst.MessageLikeNotify));
         } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnComment)) {
             commentService.lockCommentByCommentId(likeMap.getToId());
             commentService.addCommentLikeNumByCommentId(likeMap.getToId());
-        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnActivity)){
+            Comment comment = commentService.getCommentByCommentId(likeMap.getToId());
+            messageService.addSystemNotifyMessage(comment.getFromId(),
+                    Constants.MessageConst.MessageLikeNotify,
+                    messageService.getMsgDtoByObject(likeMap, Constants.MessageConst.ItemTypeComment, Constants.MessageConst.MessageLikeNotify));
+        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnActivity)) {
             activityService.lockActivityByActivityId(likeMap.getToId());
             activityService.addLikeNumByActivityId(likeMap.getToId());
-        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnGoods)){
+            messageService.addSystemNotifyMessage(activityService.getUserIdOfActivityByActivityId(likeMap.getToId()),
+                    Constants.MessageConst.MessageLikeNotify,
+                    messageService.getMsgDtoByObject(likeMap, Constants.MessageConst.ItemTypeActivity, Constants.MessageConst.MessageLikeNotify));
+        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnGoods)) {
             goodsService.lockGoodsByGoodsId(likeMap.getToId());
             goodsService.addGoodsLikeNumByGoodsId(likeMap.getToId());
-        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnDynamic)){
+            messageService.addSystemNotifyMessage(goodsService.getUserIdOfGoodsByGoodsId(likeMap.getToId()),
+                    Constants.MessageConst.MessageLikeNotify,
+                    messageService.getMsgDtoByObject(likeMap, Constants.MessageConst.ItemTypeGoods, Constants.MessageConst.MessageLikeNotify));
+        } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnDynamic)) {
             dynamicService.lockDynamicByDynamicId(likeMap.getToId());
             dynamicService.addDynamicLikeNumByDynamicId(likeMap.getToId());
+            messageService.addSystemNotifyMessage(dynamicService.getUserIdOfDynamicByDynamicId(likeMap.getToId()),
+                    Constants.MessageConst.MessageLikeNotify,
+                    messageService.getMsgDtoByObject(likeMap, Constants.MessageConst.ItemTypeDynamic, Constants.MessageConst.MessageLikeNotify));
         }
         return Results.Ok();
     }
@@ -118,17 +134,17 @@ public class ActionController {
         ) {
             throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
         }
-        if (collectionsService.isExistByItemIdAndUserIdAnItemType(collections.getItemId(), userId, collections.getItemType())){
+        if (collectionsService.isExistByItemIdAndUserIdAnItemType(collections.getItemId(), userId, collections.getItemType())) {
             throw new ControllerException(MsgEnums.RELATION_HAS_EXIST);
         }
         collectionsService.insertSelective(collections);
-        if(collections.getItemType().equals(Constants.CollectionConst.CollectOnVideo)){
+        if (collections.getItemType().equals(Constants.CollectionConst.CollectOnVideo)) {
             videoService.lockVideoByVideoId(collections.getItemId());
             videoService.addVideoCollectNumByVideoId(collections.getItemId());
-        } else if (collections.getItemType().equals(Constants.CollectionConst.CollectOnActivity)){
+        } else if (collections.getItemType().equals(Constants.CollectionConst.CollectOnActivity)) {
             activityService.lockActivityByActivityId(collections.getItemId());
             activityService.addCollectNumByActivityId(collections.getItemId());
-        } else if (collections.getItemType().equals(Constants.CollectionConst.CollectOnGoods)){
+        } else if (collections.getItemType().equals(Constants.CollectionConst.CollectOnGoods)) {
             goodsService.lockGoodsByGoodsId(collections.getItemId());
             goodsService.addGoodsCollectNumByGoodsId(collections.getItemId());
         }
@@ -140,12 +156,12 @@ public class ActionController {
     @ApiOperation("获取用户的收藏")
     public Result getCollections(@RequestParam(value = "itemType", defaultValue = "-1") Integer itemType,
                                  @RequestParam(value = "page", defaultValue = "1") Integer page) {
-        if(itemType.equals(-1)){
+        if (itemType.equals(-1)) {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
         String userId = JwtInterceptor.getUser().getUserId();
         PageInfo<Collections> pageInfo = collectionsService.getCollectionsByItemTypeAndUserIdWithPaginator(itemType, userId, page, ProjectConstant.PageSize);
-        if (itemType.equals(Constants.CollectionConst.CollectOnVideo)){
+        if (itemType.equals(Constants.CollectionConst.CollectOnVideo)) {
             List<SimpleVideoDto> simpleVideoDtos = new ArrayList<>();
             for (Collections collections : pageInfo.getList()) {
                 Video video = videoService.selectByPrimaryKey(collections.getItemId());

@@ -45,5 +45,7 @@ public interface GoodsMapper {
 
     int updateCommentNumByGoodsId(@Param("goodsId")Integer goodsId);
 
+    String findUserIdByGoodsId(@Param("goodsId")Integer goodsId);
+
 
 }

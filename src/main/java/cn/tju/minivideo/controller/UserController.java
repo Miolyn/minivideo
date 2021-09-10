@@ -195,7 +195,7 @@ public class UserController {
         return Results.OkWithData(address.getAddressId());
     }
 
-    @GetMapping("address")
+    @GetMapping("user_address")
     @ApiOperation("获取该用户所有地址，分页")
     @AuthRequired
     public Result getAddress(@RequestParam(value = "page", defaultValue = "1") Integer page){
@@ -203,7 +203,7 @@ public class UserController {
         PageInfo<Address> pageInfo = addressService.getAddressByUserIdWithPaginator(userId, page, ProjectConstant.PageSize);
         List<AddressDto> data = new ArrayList<>();
         pageInfo.getList().forEach(address -> data.add(modelMapper.map(address, AddressDto.class)));
-        return Results.OkWithData(data);
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
     }
 
     // TODO: 返回id

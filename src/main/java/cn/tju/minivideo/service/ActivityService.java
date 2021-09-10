@@ -38,6 +38,8 @@ public interface ActivityService {
     PageInfo<Activity> getCommunityActivitiesWithPaginatorSortByMethod(Integer communityId, Integer page, Integer pageSize, Integer sortMethod);
 
     PageInfo<Activity> getActivitiesWithPaginator(Integer page, Integer pageSize);
+
+    String getUserIdOfActivityByActivityId(Integer activityId);
 }
 
 

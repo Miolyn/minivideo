@@ -62,4 +62,16 @@ public class MediaServiceImpl implements MediaService {
          }
          return true;
     }
+
+    @Override
+    public boolean isExistByMediaUrlAndMediaTypeAndTrueFile(String mediaUrl, Integer mediaType) {
+        if(mediaMapper.findByMediaUrlAndMediaType(mediaUrl, mediaType) == null){
+            throw new ServiceException(MsgEnums.MEDIA_NOT_FOUND);
+        }
+        String path = FileUtil.getUploadFilePath(mediaUrl);
+        if (!FileUtil.isFileExist(path)){
+            throw new ServiceException(MsgEnums.MEDIA_NOT_FOUND);
+        }
+        return true;
+    }
 }

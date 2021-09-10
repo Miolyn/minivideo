@@ -37,4 +37,8 @@ public interface ActivityMapper {
 
     List<Activity> getAllOrderByCreatedAt();
 
+
+    String findUserIdByActivityId(@Param("activityId")Integer activityId);
+
+
 }

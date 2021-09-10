@@ -27,6 +27,10 @@ public interface DynamicService {
     void lockDynamicByDynamicId(Integer dynamicId);
 
     int addDynamicLikeNumByDynamicId(Integer dynamicId);
+
+    int addDynamicCommentNumByDynamicId(Integer dynamicId);
+
+    String getUserIdOfDynamicByDynamicId(Integer dynamicId);
 }
 
 

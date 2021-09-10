@@ -69,6 +69,9 @@ public class VideoController {
     @Autowired
     private HistoryService historyService;
 
+    @Autowired
+    private VideoGoodsRecommendService videoGoodsRecommendService;
+
     // video 元素支持三种视频格式： MP4, WebM, 和 Ogg:
     // TODO 增加视频播放量
     @GetMapping("play_tmp")
@@ -149,7 +152,8 @@ public class VideoController {
         Video video = modelMapper.map(videoDto, Video.class);
         User user = JwtInterceptor.getUser();
         video.setUserId(user.getUserId());
-        if (!mediaService.isExistByMediaUrlAndTrueFile(video.getAvatar()) || !mediaService.isExistByMediaUrlAndTrueFile(video.getVideoFile())) {
+        if (!mediaService.isExistByMediaUrlAndMediaTypeAndTrueFile(video.getAvatar(), Constants.UploadConst.UploadImgType)
+                || !mediaService.isExistByMediaUrlAndMediaTypeAndTrueFile(video.getVideoFile(), Constants.UploadConst.UploadVideoType)) {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
         video.setFileSize(FileUtil.getFileSizeByUrl(video.getVideoFile()));
@@ -216,8 +220,8 @@ public class VideoController {
 
     @GetMapping("user_videos")
     @AuthRequired(required = false)
-    @ApiOperation("获取用户发布的视频列表，按最新发布排序")
-    public Result getUserVideosOrderByCreatedAt(@RequestParam(value = "userId", required = false, defaultValue = "") String userId,
+    @ApiOperation("获取用户发布的视频列表，按顺序排序")
+    public Result getUserVideosOrderByMethod(@RequestParam(value = "userId", required = false, defaultValue = "") String userId,
                                                 @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                 @RequestParam(value = "sort", defaultValue = "1") Integer sortMethod) {
         if (userId.equals("")) {
@@ -238,12 +242,31 @@ public class VideoController {
         return Results.OkWithData(Paginators.paginator(pageInfo, simpleVideoDtos));
     }
 
+    @GetMapping("videos")
+    @ApiOperation("获取所有视频的列表，按顺序排序，分页")
+    public Result getVideoOrderBySortMethod(@RequestParam(value = "videoType", defaultValue = "-1") Integer videoType,
+                                            @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                            @RequestParam(value = "sort", defaultValue = "1") Integer sortMethod){
+        if(!videoType.equals(-1) && !ConstUtil.isVideoTypeValid(videoType)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        PageInfo<Video> pageInfo = videoService.getVideosByVideoTypeWithPaginatorSortByMethod(videoType, page, ProjectConstant.PageSize, sortMethod);
+        List<SimpleVideoDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(video -> data.add(modelMapper.map(video, SimpleVideoDto.class)));
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
+
     // TODO: 根据视频id获取推荐商品
     @GetMapping("video_goods_recommends")
     @ApiOperation("获取视频对应的推荐商品")
-    public Result getVideoGoodsRecommends(@RequestParam("videoId") Integer videoId){
-
-        return Results.Ok();
+    public Result getVideoGoodsRecommends(@RequestParam(value = "videoId", defaultValue = "-1") Integer videoId){
+        if(videoId.equals(-1) || !videoService.isVideoExistByVideoId(videoId)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        List<VideoGoodsRecommend> videoGoodsRecommends = videoGoodsRecommendService.getVideoGoodsRecommendsByVideoId(videoId);
+        List<VideoGoodsRecommendDto> data = new ArrayList<>();
+        videoGoodsRecommends.forEach(videoGoodsRecommend -> data.add(modelMapper.map(videoGoodsRecommend, VideoGoodsRecommendDto.class)));
+        return Results.OkWithData(data);
     }
 
     // TODO: 添加
@@ -252,8 +275,11 @@ public class VideoController {
     @AuthRequired
     public Result addVideoGoodsRecommends(@RequestBody @Validated(ValidationGroups.Insert.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult) {
         BindUtil.checkBindValid(bindingResult);
-
-        return Results.Ok();
+        String userId = JwtInterceptor.getUser().getUserId();
+        VideoGoodsRecommend videoGoodsRecommend = modelMapper.map(videoGoodsRecommendDto, VideoGoodsRecommend.class);
+        videoGoodsRecommend.setUserId(userId);
+        videoGoodsRecommendService.insertSelective(videoGoodsRecommend);
+        return Results.OkWithData(videoGoodsRecommend.getVideoGoodsRecommendId());
     }
 
     // TODO: 根据推荐id修改
@@ -273,6 +299,7 @@ public class VideoController {
     @AuthRequired
     public Result deleteVideoGoodsRecommend(@RequestBody @Validated(ValidationGroups.IdForm.class) VideoGoodsRecommendDto videoGoodsRecommendDto, BindingResult bindingResult){
         BindUtil.checkBindValid(bindingResult);
+        videoGoodsRecommendService.deleteByPrimaryKeyLogical(videoGoodsRecommendDto.getVideoGoodsRecommendId());
         return Results.Ok();
     }
 

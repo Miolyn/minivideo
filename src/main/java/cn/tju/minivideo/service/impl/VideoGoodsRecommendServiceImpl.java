@@ -6,6 +6,8 @@ import cn.tju.minivideo.entity.VideoGoodsRecommend;
 import cn.tju.minivideo.dao.VideoGoodsRecommendMapper;
 import cn.tju.minivideo.service.VideoGoodsRecommendService;
 
+import java.util.List;
+
 @Service
 public class VideoGoodsRecommendServiceImpl implements VideoGoodsRecommendService {
 
@@ -40,6 +42,16 @@ public class VideoGoodsRecommendServiceImpl implements VideoGoodsRecommendServic
     @Override
     public int updateByPrimaryKey(VideoGoodsRecommend record) {
         return videoGoodsRecommendMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public int deleteByPrimaryKeyLogical(Integer videoGoodsRecommendId) {
+        return videoGoodsRecommendMapper.updateIsDeletedByVideoGoodsRecommendId(videoGoodsRecommendId);
+    }
+
+    @Override
+    public List<VideoGoodsRecommend> getVideoGoodsRecommendsByVideoId(Integer videoId) {
+        return videoGoodsRecommendMapper.findByVideoId(videoId);
     }
 
 }

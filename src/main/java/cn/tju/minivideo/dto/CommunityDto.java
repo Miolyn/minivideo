@@ -87,6 +87,9 @@ public class CommunityDto {
     @Null(message = "没有权限修改", groups = {ValidationGroups.Update.class})
     List<String> selfLabels;
 
+    @Null(message = "没有权限修改", groups = {ValidationGroups.Insert.class, ValidationGroups.Update.class})
+    List<LabelDto> selfLabelDtos;
+
     /**
      * 创建时间
      */

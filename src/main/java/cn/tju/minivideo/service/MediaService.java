@@ -17,4 +17,6 @@ public interface MediaService{
     int updateByPrimaryKey(Media record);
 
     boolean isExistByMediaUrlAndTrueFile(String mediaUrl);
+
+    boolean isExistByMediaUrlAndMediaTypeAndTrueFile(String mediaUrl, Integer mediaType);
 }

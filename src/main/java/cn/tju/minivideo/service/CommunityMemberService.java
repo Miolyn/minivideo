@@ -1,6 +1,9 @@
 package cn.tju.minivideo.service;
 
+import cn.tju.minivideo.entity.Community;
 import cn.tju.minivideo.entity.CommunityMember;
+import com.github.pagehelper.PageInfo;
+
 public interface CommunityMemberService{
 
 
@@ -17,4 +20,7 @@ public interface CommunityMemberService{
     int updateByPrimaryKey(CommunityMember record);
 
     boolean isExistByUserIdAndCommunityId(String userId, Integer communityId);
+
+    PageInfo<CommunityMember> getCommunitiesByUserIdWithPaginator(String userId, Integer page, Integer pageSize);
+
 }

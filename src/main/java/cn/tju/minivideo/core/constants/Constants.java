@@ -38,8 +38,20 @@ public class Constants {
         int UploadVideoType = 2;
     }
 
-    public interface VideoConst {
-        int VideoFoodType = 1;
+    public interface VideoTypeConst {
+        int VideoFoodType = 1; // 美食
+        int videoTwoDimensionalSpaceType = 2;    //二次元
+        int videoCarType = 3;    //汽车
+        int videoGhostLivestockType = 4;    //鬼畜
+        int videoNewsType = 5;    //新闻
+        int videoEntertainmentType = 6;    //娱乐
+        int videoMovieType = 7;    //电影
+        int videoSportType = 8;    //运动
+        int videoMusicType = 9;    //音乐
+        int videoKnowledgeType = 10;    //知识
+        int videoDanceType = 11;    //舞蹈
+        int videoGameType = 12;    //游戏
+        int videoTechnologyType = 13;    //科技
     }
 
     public interface DynamicConst {
@@ -52,6 +64,7 @@ public class Constants {
         int CommentOnComment = 2;
         int CommentOnActivity = 3;
         int CommentOnGoods = 4;
+        int CommentOnDynamic = 5;
     }
 
     // 1点赞视频 2点赞帖子 3点赞弹幕 4点赞商品 5点赞评论
@@ -75,11 +88,12 @@ public class Constants {
         // 商品类型
         int GoodsFoodType = 1; // 食品类
 
+
     }
 
 
     // 1待付款，2待发货，3等待确认收货, 4订单完成， 5订单取消
-    public interface OrderConst{
+    public interface OrderConst {
         int OrderWaitForPayStatus = 1;
         int OrderWaitForShipStatus = 2;
         int OrderWaitForConfirmReceiptStatus = 3;
@@ -87,7 +101,7 @@ public class Constants {
         int OrderCancel = 5;
     }
 
-    public interface OrderGoodsConst{
+    public interface OrderGoodsConst {
         int OrderGoodsNormalStatus = 1;
     }
 
@@ -98,7 +112,7 @@ public class Constants {
         int LabelSelfDesignLabelType = 4;
     }
 
-    public interface CommunityMemberConst{
+    public interface CommunityMemberConst {
         int CommunityMemberStatusNormal = 1;
         int CommunityMemberAdministratorAuthority = 1;
         int CommunityMemberNormalAuthority = 2;
@@ -110,9 +124,35 @@ public class Constants {
         int HistoryGoodsType = 3;
     }
 
+    public interface MessageConst{
+        // 来自
+        String FromSystemId = "-1";
+
+        // 1回复/点赞视频，2回复/点赞帖子，3回复/点赞商品，4回复评论，5回复动态
+        int ItemTypeVideo = 1;
+        int ItemTypeActivity = 2;
+        int ItemTypeGoods = 3;
+        int ItemTypeComment = 4;
+        int ItemTypeDynamic = 5;
+        // 发送者类型 1系统，2用户，3网站超级管理员
+        int FromTypeSystem = 1;
+        int FromTypeUser = 2;
+        int FromTypeSuperAdministrator = 3;
+        // 消息类型 1系统消息，2回复我的（commentId），3收到的赞（likeMapId），4用户间消息
+        int MessageTypeSystem = 1;
+        int MessageTypeCommentNotify = 2;
+        int MessageLikeNotify = 3;
+        int MessageUserCommunicate = 4;
+        // isRead
+        int MessageUnRead = 0;
+        int MessageIsRead = 1;
+    }
+
     public static Map<Integer, String> goodsTypeMap = new HashMap<>();
 
     public static Map<Integer, String> historyTypeMap = new HashMap<>();
+    public static Map<Integer, String> videoTypeMap = new HashMap<>();
+
     static {
         Field[] fields = Constants.GoodsConst.class.getFields();
         for (Field f : fields) {
@@ -126,6 +166,14 @@ public class Constants {
         for (Field f : fields) {
             try {
                 historyTypeMap.put(f.getInt(f.getName()), f.getName());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        fields = Constants.VideoTypeConst.class.getFields();
+        for (Field f : fields) {
+            try {
+                videoTypeMap.put(f.getInt(f.getName()), f.getName());
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

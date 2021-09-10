@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tju.minivideo.dao.MessageMapper">
+  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Message">
+    <!--@mbg.generated-->
+    <!--@Table minivideo.messages-->
+    <id column="message_id" property="messageId" />
+    <result column="from_id" property="fromId" />
+    <result column="from_type" property="fromType" />
+    <result column="to_id" property="toId" />
+    <result column="message_type" property="messageType" />
+    <result column="content" property="content" />
+    <result column="is_read" property="isRead" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="is_deleted" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    message_id, from_id, from_type, to_id, message_type, content, is_read, created_at, 
+    updated_at, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from minivideo.messages
+    where message_id = #{messageId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from minivideo.messages
+    where message_id = #{messageId}
+  </delete>
+  <insert id="insert" keyColumn="message_id" keyProperty="messageId" parameterType="cn.tju.minivideo.entity.Message" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.messages (from_id, from_type, to_id, message_type, content, is_read, created_at, 
+      updated_at, is_deleted)
+    values (#{fromId}, #{fromType}, #{toId}, #{messageType}, #{content}, #{isRead}, #{createdAt}, 
+      #{updatedAt}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" keyColumn="message_id" keyProperty="messageId" parameterType="cn.tju.minivideo.entity.Message" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into minivideo.messages
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fromId != null">
+        from_id,
+      </if>
+      <if test="fromType != null">
+        from_type,
+      </if>
+      <if test="toId != null">
+        to_id,
+      </if>
+      <if test="messageType != null">
+        message_type,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="isRead != null">
+        is_read,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fromId != null">
+        #{fromId},
+      </if>
+      <if test="fromType != null">
+        #{fromType},
+      </if>
+      <if test="toId != null">
+        #{toId},
+      </if>
+      <if test="messageType != null">
+        #{messageType},
+      </if>
+      <if test="content != null">
+        #{content},
+      </if>
+      <if test="isRead != null">
+        #{isRead},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Message">
+    <!--@mbg.generated-->
+    update minivideo.messages
+    <set>
+      <if test="fromId != null">
+        from_id = #{fromId},
+      </if>
+      <if test="fromType != null">
+        from_type = #{fromType},
+      </if>
+      <if test="toId != null">
+        to_id = #{toId},
+      </if>
+      <if test="messageType != null">
+        message_type = #{messageType},
+      </if>
+      <if test="content != null">
+        content = #{content},
+      </if>
+      <if test="isRead != null">
+        is_read = #{isRead},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where message_id = #{messageId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Message">
+    <!--@mbg.generated-->
+    update minivideo.messages
+    set from_id = #{fromId},
+      from_type = #{fromType},
+      to_id = #{toId},
+      message_type = #{messageType},
+      content = #{content},
+      is_read = #{isRead},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      is_deleted = #{isDeleted}
+    where message_id = #{messageId}
+  </update>
+<!--auto generated by MybatisCodeHelper on 2021-09-10-->
+  <select id="findByToIdAndMessageType" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from minivideo.messages
+    where to_id=#{toId} and message_type=#{messageType} and is_deleted=0
+  </select>
+</mapper>

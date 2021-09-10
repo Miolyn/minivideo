@@ -42,6 +42,8 @@ public interface GoodsService {
     void lockGoodsByGoodsId(Integer goodsId);
 
     boolean isExistGoodsByGoodsId(Integer goodsId);
+
+    String getUserIdOfGoodsByGoodsId(Integer goodsId);
 }
 
 

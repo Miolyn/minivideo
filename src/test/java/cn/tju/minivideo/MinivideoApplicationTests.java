@@ -4,10 +4,12 @@ import cn.tju.minivideo.core.config.JwtConfig;
 import cn.tju.minivideo.core.config.UploadConfig;
 import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.util.FileUtil;
+import cn.tju.minivideo.core.util.JsonUtil;
 import cn.tju.minivideo.core.util.JwtUtil;
 import cn.tju.minivideo.core.util.StringUtil;
 import cn.tju.minivideo.dao.DynamicMapper;
 import cn.tju.minivideo.dao.UserMapper;
+import cn.tju.minivideo.dto.MsgDto;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.RedisService;
 import cn.tju.minivideo.service.UserService;
@@ -123,5 +125,10 @@ class MinivideoApplicationTests {
         for (String s : topicSet) {
             System.out.println(s);
         }
+    }
+    @Test
+    void testJackson(){
+        String ret = JsonUtil.Object2String(new MsgDto("1", 1, 1, "www"));
+        System.out.println(ret);
     }
 }

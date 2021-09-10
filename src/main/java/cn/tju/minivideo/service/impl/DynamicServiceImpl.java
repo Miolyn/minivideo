@@ -1,6 +1,8 @@
 package cn.tju.minivideo.service.impl;
 
 import cn.tju.minivideo.core.constants.Constants;
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -73,6 +75,20 @@ public class DynamicServiceImpl implements DynamicService {
     @Override
     public int addDynamicLikeNumByDynamicId(Integer dynamicId) {
         return dynamicMapper.updateLikeNumByDynamicId(dynamicId);
+    }
+
+    @Override
+    public int addDynamicCommentNumByDynamicId(Integer dynamicId) {
+        return dynamicMapper.updateCommentNumByDynamicId(dynamicId);
+    }
+
+    @Override
+    public String getUserIdOfDynamicByDynamicId(Integer dynamicId) {
+        String userId = dynamicMapper.findUserIdByDynamicId(dynamicId);
+        if(userId == null || userId.equals("")){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return userId;
     }
 
 

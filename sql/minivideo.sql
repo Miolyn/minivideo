@@ -16,12 +16,12 @@ CREATE TABLE `activities`
 
 CREATE TABLE `activity_topics`
 (
-    `activity_topic_id` int       NOT NULL AUTO_INCREMENT,
-    `topic_id`          integer   NULL COMMENT '话题id',
-    `activity_id`       int       NULL COMMENT '帖子id',
-    `created_at`    datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`    datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `is_deleted`    integer  default 0,
+    `activity_topic_id` int     NOT NULL AUTO_INCREMENT,
+    `topic_id`          integer NULL COMMENT '话题id',
+    `activity_id`       int     NULL COMMENT '帖子id',
+    `created_at`        datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`        datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted`        integer  default 0,
     PRIMARY KEY (`activity_topic_id`)
 );
 
@@ -166,7 +166,7 @@ CREATE TABLE `goods`
     `like_num`     int           NULL DEFAULT 0 COMMENT '点赞数量',
     `collect_num`  int           NULL DEFAULT 0 COMMENT '收藏数量',
     `sale_num`     int           NULL DEFAULT 0 COMMENT '销售数量',
-    `comment_num`     int           NULL DEFAULT 0 COMMENT '评论数量',
+    `comment_num`  int           NULL DEFAULT 0 COMMENT '评论数量',
     `created_at`   datetime           DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`   datetime           DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `is_deleted`   integer            default 0,
@@ -234,14 +234,15 @@ CREATE TABLE `media`
 CREATE TABLE `messages`
 (
     `message_id` int        NOT NULL AUTO_INCREMENT,
-    `from_id`    varchar(0) NOT NULL COMMENT '发送者id',
+    `from_id`    varchar(50) NOT NULL COMMENT '发送者id',
     `from_type`  int        NOT NULL COMMENT '发送者类型 1系统，2用户，3网站超级管理员',
-    `to_id`      varchar(0) NOT NULL COMMENT '接受者id',
+    `to_id`      varchar(50) NOT NULL COMMENT '接受者id',
+    `message_type` int NOT NULL  COMMENT '消息类型 1系统消息，2回复我的（commentId），3收到的赞（likeMapId），4用户间消息',
     `content`    text       NOT NULL,
-    `is_read`  int        NOT NULL COMMENT '是否已读，0为未读，1为已读',
-    `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `is_deleted` integer  default 0,
+    `is_read`    int        NOT NULL default 0 COMMENT '是否已读，0为未读，1为已读',
+    `created_at` datetime            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` datetime            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted` integer             default 0,
     PRIMARY KEY (`message_id`)
 );
 

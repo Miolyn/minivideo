@@ -73,6 +73,32 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    public PageInfo<Video> getVideosByVideoTypeWithPaginatorSortByMethod(Integer videoType, Integer page, Integer pageSize, Integer sortMethod) {
+        PageHelper.startPage(page, pageSize);
+        if (videoType.equals(-1)){
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
+                return new PageInfo<>(videoMapper.findOrderByCreatedAt());
+            } else if (sortMethod.equals(SortMethod.SortByPlayNumDesc)) {
+                return new PageInfo<>(videoMapper.findOrderByPlayNum());
+            } else if(sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+                return new PageInfo<>(videoMapper.findOrderByLikeNum());
+            } else{
+                throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+            }
+        } else{
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
+                return new PageInfo<>(videoMapper.findByVideoTypeOrderByCreatedAt(videoType));
+            } else if (sortMethod.equals(SortMethod.SortByPlayNumDesc)) {
+                return new PageInfo<>(videoMapper.findByVideoTypeOrderByPlayNum(videoType));
+            } else if(sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+                return new PageInfo<>(videoMapper.findByVideoTypeOrderByLikeNum(videoType));
+            } else{
+                throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+            }
+        }
+    }
+
+    @Override
     public int addVideoPlayNumByVideoId(Integer videoId) {
         return videoMapper.updatePlayNumByVideoId(videoId);
 
@@ -119,6 +145,15 @@ public class VideoServiceImpl implements VideoService {
         if (video == null) {
             throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
         }
+    }
+
+    @Override
+    public String getUserIdOfrVideoByVideoId(Integer videoId) {
+        String userId = videoMapper.getUserIdByVideoId(videoId);
+        if(userId == null || userId.equals("")){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return userId;
     }
 
 

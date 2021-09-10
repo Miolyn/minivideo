@@ -25,5 +25,9 @@ public interface DynamicMapper {
 
 	int updateLikeNumByDynamicId(@Param("dynamicId")Integer dynamicId);
 
+    int updateCommentNumByDynamicId(@Param("dynamicId")Integer dynamicId);
+
+	String findUserIdByDynamicId(@Param("dynamicId")Integer dynamicId);
+
 
 }

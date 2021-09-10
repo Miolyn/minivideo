@@ -1,238 +1,242 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.tju.minivideo.dao.VideoMapper">
-  <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Video">
-    <!--@mbg.generated-->
-    <!--@Table minivideo.videos-->
-    <id column="video_id" property="videoId" />
-    <result column="title" property="title" />
-    <result column="avatar" property="avatar" />
-    <result column="video_file" property="videoFile" />
-    <result column="user_id" property="userId" />
-    <result column="video_type" property="videoType" />
-    <result column="introduction" property="introduction" />
-    <result column="file_size" property="fileSize" />
-    <result column="video_size" property="videoSize" />
-    <result column="play_num" property="playNum" />
-    <result column="like_num" property="likeNum" />
-    <result column="collect_num" property="collectNum" />
-    <result column="comment_num" property="commentNum" />
-    <result column="bullet_screen_num" property="bulletScreenNum" />
-    <result column="created_at" property="createdAt" />
-    <result column="updated_at" property="updatedAt" />
-    <result column="is_deleted" property="isDeleted" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    video_id, title, avatar, video_file, user_id, video_type, introduction, file_size, 
-    video_size, play_num, like_num, collect_num, comment_num, bullet_screen_num, created_at, 
-    updated_at, is_deleted
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from minivideo.videos
-    where video_id = #{videoId} and is_deleted=0
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from minivideo.videos
-    where video_id = #{videoId}
-  </delete>
-  <insert id="insert" keyColumn="video_id" keyProperty="videoId" parameterType="cn.tju.minivideo.entity.Video" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into minivideo.videos (title, avatar, video_file, user_id, video_type, introduction, 
-      file_size, video_size, play_num, like_num, collect_num, comment_num, 
-      bullet_screen_num, created_at, updated_at, is_deleted)
-    values (#{title}, #{avatar}, #{videoFile}, #{userId}, #{videoType}, #{introduction}, 
-      #{fileSize}, #{videoSize}, #{playNum}, #{likeNum}, #{collectNum}, #{commentNum}, 
-      #{bulletScreenNum}, #{createdAt}, #{updatedAt}, #{isDeleted})
-  </insert>
-  <insert id="insertSelective" keyColumn="video_id" keyProperty="videoId" parameterType="cn.tju.minivideo.entity.Video" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into minivideo.videos
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        title,
-      </if>
-      <if test="avatar != null">
-        avatar,
-      </if>
-      <if test="videoFile != null">
-        video_file,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="videoType != null">
-        video_type,
-      </if>
-      <if test="introduction != null">
-        introduction,
-      </if>
-      <if test="fileSize != null">
-        file_size,
-      </if>
-      <if test="videoSize != null">
-        video_size,
-      </if>
-      <if test="playNum != null">
-        play_num,
-      </if>
-      <if test="likeNum != null">
-        like_num,
-      </if>
-      <if test="collectNum != null">
-        collect_num,
-      </if>
-      <if test="commentNum != null">
-        comment_num,
-      </if>
-      <if test="bulletScreenNum != null">
-        bullet_screen_num,
-      </if>
-      <if test="createdAt != null">
-        created_at,
-      </if>
-      <if test="updatedAt != null">
-        updated_at,
-      </if>
-      <if test="isDeleted != null">
-        is_deleted,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        #{title},
-      </if>
-      <if test="avatar != null">
-        #{avatar},
-      </if>
-      <if test="videoFile != null">
-        #{videoFile},
-      </if>
-      <if test="userId != null">
-        #{userId},
-      </if>
-      <if test="videoType != null">
-        #{videoType},
-      </if>
-      <if test="introduction != null">
-        #{introduction},
-      </if>
-      <if test="fileSize != null">
-        #{fileSize},
-      </if>
-      <if test="videoSize != null">
-        #{videoSize},
-      </if>
-      <if test="playNum != null">
-        #{playNum},
-      </if>
-      <if test="likeNum != null">
-        #{likeNum},
-      </if>
-      <if test="collectNum != null">
-        #{collectNum},
-      </if>
-      <if test="commentNum != null">
-        #{commentNum},
-      </if>
-      <if test="bulletScreenNum != null">
-        #{bulletScreenNum},
-      </if>
-      <if test="createdAt != null">
-        #{createdAt},
-      </if>
-      <if test="updatedAt != null">
-        #{updatedAt},
-      </if>
-      <if test="isDeleted != null">
-        #{isDeleted},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Video">
-    <!--@mbg.generated-->
-    update minivideo.videos
-    <set>
-      <if test="title != null">
-        title = #{title},
-      </if>
-      <if test="avatar != null">
-        avatar = #{avatar},
-      </if>
-      <if test="videoFile != null">
-        video_file = #{videoFile},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId},
-      </if>
-      <if test="videoType != null">
-        video_type = #{videoType},
-      </if>
-      <if test="introduction != null">
-        introduction = #{introduction},
-      </if>
-      <if test="fileSize != null">
-        file_size = #{fileSize},
-      </if>
-      <if test="videoSize != null">
-        video_size = #{videoSize},
-      </if>
-      <if test="playNum != null">
-        play_num = #{playNum},
-      </if>
-      <if test="likeNum != null">
-        like_num = #{likeNum},
-      </if>
-      <if test="collectNum != null">
-        collect_num = #{collectNum},
-      </if>
-      <if test="commentNum != null">
-        comment_num = #{commentNum},
-      </if>
-      <if test="bulletScreenNum != null">
-        bullet_screen_num = #{bulletScreenNum},
-      </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt},
-      </if>
-      <if test="updatedAt != null">
-        updated_at = #{updatedAt},
-      </if>
-      <if test="isDeleted != null">
-        is_deleted = #{isDeleted},
-      </if>
-    </set>
-    where video_id = #{videoId}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Video">
-    <!--@mbg.generated-->
-    update minivideo.videos
-    set title = #{title},
-      avatar = #{avatar},
-      video_file = #{videoFile},
-      user_id = #{userId},
-      video_type = #{videoType},
-      introduction = #{introduction},
-      file_size = #{fileSize},
-      video_size = #{videoSize},
-      play_num = #{playNum},
-      like_num = #{likeNum},
-      collect_num = #{collectNum},
-      comment_num = #{commentNum},
-      bullet_screen_num = #{bulletScreenNum},
-      created_at = #{createdAt},
-      updated_at = #{updatedAt},
-      is_deleted = #{isDeleted}
-    where video_id = #{videoId}
-  </update>
+    <resultMap id="BaseResultMap" type="cn.tju.minivideo.entity.Video">
+        <!--@mbg.generated-->
+        <!--@Table minivideo.videos-->
+        <id column="video_id" property="videoId"/>
+        <result column="title" property="title"/>
+        <result column="avatar" property="avatar"/>
+        <result column="video_file" property="videoFile"/>
+        <result column="user_id" property="userId"/>
+        <result column="video_type" property="videoType"/>
+        <result column="introduction" property="introduction"/>
+        <result column="file_size" property="fileSize"/>
+        <result column="video_size" property="videoSize"/>
+        <result column="play_num" property="playNum"/>
+        <result column="like_num" property="likeNum"/>
+        <result column="collect_num" property="collectNum"/>
+        <result column="comment_num" property="commentNum"/>
+        <result column="bullet_screen_num" property="bulletScreenNum"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        video_id, title, avatar, video_file, user_id, video_type, introduction, file_size,
+        video_size, play_num, like_num, collect_num, comment_num, bullet_screen_num, created_at,
+        updated_at, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from minivideo.videos
+        where video_id = #{videoId}
+          and is_deleted = 0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from minivideo.videos
+        where video_id = #{videoId}
+    </delete>
+    <insert id="insert" keyColumn="video_id" keyProperty="videoId" parameterType="cn.tju.minivideo.entity.Video"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into minivideo.videos (title, avatar, video_file, user_id, video_type, introduction,
+                                      file_size, video_size, play_num, like_num, collect_num, comment_num,
+                                      bullet_screen_num, created_at, updated_at, is_deleted)
+        values (#{title}, #{avatar}, #{videoFile}, #{userId}, #{videoType}, #{introduction},
+                #{fileSize}, #{videoSize}, #{playNum}, #{likeNum}, #{collectNum}, #{commentNum},
+                #{bulletScreenNum}, #{createdAt}, #{updatedAt}, #{isDeleted})
+    </insert>
+    <insert id="insertSelective" keyColumn="video_id" keyProperty="videoId"
+            parameterType="cn.tju.minivideo.entity.Video" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into minivideo.videos
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="videoFile != null">
+                video_file,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="videoType != null">
+                video_type,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="fileSize != null">
+                file_size,
+            </if>
+            <if test="videoSize != null">
+                video_size,
+            </if>
+            <if test="playNum != null">
+                play_num,
+            </if>
+            <if test="likeNum != null">
+                like_num,
+            </if>
+            <if test="collectNum != null">
+                collect_num,
+            </if>
+            <if test="commentNum != null">
+                comment_num,
+            </if>
+            <if test="bulletScreenNum != null">
+                bullet_screen_num,
+            </if>
+            <if test="createdAt != null">
+                created_at,
+            </if>
+            <if test="updatedAt != null">
+                updated_at,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="avatar != null">
+                #{avatar},
+            </if>
+            <if test="videoFile != null">
+                #{videoFile},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="videoType != null">
+                #{videoType},
+            </if>
+            <if test="introduction != null">
+                #{introduction},
+            </if>
+            <if test="fileSize != null">
+                #{fileSize},
+            </if>
+            <if test="videoSize != null">
+                #{videoSize},
+            </if>
+            <if test="playNum != null">
+                #{playNum},
+            </if>
+            <if test="likeNum != null">
+                #{likeNum},
+            </if>
+            <if test="collectNum != null">
+                #{collectNum},
+            </if>
+            <if test="commentNum != null">
+                #{commentNum},
+            </if>
+            <if test="bulletScreenNum != null">
+                #{bulletScreenNum},
+            </if>
+            <if test="createdAt != null">
+                #{createdAt},
+            </if>
+            <if test="updatedAt != null">
+                #{updatedAt},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.tju.minivideo.entity.Video">
+        <!--@mbg.generated-->
+        update minivideo.videos
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar},
+            </if>
+            <if test="videoFile != null">
+                video_file = #{videoFile},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="videoType != null">
+                video_type = #{videoType},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction},
+            </if>
+            <if test="fileSize != null">
+                file_size = #{fileSize},
+            </if>
+            <if test="videoSize != null">
+                video_size = #{videoSize},
+            </if>
+            <if test="playNum != null">
+                play_num = #{playNum},
+            </if>
+            <if test="likeNum != null">
+                like_num = #{likeNum},
+            </if>
+            <if test="collectNum != null">
+                collect_num = #{collectNum},
+            </if>
+            <if test="commentNum != null">
+                comment_num = #{commentNum},
+            </if>
+            <if test="bulletScreenNum != null">
+                bullet_screen_num = #{bulletScreenNum},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted},
+            </if>
+        </set>
+        where video_id = #{videoId}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.tju.minivideo.entity.Video">
+        <!--@mbg.generated-->
+        update minivideo.videos
+        set title             = #{title},
+            avatar            = #{avatar},
+            video_file        = #{videoFile},
+            user_id           = #{userId},
+            video_type        = #{videoType},
+            introduction      = #{introduction},
+            file_size         = #{fileSize},
+            video_size        = #{videoSize},
+            play_num          = #{playNum},
+            like_num          = #{likeNum},
+            collect_num       = #{collectNum},
+            comment_num       = #{commentNum},
+            bullet_screen_num = #{bulletScreenNum},
+            created_at        = #{createdAt},
+            updated_at        = #{updatedAt},
+            is_deleted        = #{isDeleted}
+        where video_id = #{videoId}
+    </update>
     <!--auto generated by MybatisCodeHelper on 2021-09-01-->
     <select id="findByUserId" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from minivideo.videos
         where user_id = #{userId}
           and is_deleted = 0
@@ -261,7 +265,7 @@
     <!--auto generated by MybatisCodeHelper on 2021-09-03-->
     <select id="findByUserIdOrderByCreatedAt" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from minivideo.videos
         where user_id = #{userId}
           and is_deleted = 0
@@ -270,7 +274,7 @@
     <!--auto generated by MybatisCodeHelper on 2021-09-03-->
     <select id="findByUserIdOrderByPlayNum" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from minivideo.videos
         where user_id = #{userId}
           and is_deleted = 0
@@ -283,17 +287,75 @@
         where video_id = #{videoId}
           and is_deleted = 0
     </update>
-<!--auto generated by MybatisCodeHelper on 2021-09-03-->
+    <!--auto generated by MybatisCodeHelper on 2021-09-03-->
     <select id="findByVideoIdForUpdate" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List" />
+        select
+        <include refid="Base_Column_List"/>
         from minivideo.videos
-        where video_id=#{videoId}
-        for update
+        where video_id = #{videoId}
+                for
+        update
     </select>
-<!--auto generated by MybatisCodeHelper on 2021-09-03-->
+    <!--auto generated by MybatisCodeHelper on 2021-09-03-->
     <update id="updateCollectNumByVideoId">
         update minivideo.videos
-        set collect_num=collect_num+1
-        where video_id=#{videoId} and is_deleted=0
+        set collect_num=collect_num + 1
+        where video_id = #{videoId}
+          and is_deleted = 0
     </update>
+    <!--auto generated by MybatisCodeHelper on 2021-09-09-->
+    <select id="findByVideoTypeOrderByCreatedAt" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from minivideo.videos
+        where video_type = #{videoType}
+          and is_deleted = 0
+        order by created_at desc
+    </select>
+    <!--auto generated by MybatisCodeHelper on 2021-09-09-->
+    <select id="findByVideoTypeOrderByLikeNum" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from minivideo.videos
+        where video_type = #{videoType}
+          and is_deleted = 0
+        order by like_num desc
+    </select>
+    <!--auto generated by MybatisCodeHelper on 2021-09-09-->
+    <select id="findByVideoTypeOrderByPlayNum" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from minivideo.videos
+        where video_type = #{videoType}
+          and is_deleted = 0
+        order by play_num desc
+    </select>
+    <!--auto generated by MybatisCodeHelper on 2021-09-10-->
+    <select id="getUserIdByVideoId" resultType="java.lang.String">
+        select user_id
+        from minivideo.videos
+        where video_id = #{videoId}
+          and is_deleted = 0
+    </select>
+    <!--auto generated by MybatisCodeHelper on 2021-09-10-->
+    <select id="findOrderByCreatedAt" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from minivideo.videos
+        where is_deleted = 0
+        order by created_at desc
+    </select>
+    <!--auto generated by MybatisCodeHelper on 2021-09-10-->
+    <select id="findOrderByLikeNum" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from minivideo.videos
+        where is_deleted = 0
+        order by like_num desc
+    </select>
+<!--auto generated by MybatisCodeHelper on 2021-09-10-->
+    <select id="findOrderByPlayNum" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from minivideo.videos where is_deleted=0 order by play_num desc
+    </select>
 </mapper>

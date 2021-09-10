@@ -27,4 +27,20 @@ public class JsonUtil {
             throw new ServiceException(MsgEnums.INTERNAL_ERROR);
         }
     }
+
+    public static String Object2String(Object o){
+        try {
+            return mapper.writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            throw new ServiceException(MsgEnums.INTERNAL_ERROR);
+        }
+    }
+
+    public static <T> Object String2Object(String content, Class<T> clazz){
+        try {
+            return mapper.readValue(content, clazz);
+        } catch (JsonProcessingException e) {
+            throw new ServiceException(MsgEnums.INTERNAL_ERROR);
+        }
+    }
 }

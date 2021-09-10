@@ -10,4 +10,9 @@ public class ConstUtil {
     public static boolean isHistoryTypeValid(Integer goodsType){
         return Constants.historyTypeMap.containsKey(goodsType);
     }
+
+    public static boolean isVideoTypeValid(Integer goodsType){
+        return Constants.videoTypeMap.containsKey(goodsType);
+    }
+
 }

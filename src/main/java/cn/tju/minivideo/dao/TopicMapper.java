@@ -21,4 +21,8 @@ public interface TopicMapper {
 
     Topic findByTopicName(@Param("topicName")String topicName);
 
+
+    List<Topic> findOrderByActivityNum();
+
+
 }

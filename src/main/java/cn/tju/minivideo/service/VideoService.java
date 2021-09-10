@@ -8,6 +8,7 @@ public interface VideoService {
     public interface SortMethod {
         Integer SortByTimeDesc = 1;
         Integer SortByPlayNumDesc = 2;
+        Integer SortByLikeNumDesc = 3;
     }
 
     int deleteByPrimaryKey(Integer videoId);
@@ -29,6 +30,8 @@ public interface VideoService {
 
     PageInfo<Video> getVideosByUserIdWithPaginatorSortByMethod(String userId, Integer page, Integer pageSize, Integer sortMethod);
 
+    PageInfo<Video> getVideosByVideoTypeWithPaginatorSortByMethod(Integer videoType, Integer page, Integer pageSize, Integer sortMethod);
+
     int addVideoPlayNumByVideoId(Integer videoId);
 
     int addVideoLikeNumByVideoId(Integer videoId);
@@ -44,6 +47,8 @@ public interface VideoService {
     boolean isVideoExistByVideoId(Integer videoId);
 
     void lockVideoByVideoId(Integer videoId);
+
+    String getUserIdOfrVideoByVideoId(Integer videoId);
 }
 
 

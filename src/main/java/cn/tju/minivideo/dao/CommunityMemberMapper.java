@@ -21,5 +21,5 @@ public interface CommunityMemberMapper {
 
     CommunityMember findByCommunityIdAndUserId(@Param("communityId")Integer communityId,@Param("userId")String userId);
 
-
+    List<CommunityMember> findByUserIdOrderByCreatedAt(@Param("userId")String userId);
 }

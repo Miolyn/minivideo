@@ -12,7 +12,6 @@ import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.dto.CommentDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Comment;
-import cn.tju.minivideo.entity.OrderGoods;
 import cn.tju.minivideo.entity.User;
 import cn.tju.minivideo.service.*;
 import io.swagger.annotations.ApiOperation;
@@ -23,9 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("comment")
@@ -51,7 +48,13 @@ public class CommentController {
     private OrderGoodsService orderGoodsService;
 
     @Autowired
+    private DynamicService dynamicService;
+
+    @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private MessageService messageService;
 
     @PostMapping("comment")
     @ApiOperation("评论某对象")
@@ -76,28 +79,46 @@ public class CommentController {
 //            activityService.lockActivityByActivityId(commentDto.getToId());
 //            activityService.addCommentNumByActivityId(commentDto.getToId());
 //        }
-        addCommentNum(commentDto);
+        addCommentNumAndSystemMessage(comment);
         commentService.insertSelective(comment);
         return Results.OkWithData(comment.getCommentId());
     }
 
-    private void addCommentNum(CommentDto commentDto){
-        if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnVideo)){
-            videoService.lockVideoByVideoId(commentDto.getToId());
-            videoService.addVideoCommentNumByVideoId(commentDto.getToId());
-        } else if(commentDto.getCommentType().equals(Constants.CommentConst.CommentOnActivity)){
-            activityService.lockActivityByActivityId(commentDto.getToId());
-            activityService.addCommentNumByActivityId(commentDto.getToId());
-        } else if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnComment)){
-            Comment comment = commentService.getCommentByCommentId(commentDto.getToId());
-            CommentDto commentDto1 = modelMapper.map(comment, CommentDto.class);
-            addCommentNum(commentDto1);
-        } else if (commentDto.getCommentType().equals(Constants.CommentConst.CommentOnGoods)){
-            if(!orderService.checkPermissionToCommentOnGoods(commentDto.getToId(), commentDto.getFromId())){
+    private void addCommentNumAndSystemMessage(Comment comment1){
+        if (comment1.getCommentType().equals(Constants.CommentConst.CommentOnVideo)){
+            videoService.lockVideoByVideoId(comment1.getToId());
+            videoService.addVideoCommentNumByVideoId(comment1.getToId());
+            messageService.addSystemNotifyMessage(videoService.getUserIdOfrVideoByVideoId(comment1.getToId()),
+                    Constants.MessageConst.MessageTypeCommentNotify,
+                    messageService.getMsgDtoByObject(comment1, Constants.MessageConst.ItemTypeVideo, Constants.MessageConst.MessageTypeCommentNotify));
+        } else if(comment1.getCommentType().equals(Constants.CommentConst.CommentOnActivity)){
+            activityService.lockActivityByActivityId(comment1.getToId());
+            activityService.addCommentNumByActivityId(comment1.getToId());
+            messageService.addSystemNotifyMessage(activityService.getUserIdOfActivityByActivityId(comment1.getToId()),
+                    Constants.MessageConst.MessageTypeCommentNotify,
+                    messageService.getMsgDtoByObject(comment1, Constants.MessageConst.ItemTypeActivity, Constants.MessageConst.MessageTypeCommentNotify));
+        } else if (comment1.getCommentType().equals(Constants.CommentConst.CommentOnComment)){
+            Comment comment = commentService.getCommentByCommentId(comment1.getToId());
+            messageService.addSystemNotifyMessage(comment.getFromId(),
+                    Constants.MessageConst.MessageTypeCommentNotify,
+                    messageService.getMsgDtoByObject(comment1, Constants.MessageConst.ItemTypeComment, Constants.MessageConst.MessageTypeCommentNotify));
+//            CommentDto commentDto1 = modelMapper.map(comment, CommentDto.class);
+            addCommentNumAndSystemMessage(comment);
+        } else if (comment1.getCommentType().equals(Constants.CommentConst.CommentOnGoods)){
+            if(!orderService.checkPermissionToCommentOnGoods(comment1.getToId(), comment1.getFromId())){
                 throw new ControllerException(MsgEnums.PERMISSION_ERROR);
             }
-            goodsService.lockGoodsByGoodsId(commentDto.getToId());
-            goodsService.addGoodsCommentNumByGoodsId(commentDto.getToId());
+            goodsService.lockGoodsByGoodsId(comment1.getToId());
+            goodsService.addGoodsCommentNumByGoodsId(comment1.getToId());
+            messageService.addSystemNotifyMessage(goodsService.getUserIdOfGoodsByGoodsId(comment1.getToId()),
+                    Constants.MessageConst.MessageTypeCommentNotify,
+                    messageService.getMsgDtoByObject(comment1, Constants.MessageConst.ItemTypeGoods, Constants.MessageConst.MessageTypeCommentNotify));
+        } else if (comment1.getCommentType().equals(Constants.CommentConst.CommentOnDynamic)){
+            dynamicService.lockDynamicByDynamicId(comment1.getToId());
+            dynamicService.addDynamicCommentNumByDynamicId(comment1.getToId());
+            messageService.addSystemNotifyMessage(dynamicService.getUserIdOfDynamicByDynamicId(comment1.getToId()),
+                    Constants.MessageConst.MessageTypeCommentNotify,
+                    messageService.getMsgDtoByObject(comment1, Constants.MessageConst.ItemTypeDynamic, Constants.MessageConst.MessageTypeCommentNotify));
         } else {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }

@@ -21,5 +21,12 @@ public interface CommunityMapper {
 
     Community findByCommunityId(@Param("communityId")Integer communityId);
 
+    Community findByCommunityIdForUpdate(@Param("communityId")Integer communityId);
+
+    List<Community> findOrderByCreatedAt();
+
+    int updateActivityNumByCommunityId(@Param("communityId")Integer communityId);
+
+    int updateMemberNumByCommunityId(@Param("communityId")Integer communityId);
 
 }
