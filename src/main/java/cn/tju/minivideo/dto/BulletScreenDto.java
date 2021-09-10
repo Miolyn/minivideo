@@ -28,7 +28,7 @@ public class BulletScreenDto {
      */
     @NotBlank(message = "弹幕内容不能为空", groups = ValidationGroups.Insert.class)
     @Length(min = 1, max = 255, message = "弹幕内容长度为1-255",groups = ValidationGroups.Insert.class)
-    @JsonProperty(value = "text")
+//    @JsonProperty(value = "text")
     private String content;
 
     /**
@@ -43,33 +43,11 @@ public class BulletScreenDto {
     private Integer videoId;
 
     /**
-     * 在视频中发弹幕的时间
+     * 弹幕的配置属性
      */
-    @NotNull(message = "弹幕在视频中的时间不能为空，单位为分秒？", groups = ValidationGroups.Insert.class)
-    @JsonProperty(value = "time")
-    private Integer videoTime;
-
-    /**
-     * 弹幕颜色
-     */
-    @NotNull(message = "弹幕颜色不能为空", groups = ValidationGroups.Insert.class)
-    private String color;
-
-    /**
-     * 弹幕大小
-     */
-    @NotNull(message = "弹幕大小不能为空", groups = ValidationGroups.Insert.class)
-    private Integer size;
-
-    /**
-     * 弹幕位置
-     */
-    @NotNull
-    private Integer position;
-
-    /**
-     * 点赞数量
-     */
+    @NotBlank(message = "视频配置属性不能为空", groups = ValidationGroups.Insert.class)
+    @Length(min = 1, max = 1000, message = "配置属性长度范围1-1000", groups = {ValidationGroups.Insert.class})
+    private String options;
     /**
      * 点赞数量
      */

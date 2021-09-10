@@ -37,24 +37,9 @@ public class BulletScreen implements Serializable {
     private Integer videoId;
 
     /**
-     * 在视频中发弹幕的时间
+     * 弹幕的配置属性
      */
-    private Integer videoTime;
-
-    /**
-     * 弹幕颜色
-     */
-    private String color;
-
-    /**
-     * 弹幕大小
-     */
-    private Integer size;
-
-    /**
-     * 弹幕位置
-     */
-    private Integer position;
+    private String options;
 
     /**
      * 点赞数量
