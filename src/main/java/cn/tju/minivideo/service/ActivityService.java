@@ -35,11 +35,14 @@ public interface ActivityService {
 
     int addCommentNumByActivityId(Integer activityId);
 
-    PageInfo<Activity> getCommunityActivitiesWithPaginatorSortByMethod(Integer communityId, Integer page, Integer pageSize, Integer sortMethod);
+    PageInfo<Activity> getCommunityActivitiesByEssenceWithPaginatorSortByMethod(Integer communityId, Integer essence, Integer page, Integer pageSize, Integer sortMethod);
 
     PageInfo<Activity> getActivitiesWithPaginator(Integer page, Integer pageSize);
 
     String getUserIdOfActivityByActivityId(Integer activityId);
+
+    PageInfo<Activity> getActivitiesByTopicIdWithPaginatorSortByMethod(Integer topicId, Integer sortMethod, Integer page, Integer pageSize);
 }
+
 
 

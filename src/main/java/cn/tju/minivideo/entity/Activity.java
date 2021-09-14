@@ -61,6 +61,11 @@ public class Activity implements Serializable {
     private Integer isDeleted;
 
     /**
+     * 是否是精华帖
+     */
+    private Integer isEssence;
+
+    /**
      * 帖子内容
      */
     private String content;

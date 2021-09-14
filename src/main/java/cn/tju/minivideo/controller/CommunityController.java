@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RequestMapping("community")
 @RestController
@@ -236,6 +235,21 @@ public class CommunityController {
         return Results.OkWithData(activity.getActivityId());
     }
 
+    @PostMapping("activity_essence")
+    @ApiOperation("社区管理员给帖子加精")
+    @AuthRequired
+    public Result activityAddEssence(@RequestBody @Validated(ValidationGroups.IdForm.class) ActivityDto activityDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        String userId = JwtInterceptor.getUser().getUserId();
+        Activity activity = activityService.getActivityByActivityId(activityDto.getActivityId());
+        if(!communityMemberService.isExistByUserIdAndCommunityId(userId, activity.getCommunityId())){
+            throw new ControllerException(MsgEnums.PERMISSION_ERROR);
+        }
+        activity.setIsEssence(Constants.ActivityConst.ActivityIsEssence);
+        activityService.updateByPrimaryKeySelective(activity);
+        return Results.Ok();
+    }
+
 
     @GetMapping("activity_simple")
     @ApiOperation("获取帖子简易")
@@ -268,11 +282,28 @@ public class CommunityController {
     @ApiOperation("获取社区中的帖子")
     public Result getCommunityActivities(@RequestParam(value = "communityId", defaultValue = "-1") Integer communityId,
                                          @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                         @RequestParam(value = "sort", defaultValue = "1") Integer sortMethod) {
-        if (communityId.equals(-1)) {
+                                         @RequestParam(value = "sort", defaultValue = "1") Integer sortMethod,
+                                         @RequestParam(value = "essence", defaultValue = "-1") Integer isEssence) {
+        if (communityId.equals(-1)
+                || (!isEssence.equals(Constants.ActivityConst.ActivityNotEssence) && !isEssence.equals(Constants.ActivityConst.ActivityIsEssence)) && !isEssence.equals(Constants.ActivityConst.ActivityAnyEssence)) {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
-        PageInfo<Activity> pageInfo = activityService.getCommunityActivitiesWithPaginatorSortByMethod(communityId, page, ProjectConstant.PageSize, sortMethod);
+        PageInfo<Activity> pageInfo = activityService.getCommunityActivitiesByEssenceWithPaginatorSortByMethod(communityId, isEssence, page, ProjectConstant.PageSize, sortMethod);
+        List<ActivityDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
+
+    @GetMapping("activities_by_topic")
+    @ApiOperation("根据话题获取相应的帖子，分页")
+    public Result getActivitiesByTopic(@RequestParam(value = "topicName", defaultValue = "") String topicName,
+                                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                       @RequestParam(value = "sort", defaultValue = "1") Integer sortMethod){
+        if(topicName.equals("")){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        Topic topic = topicService.getTopicByTopicName(topicName);
+        PageInfo<Activity> pageInfo = activityService.getActivitiesByTopicIdWithPaginatorSortByMethod(topic.getTopicId(), sortMethod, page, ProjectConstant.PageSize);
         List<ActivityDto> data = new ArrayList<>();
         pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
         return Results.OkWithData(Paginators.paginator(pageInfo, data));

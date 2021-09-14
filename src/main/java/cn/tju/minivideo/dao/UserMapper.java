@@ -24,5 +24,9 @@ public interface UserMapper {
 
     User findByUserId(@Param("userId")String userId);
 
+    User findByUserIdForUpdate(@Param("userId")String userId);
+
+    int updateLikeNumByUserId(@Param("userId")String userId);
+
 
 }

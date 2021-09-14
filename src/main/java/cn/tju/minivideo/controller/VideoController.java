@@ -153,7 +153,8 @@ public class VideoController {
         User user = JwtInterceptor.getUser();
         video.setUserId(user.getUserId());
         if (!mediaService.isExistByMediaUrlAndMediaTypeAndTrueFile(video.getAvatar(), Constants.UploadConst.UploadImgType)
-                || !mediaService.isExistByMediaUrlAndMediaTypeAndTrueFile(video.getVideoFile(), Constants.UploadConst.UploadVideoType)) {
+                || !mediaService.isExistByMediaUrlAndMediaTypeAndTrueFile(video.getVideoFile(), Constants.UploadConst.UploadVideoType)
+                || !ConstUtil.isVideoTypeValid(videoDto.getVideoType())) {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
         video.setFileSize(FileUtil.getFileSizeByUrl(video.getVideoFile()));

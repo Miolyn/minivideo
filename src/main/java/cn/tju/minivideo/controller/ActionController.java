@@ -61,6 +61,9 @@ public class ActionController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private UserService userService;
+
     // 这个点赞接口就包括了所有类型的点赞了，通过likeType区分
     @PostMapping("like")
     @AuthRequired
@@ -87,9 +90,12 @@ public class ActionController {
         if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnVideo)) {
             videoService.lockVideoByVideoId(likeMap.getToId());
             videoService.addVideoLikeNumByVideoId(likeMap.getToId());
-            messageService.addSystemNotifyMessage(videoService.getUserIdOfrVideoByVideoId(likeMap.getToId()),
+            String userId = videoService.getUserIdOfrVideoByVideoId(likeMap.getToId());
+            messageService.addSystemNotifyMessage(userId,
                     Constants.MessageConst.MessageLikeNotify,
                     messageService.getMsgDtoByObject(likeMap, Constants.MessageConst.ItemTypeVideo, Constants.MessageConst.MessageLikeNotify));
+            userService.lockUserByUserId(userId);
+            userService.updateUserLikeNum(userId);
         } else if (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnComment)) {
             commentService.lockCommentByCommentId(likeMap.getToId());
             commentService.addCommentLikeNumByCommentId(likeMap.getToId());
@@ -161,15 +167,17 @@ public class ActionController {
         }
         String userId = JwtInterceptor.getUser().getUserId();
         PageInfo<Collections> pageInfo = collectionsService.getCollectionsByItemTypeAndUserIdWithPaginator(itemType, userId, page, ProjectConstant.PageSize);
-        if (itemType.equals(Constants.CollectionConst.CollectOnVideo)) {
-            List<SimpleVideoDto> simpleVideoDtos = new ArrayList<>();
-            for (Collections collections : pageInfo.getList()) {
-                Video video = videoService.selectByPrimaryKey(collections.getItemId());
-                SimpleVideoDto simpleVideoDto = modelMapper.map(video, SimpleVideoDto.class);
-                simpleVideoDtos.add(simpleVideoDto);
-            }
-            return Results.OkWithData(Paginators.paginator(pageInfo, simpleVideoDtos));
-        }
-        return Results.Ok();
+//        if (itemType.equals(Constants.CollectionConst.CollectOnVideo)) {
+//            List<SimpleVideoDto> simpleVideoDtos = new ArrayList<>();
+//            for (Collections collections : pageInfo.getList()) {
+//                Video video = videoService.selectByPrimaryKey(collections.getItemId());
+//                SimpleVideoDto simpleVideoDto = modelMapper.map(video, SimpleVideoDto.class);
+//                simpleVideoDtos.add(simpleVideoDto);
+//            }
+//            return Results.OkWithData(Paginators.paginator(pageInfo, simpleVideoDtos));
+//        }
+        List<CollectionDto> data = new ArrayList<>();
+        pageInfo.getList().forEach(collections -> data.add(modelMapper.map(collections, CollectionDto.class)));
+        return Results.OkWithData(Paginators.paginator(pageInfo, data));
     }
 }

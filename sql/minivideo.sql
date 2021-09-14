@@ -8,6 +8,7 @@ CREATE TABLE `activities`
     `like_num`     int      default 0 COMMENT '点赞数量',
     `collect_num`  int      default 0 COMMENT '收藏数量',
     `comment_num`  int      default 0 COMMENT '评论数量',
+    `is_essence`  int      default 0 COMMENT '是否是精华贴',
     `created_at`   datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`   datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `is_deleted`   integer  default 0,

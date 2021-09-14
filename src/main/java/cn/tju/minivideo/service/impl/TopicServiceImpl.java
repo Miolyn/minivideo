@@ -1,5 +1,7 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.tju.minivideo.dao.TopicMapper;
@@ -63,6 +65,15 @@ public class TopicServiceImpl implements TopicService{
     public List<Topic> getHotTopic() {
 
         return topicMapper.findOrderByActivityNum();
+    }
+
+    @Override
+    public Topic getTopicByTopicName(String topicName) {
+        Topic topic = topicMapper.findByTopicName(topicName);
+        if(topic == null){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return topic;
     }
 
 }

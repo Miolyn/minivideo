@@ -23,4 +23,6 @@ public interface TopicService{
 
     List<Topic> getHotTopic();
 
+
+    Topic getTopicByTopicName(String topicName);
 }

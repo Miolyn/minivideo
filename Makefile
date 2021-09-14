@@ -1,4 +1,5 @@
 run:
+	rm nohup.out
 	nohup mvn spring-boot:run &
 
 test:

@@ -57,4 +57,19 @@ public class UserDto {
      */
     @Range(max=2, min=1, message = "性别：男1，女2",groups = {ValidationGroups.Insert.class, ValidationGroups.Update.class})
     private Integer sex;
+
+    /**
+     * 关注的数量
+     */
+    private Integer followNum;
+
+    /**
+     * 粉丝的数量
+     */
+    private Integer fansNum;
+
+    /**
+     * 视频获得的点赞量总数
+     */
+    private Integer likeNum;
 }

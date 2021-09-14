@@ -100,12 +100,14 @@ public class UserController {
         if(userId.equals("")){
             User user = JwtInterceptor.getUser();
             if (user == null){
-                throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+                log.info("未获得user");
+                throw new ControllerException(MsgEnums.VALIDATION_ERROR.code(), "未获得用户信息，可能是没有在请求头设置token");
             }
             userId = user.getUserId();
         }
         User user = userService.findByUserId(userId);
         UserDto userDto = modelMapper.map(user, UserDto.class);
+        userDto.setPassword(null);
         return Results.OkWithData(userDto);
     }
 

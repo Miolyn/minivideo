@@ -44,6 +44,8 @@ public interface GoodsService {
     boolean isExistGoodsByGoodsId(Integer goodsId);
 
     String getUserIdOfGoodsByGoodsId(Integer goodsId);
+
+    int deleteGoodsByGoodsIdLogically(Integer goodsId);
 }
 
 

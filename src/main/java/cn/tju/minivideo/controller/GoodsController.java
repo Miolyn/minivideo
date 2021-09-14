@@ -84,9 +84,31 @@ public class GoodsController {
             throw new ControllerException(MsgEnums.PERMISSION_ERROR);
         }
         if(goodsDto.getImgs() != null){
+            for (String img : goodsDto.getImgs()) {
+                if(!mediaService.isExistByMediaUrlAndMediaTypeAndTrueFile(img, Constants.UploadConst.UploadImgType)){
+                    throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+                }
+            }
             goods.setImgs(JsonUtil.List2String(goodsDto.getImgs()));
         }
+        if(goodsDto.getAvatar() != null && !mediaService.isExistByMediaUrlAndMediaTypeAndTrueFile(goodsDto.getAvatar(), Constants.UploadConst.UploadImgType)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
         goodsService.updateByPrimaryKeySelective(goods);
+        return Results.Ok();
+    }
+
+    @PostMapping("delete_goods")
+    @ApiOperation("删除商品")
+    @AuthRequired
+    public Result deleteGoodsLogically(@RequestBody @Validated(ValidationGroups.IdForm.class) GoodsDto goodsDto, BindingResult bindingResult){
+        BindUtil.checkBindValid(bindingResult);
+        Goods goods = modelMapper.map(goodsDto, Goods.class);
+        String userId = JwtInterceptor.getUser().getUserId();
+        if(!goodsService.checkPermissionToUpdateGoodsInfo(goods.getGoodsId(), userId)){
+            throw new ControllerException(MsgEnums.PERMISSION_ERROR);
+        }
+        goodsService.deleteGoodsByGoodsIdLogically(goodsDto.getGoodsId());
         return Results.Ok();
     }
 

@@ -121,6 +121,19 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public void lockUserByUserId(String userId) {
+        User user = userMapper.findByUserIdForUpdate(userId);
+        if (user == null){
+            throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
+        }
+    }
+
+    @Override
+    public int updateUserLikeNum(String userId) {
+        return userMapper.updateLikeNumByUserId(userId);
+    }
 }
 
 

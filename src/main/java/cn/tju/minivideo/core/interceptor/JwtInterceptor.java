@@ -60,6 +60,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                 if (user == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
+                log.info("token 验证成果，{}", user.toString());
                 tl.set(user);
                 return true;
             } else if (token != null){

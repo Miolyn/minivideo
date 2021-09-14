@@ -26,7 +26,7 @@ public class GlobalExceptionConfig {
 
     @ExceptionHandler(ServiceException.class)
     public Result handlerServiceException(ServiceException e){
-        Result result = new Result(MsgEnums.FAIL.code(), MsgEnums.FAIL.desc(), "", null);
+        Result result = new Result(e.getCode(), e.getMessage(), "", null);
         log.info("ServiceException,code:" + String.valueOf(e.getCode()) + ", Msg:" + e.getMessage());
         return result;
     }

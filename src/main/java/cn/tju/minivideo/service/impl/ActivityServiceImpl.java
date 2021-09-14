@@ -1,5 +1,6 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.exception.ServiceException;
 import com.github.pagehelper.PageHelper;
@@ -86,16 +87,27 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public PageInfo<Activity> getCommunityActivitiesWithPaginatorSortByMethod(Integer communityId, Integer page, Integer pageSize, Integer sortMethod) {
+    public PageInfo<Activity> getCommunityActivitiesByEssenceWithPaginatorSortByMethod(Integer communityId, Integer essence, Integer page, Integer pageSize, Integer sortMethod) {
         PageHelper.startPage(page, pageSize);
         PageInfo<Activity> pageInfo;
-        if (sortMethod.equals(SortMethod.SortByTimeDesc)){
-            pageInfo = new PageInfo<>(activityMapper.findByCommunityIdOrderByCreatedAt(communityId));
-        } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)){
-            pageInfo = new PageInfo<>(activityMapper.findByCommunityIdOrderByLikeNum(communityId));
+        if (essence.equals(Constants.ActivityConst.ActivityAnyEssence)){
+            if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+                pageInfo = new PageInfo<>(activityMapper.findByCommunityIdOrderByCreatedAt(communityId));
+            } else if(sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+                pageInfo = new PageInfo<>(activityMapper.findByCommunityIdOrderByLikeNum(communityId));
+            } else{
+                throw new ServiceException(MsgEnums.VALIDATION_ERROR);
+            }
         } else {
-            throw new ServiceException(MsgEnums.VALIDATION_ERROR);
+            if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+                pageInfo = new PageInfo<>(activityMapper.findByCommunityIdAndIsEssenceOrderByCreatedAt(communityId, essence));
+            } else if(sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+                pageInfo = new PageInfo<>(activityMapper.findByCommunityIdAndIsEssenceOrderByLikeNum(communityId, essence));
+            } else{
+                throw new ServiceException(MsgEnums.VALIDATION_ERROR);
+            }
         }
+
         return pageInfo;
     }
 
@@ -108,12 +120,25 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public String getUserIdOfActivityByActivityId(Integer activityId) {
         String userId = activityMapper.findUserIdByActivityId(activityId);
-        if(userId == null || userId.equals("")){
+        if (userId == null || userId.equals("")) {
             throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
         }
         return userId;
     }
 
+    @Override
+    public PageInfo<Activity> getActivitiesByTopicIdWithPaginatorSortByMethod(Integer topicId, Integer sortMethod, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
+            return new PageInfo<>(activityMapper.findByTopicIdOrderByCreatedAt(topicId));
+        } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)) {
+            return new PageInfo<>(activityMapper.findByTopicIdOrderByLikeNum(topicId));
+        } else {
+            throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+        }
+    }
+
 }
+
 
 

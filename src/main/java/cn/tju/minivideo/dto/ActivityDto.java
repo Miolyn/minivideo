@@ -57,6 +57,12 @@ public class ActivityDto {
     private Integer commentNum;
 
     /**
+     * 是否是精华帖
+     */
+    @Null(message = "没有权限修改评论数量", groups = {ValidationGroups.Insert.class})
+    private Integer isEssence;
+
+    /**
      * 创建时间
      */
     @Null(message = "没有权限修改发布日期", groups = {ValidationGroups.Insert.class})

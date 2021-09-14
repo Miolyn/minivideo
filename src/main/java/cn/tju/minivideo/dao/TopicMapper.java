@@ -24,5 +24,4 @@ public interface TopicMapper {
 
     List<Topic> findOrderByActivityNum();
 
-
 }

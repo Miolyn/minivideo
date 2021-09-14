@@ -1,8 +1,7 @@
 package cn.tju.minivideo.dao;
-import java.util.List;
 
 import cn.tju.minivideo.entity.Activity;
-import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 @Mapper
 public interface ActivityMapper {
@@ -28,17 +27,23 @@ public interface ActivityMapper {
 
     int updateCollectNumByActivityId(@Param("activityId") Integer activityId);
 
-    int updateCommentNumByActivityId(@Param("activityId")Integer activityId);
+    int updateCommentNumByActivityId(@Param("activityId") Integer activityId);
+
+    List<Activity> findByCommunityIdOrderByCreatedAt(@Param("communityId") Integer communityId);
+
+    List<Activity> findByCommunityIdAndIsEssenceOrderByCreatedAt(@Param("communityId")Integer communityId,@Param("isEssence")Integer isEssence);
+
+    List<Activity> findByCommunityIdOrderByLikeNum(@Param("communityId") Integer communityId);
+
+    List<Activity> findByCommunityIdAndIsEssenceOrderByLikeNum(@Param("communityId")Integer communityId,@Param("isEssence")Integer isEssence);
 
 
-    List<Activity> findByCommunityIdOrderByCreatedAt(@Param("communityId")Integer communityId);
-
-    List<Activity> findByCommunityIdOrderByLikeNum(@Param("communityId")Integer communityId);
 
     List<Activity> getAllOrderByCreatedAt();
 
+    String findUserIdByActivityId(@Param("activityId") Integer activityId);
 
-    String findUserIdByActivityId(@Param("activityId")Integer activityId);
+    List<Activity> findByTopicIdOrderByCreatedAt(Integer topicId);
 
-
+    List<Activity> findByTopicIdOrderByLikeNum(Integer topicId);
 }

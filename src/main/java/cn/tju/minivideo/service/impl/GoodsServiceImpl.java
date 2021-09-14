@@ -139,6 +139,11 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return userId;
     }
+
+    @Override
+    public int deleteGoodsByGoodsIdLogically(Integer goodsId) {
+        return goodsMapper.deleteGoodsByGoodsIdLogically(goodsId);
+    }
 }
 
 

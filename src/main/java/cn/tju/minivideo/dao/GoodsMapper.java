@@ -47,5 +47,7 @@ public interface GoodsMapper {
 
     String findUserIdByGoodsId(@Param("goodsId")Integer goodsId);
 
+    int deleteGoodsByGoodsIdLogically(@Param("goodsId")Integer goodsId);
+
 
 }

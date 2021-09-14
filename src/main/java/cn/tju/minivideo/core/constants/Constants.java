@@ -118,6 +118,12 @@ public class Constants {
         int CommunityMemberNormalAuthority = 2;
     }
 
+    public interface ActivityConst{
+        int ActivityIsEssence = 1;
+        int ActivityNotEssence = 0;
+        int ActivityAnyEssence = -1;
+    }
+
     public interface HistoryConst {
         int HistoryVideoType = 1;
         int HistoryActivityType = 2;
