@@ -111,6 +111,11 @@ public class CommunityServiceImpl implements CommunityService{
     }
 
     @Override
+    public List<Community> getCommunitiesOrderByCreatedAt() {
+        return communityMapper.findOrderByCreatedAt();
+    }
+
+    @Override
     public void lockCommunityByCommunityId(Integer communityId) {
         communityMapper.findByCommunityIdForUpdate(communityId);
     }

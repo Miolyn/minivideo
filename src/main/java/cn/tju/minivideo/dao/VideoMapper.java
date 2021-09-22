@@ -52,5 +52,11 @@ public interface VideoMapper {
 
     String getUserIdByVideoId(@Param("videoId")Integer videoId);
 
+    List<Video> searchOnTitleAndIntroductionOrderByCreatedAt(@Param("key")String key);
+
+    List<Video> searchOnTitleAndIntroductionOrderByPlayNum(@Param("key")String key);
+
+    List<Video> searchOnTitleAndIntroductionOrderByLikeNum(@Param("key")String key);
+
 
 }

@@ -1,8 +1,10 @@
 package cn.tju.minivideo.dao;
+
 import java.util.List;
 
 import cn.tju.minivideo.entity.User;
-import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper {
@@ -22,11 +24,13 @@ public interface UserMapper {
 
     User findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
-    User findByUserId(@Param("userId")String userId);
+    User findByUserId(@Param("userId") String userId);
 
-    User findByUserIdForUpdate(@Param("userId")String userId);
+    User findByUserIdForUpdate(@Param("userId") String userId);
 
-    int updateLikeNumByUserId(@Param("userId")String userId);
+    int updateLikeNumByUserId(@Param("userId") String userId);
+
+    List<User> searchKeyOnUsernameOrderByCreatedAt(@Param("key") String key);
 
 
 }

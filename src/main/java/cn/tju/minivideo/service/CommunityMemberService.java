@@ -4,6 +4,8 @@ import cn.tju.minivideo.entity.Community;
 import cn.tju.minivideo.entity.CommunityMember;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface CommunityMemberService{
 
 
@@ -22,5 +24,6 @@ public interface CommunityMemberService{
     boolean isExistByUserIdAndCommunityId(String userId, Integer communityId);
 
     PageInfo<CommunityMember> getCommunitiesByUserIdWithPaginator(String userId, Integer page, Integer pageSize);
+    List<CommunityMember> getCommunitiesByUserId(String userId);
 
 }

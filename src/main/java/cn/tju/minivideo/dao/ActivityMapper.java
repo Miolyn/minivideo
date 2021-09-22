@@ -31,13 +31,11 @@ public interface ActivityMapper {
 
     List<Activity> findByCommunityIdOrderByCreatedAt(@Param("communityId") Integer communityId);
 
-    List<Activity> findByCommunityIdAndIsEssenceOrderByCreatedAt(@Param("communityId")Integer communityId,@Param("isEssence")Integer isEssence);
+    List<Activity> findByCommunityIdAndIsEssenceOrderByCreatedAt(@Param("communityId") Integer communityId, @Param("isEssence") Integer isEssence);
 
     List<Activity> findByCommunityIdOrderByLikeNum(@Param("communityId") Integer communityId);
 
-    List<Activity> findByCommunityIdAndIsEssenceOrderByLikeNum(@Param("communityId")Integer communityId,@Param("isEssence")Integer isEssence);
-
-
+    List<Activity> findByCommunityIdAndIsEssenceOrderByLikeNum(@Param("communityId") Integer communityId, @Param("isEssence") Integer isEssence);
 
     List<Activity> getAllOrderByCreatedAt();
 
@@ -46,4 +44,8 @@ public interface ActivityMapper {
     List<Activity> findByTopicIdOrderByCreatedAt(Integer topicId);
 
     List<Activity> findByTopicIdOrderByLikeNum(Integer topicId);
+
+    List<Activity> findByUserIdOrderByCreatedAt(@Param("userId")String userId);
+
+
 }

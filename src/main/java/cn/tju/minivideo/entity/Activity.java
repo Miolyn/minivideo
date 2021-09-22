@@ -19,6 +19,11 @@ public class Activity implements Serializable {
     private Integer activityId;
 
     /**
+     * 帖子标题
+     */
+    private String title;
+
+    /**
      * 用户id
      */
     private String userId;

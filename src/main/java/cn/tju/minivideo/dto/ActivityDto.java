@@ -20,6 +20,12 @@ public class ActivityDto {
     private Integer activityId;
 
     /**
+     * 帖子标题
+     */
+    @NotNull(message = "帖子标题不能为空", groups = {ValidationGroups.Insert.class})
+    private String title;
+
+    /**
      * 用户id
      */
     @Null(message = "没有权限修改用户id", groups = {ValidationGroups.Insert.class})

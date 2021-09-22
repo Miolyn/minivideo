@@ -8,6 +8,9 @@ import javax.annotation.Resource;
 import cn.tju.minivideo.dao.CommunityMemberMapper;
 import cn.tju.minivideo.entity.CommunityMember;
 import cn.tju.minivideo.service.CommunityMemberService;
+
+import java.util.List;
+
 @Service
 public class CommunityMemberServiceImpl implements CommunityMemberService{
 
@@ -54,6 +57,12 @@ public class CommunityMemberServiceImpl implements CommunityMemberService{
     public PageInfo<CommunityMember> getCommunitiesByUserIdWithPaginator(String userId, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         return new PageInfo<>(communityMemberMapper.findByUserIdOrderByCreatedAt(userId));
+    }
+
+    @Override
+    public List<CommunityMember> getCommunitiesByUserId(String userId) {
+
+        return communityMemberMapper.findByUserIdOrderByCreatedAt(userId);
     }
 
 }

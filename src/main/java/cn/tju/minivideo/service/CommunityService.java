@@ -4,6 +4,8 @@ import cn.tju.minivideo.dto.CommunityDto;
 import cn.tju.minivideo.entity.Community;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface CommunityService{
 
 
@@ -27,6 +29,7 @@ public interface CommunityService{
     CommunityDto getCommunityDtoByCommunity(Community community);
 
     PageInfo<Community> getCommunitiesWithPaginatorOrderByCreatedAt(Integer page, Integer pageSize);
+    List<Community> getCommunitiesOrderByCreatedAt();
 
     void lockCommunityByCommunityId(Integer communityId);
 

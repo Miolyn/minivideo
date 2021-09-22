@@ -10,15 +10,9 @@ import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.handler.NonStaticResourceHttpRequestHandler;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.*;
-import cn.tju.minivideo.dto.BulletScreenDto;
-import cn.tju.minivideo.dto.SimpleVideoDto;
-import cn.tju.minivideo.dto.VideoDto;
-import cn.tju.minivideo.dto.VideoGoodsRecommendDto;
+import cn.tju.minivideo.dto.*;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
-import cn.tju.minivideo.entity.BulletScreen;
-import cn.tju.minivideo.entity.User;
-import cn.tju.minivideo.entity.Video;
-import cn.tju.minivideo.entity.VideoGoodsRecommend;
+import cn.tju.minivideo.entity.*;
 import cn.tju.minivideo.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
@@ -71,6 +65,9 @@ public class VideoController {
 
     @Autowired
     private VideoGoodsRecommendService videoGoodsRecommendService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     // video 元素支持三种视频格式： MP4, WebM, 和 Ogg:
     // TODO 增加视频播放量
@@ -265,8 +262,13 @@ public class VideoController {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
         List<VideoGoodsRecommend> videoGoodsRecommends = videoGoodsRecommendService.getVideoGoodsRecommendsByVideoId(videoId);
-        List<VideoGoodsRecommendDto> data = new ArrayList<>();
-        videoGoodsRecommends.forEach(videoGoodsRecommend -> data.add(modelMapper.map(videoGoodsRecommend, VideoGoodsRecommendDto.class)));
+        List<SimpleGoodsDto> data = new ArrayList<>();
+        for (VideoGoodsRecommend videoGoodsRecommend : videoGoodsRecommends) {
+            Goods goods = goodsService.getGoodsByGoodsId(videoGoodsRecommend.getGoodsId());
+            data.add(modelMapper.map(goods, SimpleGoodsDto.class));
+        }
+//        List<VideoGoodsRecommendDto> data = new ArrayList<>();
+//        videoGoodsRecommends.forEach(videoGoodsRecommend -> data.add(modelMapper.map(videoGoodsRecommend, VideoGoodsRecommendDto.class)));
         return Results.OkWithData(data);
     }
 

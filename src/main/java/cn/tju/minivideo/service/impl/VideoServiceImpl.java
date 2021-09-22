@@ -156,6 +156,20 @@ public class VideoServiceImpl implements VideoService {
         return userId;
     }
 
+    @Override
+    public PageInfo<Video> searchVideoByKeyOnTitleAndIntroductionWithPaginator(String key, Integer sortMethod, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+            return new PageInfo<>(videoMapper.searchOnTitleAndIntroductionOrderByCreatedAt(key));
+        } else if(sortMethod.equals(SortMethod.SortByPlayNumDesc)){
+            return new PageInfo<>(videoMapper.searchOnTitleAndIntroductionOrderByPlayNum(key));
+        } else if(sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+            return new PageInfo<>(videoMapper.searchOnTitleAndIntroductionOrderByLikeNum(key));
+        } else{
+            throw new ServiceException(MsgEnums.VALIDATION_ERROR);
+        }
+    }
+
 
 }
 

@@ -10,9 +10,7 @@ import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.BindUtil;
 import cn.tju.minivideo.core.util.Paginators;
 import cn.tju.minivideo.core.util.Results;
-import cn.tju.minivideo.dto.CollectionDto;
-import cn.tju.minivideo.dto.LikeMapDto;
-import cn.tju.minivideo.dto.SimpleVideoDto;
+import cn.tju.minivideo.dto.*;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.*;
 import cn.tju.minivideo.service.*;
@@ -167,15 +165,31 @@ public class ActionController {
         }
         String userId = JwtInterceptor.getUser().getUserId();
         PageInfo<Collections> pageInfo = collectionsService.getCollectionsByItemTypeAndUserIdWithPaginator(itemType, userId, page, ProjectConstant.PageSize);
-//        if (itemType.equals(Constants.CollectionConst.CollectOnVideo)) {
-//            List<SimpleVideoDto> simpleVideoDtos = new ArrayList<>();
-//            for (Collections collections : pageInfo.getList()) {
-//                Video video = videoService.selectByPrimaryKey(collections.getItemId());
-//                SimpleVideoDto simpleVideoDto = modelMapper.map(video, SimpleVideoDto.class);
-//                simpleVideoDtos.add(simpleVideoDto);
-//            }
-//            return Results.OkWithData(Paginators.paginator(pageInfo, simpleVideoDtos));
-//        }
+        if (itemType.equals(Constants.CollectionConst.CollectOnVideo)) {
+            List<SimpleVideoDto> data = new ArrayList<>();
+            for (Collections collections : pageInfo.getList()) {
+                Video video = videoService.selectByPrimaryKey(collections.getItemId());
+                SimpleVideoDto simpleVideoDto = modelMapper.map(video, SimpleVideoDto.class);
+                data.add(simpleVideoDto);
+            }
+            return Results.OkWithData(Paginators.paginator(pageInfo, data));
+        } else if(itemType.equals(Constants.CollectionConst.CollectOnActivity)){
+            List<ActivityDto> data = new ArrayList<>();
+            for (Collections collections : pageInfo.getList()) {
+                Activity activity = activityService.getActivityByActivityId(collections.getItemId());
+                ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+                data.add(activityDto);
+            }
+            return Results.OkWithData(Paginators.paginator(pageInfo, data));
+        } else if(itemType.equals(Constants.CollectionConst.CollectOnGoods)){
+            List<SimpleGoodsDto> data = new ArrayList<>();
+            for (Collections collections : pageInfo.getList()) {
+                Goods goods = goodsService.getGoodsByGoodsId(collections.getItemId());
+                SimpleGoodsDto simpleGoodsDto = modelMapper.map(goods, SimpleGoodsDto.class);
+                data.add(simpleGoodsDto);
+            }
+            return Results.OkWithData(Paginators.paginator(pageInfo, data));
+        }
         List<CollectionDto> data = new ArrayList<>();
         pageInfo.getList().forEach(collections -> data.add(modelMapper.map(collections, CollectionDto.class)));
         return Results.OkWithData(Paginators.paginator(pageInfo, data));

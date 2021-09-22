@@ -1,12 +1,18 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.User;
+import com.github.pagehelper.PageInfo;
 
 public interface UserService {
 
     public interface FollowUserAction {
         Integer followUser = 1;
         Integer unFollowUser = 2;
+    }
+
+    interface SortMethod{
+        Integer SortByTimeDesc = 1;
+
     }
 
     int deleteByPrimaryKey(String userId);
@@ -36,6 +42,8 @@ public interface UserService {
     void lockUserByUserId(String userId);
 
     int updateUserLikeNum(String userId);
+
+    PageInfo<User> searchUserByKeyOnUsernameWithPaginator(String key, Integer sortMethod, Integer page, Integer pageSize);
 }
 
 

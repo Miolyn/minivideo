@@ -4,6 +4,8 @@ import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ServiceException;
 import cn.tju.minivideo.service.RedisService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -133,6 +135,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUserLikeNum(String userId) {
         return userMapper.updateLikeNumByUserId(userId);
+    }
+
+    @Override
+    public PageInfo<User> searchUserByKeyOnUsernameWithPaginator(String key, Integer sortMethod, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+            return new PageInfo<>(userMapper.searchKeyOnUsernameOrderByCreatedAt(key));
+        } else {
+            throw new ServiceException(MsgEnums.VALIDATION_ERROR);
+        }
     }
 }
 

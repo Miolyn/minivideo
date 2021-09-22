@@ -87,7 +87,12 @@ public class Constants {
     public interface GoodsConst {
         // 商品类型
         int GoodsFoodType = 1; // 食品类
-
+        int GoodsClothingType = 2; // 服装类
+        int GoodsElectronicType = 3; // 电子类
+        int GoodsMusicalInstrumentType = 4; // 乐器类
+        int GoodsSportType = 5; // 运动类
+        int GoodsBookType = 6; // 书籍类
+        int GoodsOtherType = 7; // 其他类
 
     }
 

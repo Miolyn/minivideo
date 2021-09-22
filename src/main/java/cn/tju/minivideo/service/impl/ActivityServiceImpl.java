@@ -11,6 +11,8 @@ import cn.tju.minivideo.entity.Activity;
 import cn.tju.minivideo.dao.ActivityMapper;
 import cn.tju.minivideo.service.ActivityService;
 
+import java.util.List;
+
 @Service
 public class ActivityServiceImpl implements ActivityService {
 
@@ -90,20 +92,20 @@ public class ActivityServiceImpl implements ActivityService {
     public PageInfo<Activity> getCommunityActivitiesByEssenceWithPaginatorSortByMethod(Integer communityId, Integer essence, Integer page, Integer pageSize, Integer sortMethod) {
         PageHelper.startPage(page, pageSize);
         PageInfo<Activity> pageInfo;
-        if (essence.equals(Constants.ActivityConst.ActivityAnyEssence)){
-            if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+        if (essence.equals(Constants.ActivityConst.ActivityAnyEssence)) {
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
                 pageInfo = new PageInfo<>(activityMapper.findByCommunityIdOrderByCreatedAt(communityId));
-            } else if(sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)) {
                 pageInfo = new PageInfo<>(activityMapper.findByCommunityIdOrderByLikeNum(communityId));
-            } else{
+            } else {
                 throw new ServiceException(MsgEnums.VALIDATION_ERROR);
             }
         } else {
-            if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
                 pageInfo = new PageInfo<>(activityMapper.findByCommunityIdAndIsEssenceOrderByCreatedAt(communityId, essence));
-            } else if(sortMethod.equals(SortMethod.SortByLikeNumDesc)){
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)) {
                 pageInfo = new PageInfo<>(activityMapper.findByCommunityIdAndIsEssenceOrderByLikeNum(communityId, essence));
-            } else{
+            } else {
                 throw new ServiceException(MsgEnums.VALIDATION_ERROR);
             }
         }
@@ -112,9 +114,35 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public List<Activity> getCommunityActivitiesByEssenceSortByMethod(Integer communityId, Integer essence, Integer sortMethod) {
+        if (essence.equals(Constants.ActivityConst.ActivityAnyEssence)) {
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
+                return activityMapper.findByCommunityIdOrderByCreatedAt(communityId);
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)) {
+                return activityMapper.findByCommunityIdOrderByLikeNum(communityId);
+            } else {
+                throw new ServiceException(MsgEnums.VALIDATION_ERROR);
+            }
+        } else {
+            if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
+                return activityMapper.findByCommunityIdAndIsEssenceOrderByCreatedAt(communityId, essence);
+            } else if (sortMethod.equals(SortMethod.SortByLikeNumDesc)) {
+                return activityMapper.findByCommunityIdAndIsEssenceOrderByLikeNum(communityId, essence);
+            } else {
+                throw new ServiceException(MsgEnums.VALIDATION_ERROR);
+            }
+        }
+    }
+
+    @Override
     public PageInfo<Activity> getActivitiesWithPaginator(Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         return new PageInfo<>(activityMapper.getAllOrderByCreatedAt());
+    }
+
+    @Override
+    public List<Activity> getActivities() {
+        return activityMapper.getAllOrderByCreatedAt();
     }
 
     @Override
@@ -138,7 +166,17 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+    @Override
+    public List<Activity> getActivitiesByUserIdSortByMethod(String userId, Integer sortMethod) {
+        if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+            return activityMapper.findByUserIdOrderByCreatedAt(userId);
+        } else{
+            throw new ServiceException(MsgEnums.ACTION_NOT_FOUND);
+        }
+    }
+
 }
+
 
 
 

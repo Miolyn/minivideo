@@ -182,27 +182,41 @@ public class CommunityController {
     @AuthRequired
     public Result getHasJoinedCommunities(@RequestParam(value = "page", defaultValue = "1") Integer page) {
         String userId = JwtInterceptor.getUser().getUserId();
-        PageInfo<CommunityMember> pageInfo = communityMemberService.getCommunitiesByUserIdWithPaginator(userId, page, ProjectConstant.PageSize);
+        List<CommunityMember> communityMembers = communityMemberService.getCommunitiesByUserId(userId);
         List<CommunityDto> data = new ArrayList<>();
-        for (CommunityMember communityMember : pageInfo.getList()) {
-//            Community community = communityService.getCommunityByCommunityId(communityMember.getCommunityId());
+        for (CommunityMember communityMember : communityMembers) {
             CommunityDto communityDto = communityService.getCommunityDtoByCommunityId(communityMember.getCommunityId());
             data.add(communityDto);
         }
+        return Results.OkWithData(data);
 
-        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+//        PageInfo<CommunityMember> pageInfo = communityMemberService.getCommunitiesByUserIdWithPaginator(userId, page, ProjectConstant.PageSize);
+//        List<CommunityDto> data = new ArrayList<>();
+//        for (CommunityMember communityMember : pageInfo.getList()) {
+////            Community community = communityService.getCommunityByCommunityId(communityMember.getCommunityId());
+//            CommunityDto communityDto = communityService.getCommunityDtoByCommunityId(communityMember.getCommunityId());
+//            data.add(communityDto);
+//        }
+//
+//        return Results.OkWithData(Paginators.paginator(pageInfo, data));
     }
 
     @GetMapping("communities")
     @ApiOperation("获取所有社区，按时间排序，暂时当作一些需要社区数据的数据提供接口")
     public Result getCommunities(@RequestParam(value = "page", defaultValue = "1") Integer page) {
-        PageInfo<Community> pageInfo = communityService.getCommunitiesWithPaginatorOrderByCreatedAt(page, ProjectConstant.PageSize);
+        List<Community> communities = communityService.getCommunitiesOrderByCreatedAt();
         List<CommunityDto> data = new ArrayList<>();
-        for (Community community : pageInfo.getList()) {
-            CommunityDto communityDto = communityService.getCommunityDtoByCommunity(community);
-            data.add(communityDto);
+        for (Community community : communities) {
+            data.add(communityService.getCommunityDtoByCommunity(community));
         }
-        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+        return Results.OkWithData(data);
+//        PageInfo<Community> pageInfo = communityService.getCommunitiesWithPaginatorOrderByCreatedAt(page, ProjectConstant.PageSize);
+//        List<CommunityDto> data = new ArrayList<>();
+//        for (Community community : pageInfo.getList()) {
+//            CommunityDto communityDto = communityService.getCommunityDtoByCommunity(community);
+//            data.add(communityDto);
+//        }
+//        return Results.OkWithData(Paginators.paginator(pageInfo, data));
     }
 
 
@@ -224,12 +238,12 @@ public class CommunityController {
         }
         Activity activity = modelMapper.map(activityDto, Activity.class);
         activity.setUserId(userId);
-        List<String> topics = StringUtil.getTopicList(activityDto.getContent());
-        List<Integer> topicIds = topicService.getTopicIdsOrInsert(topics, userId);
-        String ids = JsonUtil.List2String(topicIds);
-        activity.setTopicIds(ids);
+//        List<String> topics = StringUtil.getTopicList(activityDto.getContent());
+//        List<Integer> topicIds = topicService.getTopicIdsOrInsert(topics, userId);
+//        String ids = JsonUtil.List2String(topicIds);
+//        activity.setTopicIds(ids);
         activityService.insertSelective(activity);
-        activityTopicService.insertActivityTopicByTopicIdsAndActivityId(topicIds, activity.getActivityId());
+//        activityTopicService.insertActivityTopicByTopicIdsAndActivityId(topicIds, activity.getActivityId());
         communityService.lockCommunityByCommunityId(activity.getCommunityId());
         communityService.addCommunityActivityNumByCommunityId(activity.getCommunityId());
         return Results.OkWithData(activity.getActivityId());
@@ -288,10 +302,21 @@ public class CommunityController {
                 || (!isEssence.equals(Constants.ActivityConst.ActivityNotEssence) && !isEssence.equals(Constants.ActivityConst.ActivityIsEssence)) && !isEssence.equals(Constants.ActivityConst.ActivityAnyEssence)) {
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
-        PageInfo<Activity> pageInfo = activityService.getCommunityActivitiesByEssenceWithPaginatorSortByMethod(communityId, isEssence, page, ProjectConstant.PageSize, sortMethod);
-        List<ActivityDto> data = new ArrayList<>();
-        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
-        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+        return Results.OkWithData(activityService.getCommunityActivitiesByEssenceSortByMethod(communityId, isEssence, sortMethod));
+//        PageInfo<Activity> pageInfo = activityService.getCommunityActivitiesByEssenceWithPaginatorSortByMethod(communityId, isEssence, page, ProjectConstant.PageSize, sortMethod);
+//        List<ActivityDto> data = new ArrayList<>();
+//        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
+//        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+    }
+
+
+
+    @GetMapping("my_activities")
+    @ApiOperation("获取我发布的帖子")
+    @AuthRequired
+    public Result getMyActivities(@RequestParam(value = "sort", defaultValue = "1") Integer sortMethod){
+        String userId = JwtInterceptor.getUser().getUserId();
+        return Results.OkWithData(activityService.getActivitiesByUserIdSortByMethod(userId, sortMethod));
     }
 
     @GetMapping("activities_by_topic")
@@ -312,10 +337,13 @@ public class CommunityController {
     @GetMapping("activity_main_tmp")
     @ApiOperation("暂时的帖子首页，按顺序返回帖子，分页")
     public Result getActivitiesByPage(@RequestParam(value = "page", defaultValue = "1") Integer page) {
-        PageInfo<Activity> pageInfo = activityService.getActivitiesWithPaginator(page, ProjectConstant.PageSize);
+//        PageInfo<Activity> pageInfo = activityService.getActivitiesWithPaginator(page, ProjectConstant.PageSize);
+        List<Activity> activities = activityService.getActivities();
         List<ActivityDto> data = new ArrayList<>();
-        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
-        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+//        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
+        activities.forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
+//        return Results.OkWithData(Paginators.paginator(pageInfo, data));
+        return Results.OkWithData(data);
     }
 
     @GetMapping("hot_topics")

@@ -49,6 +49,8 @@ public interface VideoService {
     void lockVideoByVideoId(Integer videoId);
 
     String getUserIdOfrVideoByVideoId(Integer videoId);
+
+    PageInfo<Video> searchVideoByKeyOnTitleAndIntroductionWithPaginator(String key, Integer sortMethod, Integer page, Integer pageSize);
 }
 
 

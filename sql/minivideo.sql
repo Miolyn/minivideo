@@ -1,10 +1,11 @@
 CREATE TABLE `activities`
 (
     `activity_id`  int          NOT NULL AUTO_INCREMENT,
+    `title`      varchar(255)  not NULL COMMENT '帖子标题',
     `content`      text         not NULL COMMENT '帖子内容',
     `user_id`      varchar(50)  not NULL COMMENT '用户id',
     `community_id` int          not NULL COMMENT '社区id',
-    `topic_ids`    varchar(255) not NULL COMMENT '话题ids',
+    `topic_ids`    varchar(255)  default NULL COMMENT '话题ids',
     `like_num`     int      default 0 COMMENT '点赞数量',
     `collect_num`  int      default 0 COMMENT '收藏数量',
     `comment_num`  int      default 0 COMMENT '评论数量',
