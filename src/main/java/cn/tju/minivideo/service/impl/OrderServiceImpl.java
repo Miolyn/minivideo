@@ -1,5 +1,6 @@
 package cn.tju.minivideo.service.impl;
 
+import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
 import cn.tju.minivideo.core.exception.ServiceException;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,9 @@ import javax.annotation.Resource;
 import cn.tju.minivideo.dao.OrderMapper;
 import cn.tju.minivideo.entity.Order;
 import cn.tju.minivideo.service.OrderService;
+
+import java.util.List;
+
 @Service
 public class OrderServiceImpl implements OrderService{
 
@@ -55,6 +59,15 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public boolean checkPermissionToCommentOnGoods(Integer goodsId, String userId) {
         return orderMapper.countByUserIdAndGoodsId(userId, goodsId) != 0;
+    }
+
+    @Override
+    public List<Order> getOrdersByUserIdAndStatus(String userId, Integer status) {
+        if(status.equals(Constants.OrderConst.OrderAnyStatus)){
+            return orderMapper.findByUserId(userId);
+        } else{
+            return orderMapper.findByUserIdAndStatus(userId, status);
+        }
     }
 
 }

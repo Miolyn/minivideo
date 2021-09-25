@@ -3,10 +3,7 @@ package cn.tju.minivideo;
 import cn.tju.minivideo.core.config.JwtConfig;
 import cn.tju.minivideo.core.config.UploadConfig;
 import cn.tju.minivideo.core.constants.Constants;
-import cn.tju.minivideo.core.util.FileUtil;
-import cn.tju.minivideo.core.util.JsonUtil;
-import cn.tju.minivideo.core.util.JwtUtil;
-import cn.tju.minivideo.core.util.StringUtil;
+import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dao.DynamicMapper;
 import cn.tju.minivideo.dao.UserMapper;
 import cn.tju.minivideo.dto.MsgDto;
@@ -130,5 +127,11 @@ class MinivideoApplicationTests {
     void testJackson(){
         String ret = JsonUtil.Object2String(new MsgDto("1", 1, 1, "www"));
         System.out.println(ret);
+    }
+
+    @Test
+    void testHttp(){
+        List<String> res = HttpUtil.httpGet("http://175.27.191.103:8000/recommend/2/2");
+        System.out.println(res);
     }
 }

@@ -99,6 +99,7 @@ public class Constants {
 
     // 1待付款，2待发货，3等待确认收货, 4订单完成， 5订单取消
     public interface OrderConst {
+        int OrderAnyStatus = -1;
         int OrderWaitForPayStatus = 1;
         int OrderWaitForShipStatus = 2;
         int OrderWaitForConfirmReceiptStatus = 3;

@@ -123,6 +123,28 @@ public class ActionController {
         return Results.Ok();
     }
 
+    @GetMapping("is_like")
+    @ApiOperation("是否点赞某对象")
+    @AuthRequired
+    public Result isLike(@RequestParam(value = "toId", defaultValue = "-1") Integer toId,
+                            @RequestParam(value = "likeType", defaultValue = "-1") Integer likeType){
+        if(toId.equals(-1) || likeType.equals(-1)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        String userId = JwtInterceptor.getUser().getUserId();
+        if ((likeType.equals(Constants.LikeConst.LikeOnVideo) && !videoService.isVideoExistByVideoId(toId))
+                || (likeType.equals(Constants.LikeConst.LikeOnComment) && !commentService.isCommentExistByCommentId(toId))
+                || (likeType.equals(Constants.LikeConst.LikeOnActivity) && !activityService.isActivityExistByActivityId(toId))
+//                || (likeMapDto.getLikeType().equals(Constants.LikeConst.LikeOnBulletScreen))
+                || (likeType.equals(Constants.LikeConst.LikeOnGoods) && !goodsService.isExistGoodsByGoodsId(toId))
+                || (likeType.equals(Constants.LikeConst.LikeOnDynamic) && !dynamicService.isExistDynamicByDynamicId(toId))
+        ) {
+            throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
+        }
+
+        return Results.OkWithData(likeMapService.isExistByFromIdAndToIdAndLikeType(userId, toId, likeType));
+    }
+
     // 收藏同样也是包含了所有类型的收藏了，按收藏类型区分
     @PostMapping("collect")
     @ApiOperation("收藏")
@@ -153,6 +175,24 @@ public class ActionController {
             goodsService.addGoodsCollectNumByGoodsId(collections.getItemId());
         }
         return Results.Ok();
+    }
+
+    @GetMapping("is_collect")
+    @ApiOperation("获取是否收藏")
+    @AuthRequired
+    public Result isCollect(@RequestParam(value = "itemId", defaultValue = "-1") Integer itemId,
+                            @RequestParam(value = "itemType", defaultValue = "-1") Integer itemType){
+        if(itemId.equals(-1) || itemType.equals(-1)){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        String userId = JwtInterceptor.getUser().getUserId();
+        if ((itemType.equals(Constants.CollectionConst.CollectOnVideo) && !videoService.isVideoExistByVideoId(itemId))
+                || (itemType.equals(Constants.CollectionConst.CollectOnActivity) && !activityService.isActivityExistByActivityId(itemId))
+                || (itemType.equals(Constants.CollectionConst.CollectOnGoods) && !goodsService.isExistGoodsByGoodsId(itemId))
+        ) {
+            throw new ControllerException(MsgEnums.ITEM_NOT_EXIST);
+        }
+        return Results.OkWithData(collectionsService.isExistByItemIdAndUserIdAnItemType(itemId, userId, itemType));
     }
 
     @GetMapping("collections")

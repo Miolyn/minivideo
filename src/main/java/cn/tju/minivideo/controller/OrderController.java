@@ -9,6 +9,7 @@ import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.BindUtil;
 import cn.tju.minivideo.core.util.Results;
+import cn.tju.minivideo.core.util.StringUtil;
 import cn.tju.minivideo.dto.OrderDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Goods;
@@ -25,12 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -65,6 +64,9 @@ public class OrderController {
         Order order = modelMapper.map(orderDto, Order.class);
         Goods goods = goodsService.getGoodsByGoodsId(orderDto.getGoodsId());
         String userId = JwtInterceptor.getUser().getUserId();
+        if(userId.equals(goods.getUserId())){
+            throw new ControllerException(MsgEnums.GOODS_NOT_ALLOWED_TO_BUY);
+        }
         order.setPayPrice(goods.getPrice().multiply(new BigDecimal(orderDto.getNumber())));
         order.setStatus(Constants.OrderConst.OrderWaitForPayStatus);
         order.setUserId(userId);
@@ -109,5 +111,22 @@ public class OrderController {
             goodsService.addGoodsSaleNum(orderGoods1.getGoodsId(), orderGoods1.getNumber());
         });
         return Results.Ok();
+    }
+
+    @GetMapping("orders")
+    @ApiOperation("获取自己的订单信息")
+    @AuthRequired
+    public Result getOrders(@RequestParam(value = "status", defaultValue = "-1") Integer status){
+        String userId = JwtInterceptor.getUser().getUserId();
+        List<Order> orders = orderService.getOrdersByUserIdAndStatus(userId, status);
+        List<OrderDto> data = new ArrayList<>();
+        for (Order order : orders) {
+            List<OrderGoods> orderGoods = orderGoodsService.getOrderGoodsByOrderId(order.getOrderId());
+            OrderDto orderDto = modelMapper.map(order, OrderDto.class);
+            orderDto.setGoodsId(orderGoods.get(0).getGoodsId());
+            orderDto.setNumber(orderGoods.get(0).getNumber());
+            data.add(orderDto);
+        }
+        return Results.OkWithData(data);
     }
 }

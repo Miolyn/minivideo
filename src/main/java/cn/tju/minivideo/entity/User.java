@@ -16,6 +16,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements Serializable {
+    private Integer id;
+
     /**
      * 用户id
      */

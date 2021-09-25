@@ -10,6 +10,8 @@ import cn.tju.minivideo.dao.GoodsMapper;
 import cn.tju.minivideo.entity.Goods;
 import cn.tju.minivideo.service.GoodsService;
 
+import java.util.List;
+
 @Service
 public class GoodsServiceImpl implements GoodsService {
 
@@ -73,6 +75,11 @@ public class GoodsServiceImpl implements GoodsService {
             }
         }
         return pageInfo;
+    }
+
+    @Override
+    public List<Goods> getGoodsByUserId(String userId) {
+        return goodsMapper.findByUserIdOrderByCreatedAt(userId);
     }
 
     @Override

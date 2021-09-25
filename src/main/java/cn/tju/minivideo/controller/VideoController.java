@@ -34,9 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("video")
@@ -254,22 +252,32 @@ public class VideoController {
         return Results.OkWithData(Paginators.paginator(pageInfo, data));
     }
 
-    // TODO: 根据视频id获取推荐商品
+    // TODO: 根据视频id获取推荐商品，从用户上传商品中随机推荐
     @GetMapping("video_goods_recommends")
     @ApiOperation("获取视频对应的推荐商品")
     public Result getVideoGoodsRecommends(@RequestParam(value = "videoId", defaultValue = "-1") Integer videoId){
         if(videoId.equals(-1) || !videoService.isVideoExistByVideoId(videoId)){
             throw new ControllerException(MsgEnums.VALIDATION_ERROR);
         }
-        List<VideoGoodsRecommend> videoGoodsRecommends = videoGoodsRecommendService.getVideoGoodsRecommendsByVideoId(videoId);
-        List<SimpleGoodsDto> data = new ArrayList<>();
-        for (VideoGoodsRecommend videoGoodsRecommend : videoGoodsRecommends) {
-            Goods goods = goodsService.getGoodsByGoodsId(videoGoodsRecommend.getGoodsId());
-            data.add(modelMapper.map(goods, SimpleGoodsDto.class));
+        Random random = new Random();
+        String userId = videoService.getUserIdOfrVideoByVideoId(videoId);
+        List<Goods> goods = goodsService.getGoodsByUserId(userId);
+        Set<Goods> total = new HashSet<>();
+        while (total.size() < 3){
+            total.add(goods.get(random.nextInt(goods.size())));
         }
-//        List<VideoGoodsRecommendDto> data = new ArrayList<>();
-//        videoGoodsRecommends.forEach(videoGoodsRecommend -> data.add(modelMapper.map(videoGoodsRecommend, VideoGoodsRecommendDto.class)));
+        List<SimpleGoodsDto> data = new ArrayList<>();
+        for (Goods goods1 : total) {
+            data.add(modelMapper.map(goods1, SimpleGoodsDto.class));
+        }
         return Results.OkWithData(data);
+//        List<VideoGoodsRecommend> videoGoodsRecommends = videoGoodsRecommendService.getVideoGoodsRecommendsByVideoId(videoId);
+//        List<SimpleGoodsDto> data = new ArrayList<>();
+//        for (VideoGoodsRecommend videoGoodsRecommend : videoGoodsRecommends) {
+//            Goods goods = goodsService.getGoodsByGoodsId(videoGoodsRecommend.getGoodsId());
+//            data.add(modelMapper.map(goods, SimpleGoodsDto.class));
+//        }
+//        return Results.OkWithData(data);
     }
 
     // TODO: 添加

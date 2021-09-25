@@ -23,5 +23,9 @@ public interface OrderMapper {
 
     Integer countByUserIdAndGoodsId(@Param("userId") String userId, @Param("goodsId") Integer goodsId);
 
-	
+	List<Order> findByUserId(@Param("userId")String userId);
+
+	List<Order> findByUserIdAndStatus(@Param("userId")String userId,@Param("status")Integer status);
+
+
 }

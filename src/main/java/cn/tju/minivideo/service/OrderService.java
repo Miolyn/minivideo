@@ -1,6 +1,9 @@
 package cn.tju.minivideo.service;
 
 import cn.tju.minivideo.entity.Order;
+
+import java.util.List;
+
 public interface OrderService{
 
 
@@ -19,4 +22,6 @@ public interface OrderService{
     Order getOrderByOrderId(Integer orderId);
 
     boolean checkPermissionToCommentOnGoods(Integer goodsId, String userId);
+
+    List<Order> getOrdersByUserIdAndStatus(String userId, Integer status);
 }

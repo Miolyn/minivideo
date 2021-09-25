@@ -38,6 +38,8 @@ public enum MsgEnums implements BaseEnum<Integer, String> {
     COMMUNITY_LABEL_NOT_EXIT(-801, "community label not exist"),
     COMMUNITY_CANT_MODIFY_COMMUNITY_NAME(-802, "up主类型社区不能修改社区名称"),
     COMMUNITY_HAS_JOIN_COMMUNITY(-803, "已经加入了社区"),
+    // -900 order
+    GOODS_NOT_ALLOWED_TO_BUY(-900, "不允许购买自己的商品"),
 
     ;
     private Integer code;

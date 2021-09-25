@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserId(String userId) {
         User user = userMapper.findByUserId(userId);
-        if (user == null){
+        if (user == null) {
             throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
         }
         return user;
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void lockUserByUserId(String userId) {
         User user = userMapper.findByUserIdForUpdate(userId);
-        if (user == null){
+        if (user == null) {
             throw new ServiceException(MsgEnums.ITEM_NOT_EXIST);
         }
     }
@@ -140,13 +140,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageInfo<User> searchUserByKeyOnUsernameWithPaginator(String key, Integer sortMethod, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
-        if(sortMethod.equals(SortMethod.SortByTimeDesc)){
+        if (sortMethod.equals(SortMethod.SortByTimeDesc)) {
             return new PageInfo<>(userMapper.searchKeyOnUsernameOrderByCreatedAt(key));
         } else {
             throw new ServiceException(MsgEnums.VALIDATION_ERROR);
         }
     }
+
+
 }
+
 
 
 

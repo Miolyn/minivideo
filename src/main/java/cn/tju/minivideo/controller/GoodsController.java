@@ -70,7 +70,7 @@ public class GoodsController {
         goods.setUserId(userId);
         goodsService.insertSelective(goods);
         log.info(goods.toString());
-        return Results.Ok();
+        return Results.OkWithData(goods.getGoodsId());
     }
 
     @PostMapping("update_goods")

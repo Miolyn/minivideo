@@ -1,5 +1,6 @@
 package cn.tju.minivideo.core.aop;
 
+import cn.tju.minivideo.core.base.Result;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -40,7 +41,7 @@ public class LogAspectAop {
     @AfterReturning(returning = "ret", pointcut = "webLog()")
     public void doAfterReturning(Object ret) {
         // 处理完请求，返回内容
-        log.info("方法的返回值 : " + ret);
+        log.info("方法的返回值 : " + ret.toString());
     }
 
 

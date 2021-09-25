@@ -5,12 +5,13 @@ import com.github.pagehelper.PageInfo;
 
 public interface UserService {
 
+
     public interface FollowUserAction {
         Integer followUser = 1;
         Integer unFollowUser = 2;
     }
 
-    interface SortMethod{
+    interface SortMethod {
         Integer SortByTimeDesc = 1;
 
     }
@@ -45,6 +46,7 @@ public interface UserService {
 
     PageInfo<User> searchUserByKeyOnUsernameWithPaginator(String key, Integer sortMethod, Integer page, Integer pageSize);
 }
+
 
 
 

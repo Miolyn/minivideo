@@ -3,6 +3,8 @@ package cn.tju.minivideo.service;
 import cn.tju.minivideo.entity.Goods;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface GoodsService {
     interface SortMethod {
         Integer SortByTimeDesc = 1;
@@ -24,6 +26,8 @@ public interface GoodsService {
     int updateByPrimaryKey(Goods record);
 
     PageInfo<Goods> getGoodsByUserIdOrGoodsTypeWithPaginatorSortByMethod(String userId, Integer goodsType, Integer page, Integer pageSize, Integer sortMethod);
+
+    List<Goods> getGoodsByUserId(String userId);
 
     boolean checkPermissionToUpdateGoodsInfo(Integer goodsId, String userId);
 
