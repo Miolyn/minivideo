@@ -170,6 +170,12 @@ public class VideoServiceImpl implements VideoService {
         }
     }
 
+    @Override
+    public Video getVideoByVideoId(Integer videoId) {
+
+        return videoMapper.findByVideoId(videoId);
+    }
+
 
 }
 

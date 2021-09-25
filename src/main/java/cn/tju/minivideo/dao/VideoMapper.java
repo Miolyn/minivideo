@@ -58,5 +58,7 @@ public interface VideoMapper {
 
     List<Video> searchOnTitleAndIntroductionOrderByLikeNum(@Param("key")String key);
 
+    Video findByVideoId(@Param("videoId")Integer videoId);
+
 
 }

@@ -67,6 +67,12 @@ public class VideoController {
     @Autowired
     private GoodsService goodsService;
 
+    @Autowired
+    private AlgorithmService algorithmService;
+
+    @Autowired
+    private UserService userService;
+
     // video 元素支持三种视频格式： MP4, WebM, 和 Ogg:
     // TODO 增加视频播放量
     @GetMapping("play_tmp")
@@ -156,6 +162,7 @@ public class VideoController {
         video.setVideoSize(VideoUtils.getVideoDuration(video.getVideoFile()));
         videoService.insertSelective(video);
         dynamicService.createVideoAutoDynamic(user.getUserId(), video.getVideoId());
+        algorithmService.updateModelOnCreateVideo();
         return Results.OkWithData(video.getVideoId());
     }
 
@@ -172,6 +179,21 @@ public class VideoController {
         }
         videoService.updateByPrimaryKeySelective(video);
         return Results.Ok();
+    }
+
+    @GetMapping("recommend_videos")
+    @ApiOperation("获取推荐视频")
+    @AuthRequired
+    public Result getRecommendVideos(){
+        String userId = JwtInterceptor.getUser().getUserId();
+        User user = userService.findByUserId(userId);
+        List<Integer> videoIds = algorithmService.getRecommendByUId(user.getId());
+        List<SimpleVideoDto> data = new ArrayList<>();
+        for (Integer videoId : videoIds) {
+            Video video = videoService.getVideoByVideoId(videoId);
+            data.add(modelMapper.map(video, SimpleVideoDto.class));
+        }
+        return Results.OkWithData(data);
     }
 
     @PostMapping("delete_video")
@@ -199,6 +221,7 @@ public class VideoController {
         VideoDto videoDto = modelMapper.map(video, VideoDto.class);
         if (JwtInterceptor.getUser() != null){
             historyService.addHistory(JwtInterceptor.getUser().getUserId(), videoId, Constants.HistoryConst.HistoryVideoType);
+            algorithmService.updateModelOnNewHistory();
         }
         return Results.OkWithData(videoDto);
     }

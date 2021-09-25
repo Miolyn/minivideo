@@ -7,10 +7,16 @@ import java.util.List;
 
 public class HttpUtil {
 
-    public static List<String> httpGet(String url){
+    public static void httpGet(String url){
+        RestTemplate restTemplate = new RestTemplate();
+
+        restTemplate.getForObject(url, String.class);
+    }
+
+    public static List<Integer> httpGetReturnList(String url){
         RestTemplate restTemplate = new RestTemplate();
 
         String res = restTemplate.getForObject(url, String.class);
-        return JsonUtil.String2List(res, String.class);
+        return JsonUtil.String2List(res, Integer.class);
     }
 }

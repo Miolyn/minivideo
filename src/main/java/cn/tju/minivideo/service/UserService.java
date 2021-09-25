@@ -38,6 +38,7 @@ public interface UserService {
 
     User getUserByUserIdWithRedis(String userId);
 
+
     User findByUserId(String userId);
 
     void lockUserByUserId(String userId);

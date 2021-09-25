@@ -2,6 +2,7 @@ package cn.tju.minivideo;
 
 import cn.tju.minivideo.core.config.JwtConfig;
 import cn.tju.minivideo.core.config.UploadConfig;
+import cn.tju.minivideo.core.constants.AlgorithmConst;
 import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dao.DynamicMapper;
@@ -131,7 +132,7 @@ class MinivideoApplicationTests {
 
     @Test
     void testHttp(){
-        List<String> res = HttpUtil.httpGet("http://175.27.191.103:8000/recommend/2/2");
+        List<Integer> res = HttpUtil.httpGetReturnList(String.format(AlgorithmConst.RecommendUrl, 2, 2));
         System.out.println(res);
     }
 }

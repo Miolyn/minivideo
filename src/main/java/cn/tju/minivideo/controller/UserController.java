@@ -10,6 +10,7 @@ import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.*;
 import cn.tju.minivideo.dto.AddressDto;
 import cn.tju.minivideo.dto.HistoryDto;
+import cn.tju.minivideo.dto.SimpleVideoDto;
 import cn.tju.minivideo.dto.UserDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.*;
@@ -50,6 +51,9 @@ public class UserController {
 
     @Autowired
     private HistoryService historyService;
+
+    @Autowired
+    private VideoService videoService;
 
     @PostMapping("register")
     @ApiOperation("用户注册")
@@ -219,6 +223,14 @@ public class UserController {
         }
         String userId = JwtInterceptor.getUser().getUserId();
         PageInfo<History> pageInfo = historyService.getHistoriesByItemIdAndUserIdWithPaginatorOrderByTimeDesc(itemType, userId, page, ProjectConstant.PageSize);
+        if (itemType.equals(Constants.HistoryConst.HistoryVideoType)){
+            List<SimpleVideoDto> data = new ArrayList<>();
+            for (History history : pageInfo.getList()) {
+                Video video = videoService.getVideoByVideoId(history.getItemId());
+                data.add(modelMapper.map(video, SimpleVideoDto.class));
+            }
+            return Results.OkWithData(Paginators.paginator(pageInfo, data));
+        }
         List<HistoryDto> data = new ArrayList<>();
         pageInfo.getList().forEach(history -> data.add(modelMapper.map(history, HistoryDto.class)));
         return Results.OkWithData(Paginators.paginator(pageInfo, data));
