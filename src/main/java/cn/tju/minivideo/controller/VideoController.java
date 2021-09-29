@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -187,7 +186,8 @@ public class VideoController {
     public Result getRecommendVideos(){
         String userId = JwtInterceptor.getUser().getUserId();
         User user = userService.findByUserId(userId);
-        List<Integer> videoIds = algorithmService.getRecommendByUId(user.getId());
+        List<Integer> videoIds = algorithmService.getVideoRecommendByUId(user.getId());
+        log.info(String.valueOf(videoIds));
         List<SimpleVideoDto> data = new ArrayList<>();
         for (Integer videoId : videoIds) {
             Video video = videoService.getVideoByVideoId(videoId);

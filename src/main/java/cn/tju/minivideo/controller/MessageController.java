@@ -36,6 +36,7 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    // TODO：加入已读这项功能
     @GetMapping("comment_message")
     @ApiOperation("获取回复我的消息")
     @AuthRequired

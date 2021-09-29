@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Map;
 
 public class JsonUtil {
     public static final ObjectMapper mapper = new ObjectMapper();
@@ -42,5 +43,15 @@ public class JsonUtil {
         } catch (JsonProcessingException e) {
             throw new ServiceException(MsgEnums.INTERNAL_ERROR);
         }
+    }
+
+    public static Map<String, Object> String2Map(String res){
+        try {
+            Map<String, Object> tmpMap = mapper.readValue(res, Map.class);
+            return tmpMap;
+        } catch (JsonProcessingException e) {
+            throw new ServiceException(MsgEnums.INTERNAL_ERROR);
+        }
+
     }
 }

@@ -12,7 +12,8 @@ public class Constants {
 
     public static final Charset CHARSET = Charsets.UTF_8;
 
-
+    public static final String BaseUrl = "http://124.70.31.157:8090/";
+    public static final String StaticUrl = "http://124.70.31.157:8091/";
     public interface Flag {
         int YES = 1;
         int NO = 2;

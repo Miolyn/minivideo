@@ -74,4 +74,5 @@ public class ActivityDto {
     @Null(message = "没有权限修改发布日期", groups = {ValidationGroups.Insert.class})
     private LocalDateTime createdAt;
 
+    private UserDto userDto;
 }

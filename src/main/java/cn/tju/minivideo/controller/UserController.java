@@ -80,6 +80,25 @@ public class UserController {
         return Results.OkWithToken(token);
     }
 
+    @GetMapping("is_me")
+    @ApiOperation("判断是否是自己")
+    @AuthRequired
+    public Result isMe(@RequestParam(value = "userId", defaultValue = "") String userId){
+        if (userId.equals("")){
+            throw new ControllerException(MsgEnums.VALIDATION_ERROR);
+        }
+        log.info(userId);
+        String myId = JwtInterceptor.getUser().getUserId();
+        log.info("myId  :" + myId);
+        log.info("userId:" + userId);
+        log.info("res:" + userId.equals(myId));
+        if(myId.equals(userId)){
+            return Results.OkWithData(true);
+        } else{
+            return Results.OkWithData(false);
+        }
+    }
+
     @PostMapping("update_profile")
     @AuthRequired
     @ApiOperation("修改用户信息")

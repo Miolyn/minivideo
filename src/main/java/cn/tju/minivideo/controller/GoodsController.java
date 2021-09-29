@@ -15,9 +15,7 @@ import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Goods;
 import cn.tju.minivideo.entity.Order;
 import cn.tju.minivideo.entity.User;
-import cn.tju.minivideo.service.GoodsService;
-import cn.tju.minivideo.service.HistoryService;
-import cn.tju.minivideo.service.MediaService;
+import cn.tju.minivideo.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +44,12 @@ public class GoodsController {
 
     @Autowired
     private HistoryService historyService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AlgorithmService algorithmService;
 
     @PostMapping("create_goods")
     @ApiOperation("上传商品")
@@ -154,6 +158,24 @@ public class GoodsController {
             historyService.addHistory(JwtInterceptor.getUser().getUserId(), goodsId, Constants.HistoryConst.HistoryGoodsType);
         }
         return Results.OkWithData(goodsDto);
+    }
+
+    @GetMapping("goods_recommend")
+    @ApiOperation("获取推荐的商品")
+    @AuthRequired
+    public Result getRecommendGoods(){
+        String userId = JwtInterceptor.getUser().getUserId();
+        User user = userService.findByUserId(userId);
+        List<Integer> goodsIds = algorithmService.getGoodsRecommendByUId(user.getId());
+        List<GoodsDto> data = new ArrayList<>();
+        for (Integer goodsId : goodsIds) {
+            Goods goods = goodsService.getGoodsByGoodsIdWithoutError(goodsId);
+            if(goods == null) continue;
+            GoodsDto goodsDto = modelMapper.map(goods, GoodsDto.class);
+            data.add(goodsDto);
+        }
+
+        return Results.OkWithData(data);
     }
 
 

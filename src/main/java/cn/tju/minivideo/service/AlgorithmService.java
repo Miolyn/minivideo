@@ -8,5 +8,10 @@ public interface AlgorithmService {
 
     public void updateModelOnNewHistory();
 
-    public List<Integer> getRecommendByUId(Integer uid);
+    public List<Integer> getVideoRecommendByUId(Integer uid);
+    public List<Integer> getGoodsRecommendByUId(Integer uid);
+
+    public String checkContentAndGetDealingContent(String content);
+
+    public Boolean checkPicture(String url);
 }

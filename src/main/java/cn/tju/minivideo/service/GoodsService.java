@@ -34,6 +34,7 @@ public interface GoodsService {
     Goods getGoodsByGoodsIdWithContent(Integer goodsId);
 
     Goods getGoodsByGoodsId(Integer goodsId);
+    Goods getGoodsByGoodsIdWithoutError(Integer goodsId);
 
     int addGoodsSaleNum(Integer goodsId, Integer addNum);
 

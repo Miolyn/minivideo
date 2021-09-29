@@ -27,7 +27,7 @@ public class ProjectConstant {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/" };
 
-    public static final Integer PageSize = 10;
+    public static final Integer PageSize = 12;
     public static final Integer SmallPageSize = 3;
 
     // redis 过期时间 5分钟=300秒
@@ -35,4 +35,6 @@ public class ProjectConstant {
 
     // 社区后缀
     public static final String LabelUpMasterSuffix = "的社区";
+
+
 }

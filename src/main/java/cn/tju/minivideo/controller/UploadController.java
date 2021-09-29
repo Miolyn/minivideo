@@ -3,14 +3,17 @@ package cn.tju.minivideo.controller;
 import cn.tju.minivideo.core.annotation.AuthRequired;
 import cn.tju.minivideo.core.base.Result;
 import cn.tju.minivideo.core.config.UploadConfig;
+import cn.tju.minivideo.core.constants.AlgorithmConst;
 import cn.tju.minivideo.core.constants.Constants;
 import cn.tju.minivideo.core.constants.MsgEnums;
+import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.FileUtil;
 import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.entity.Media;
 import cn.tju.minivideo.entity.User;
+import cn.tju.minivideo.service.AlgorithmService;
 import cn.tju.minivideo.service.MediaService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +37,9 @@ public class UploadController {
 
     @Autowired
     private MediaService mediaService;
+
+    @Autowired
+    private AlgorithmService algorithmService;
 
     @PostMapping("img_upload")
     @AuthRequired
@@ -67,12 +73,18 @@ public class UploadController {
         String absPath = newFile.getAbsolutePath();
         String relativePath = absPath.substring(absPath.lastIndexOf(UploadConfig.imgUrlBase));
         User user = JwtInterceptor.getUser();
+        Media media = new Media(relativePath, Constants.UploadConst.UploadImgType, user.getUserId());
         try {
-            mediaService.insertSelective(new Media(relativePath, Constants.UploadConst.UploadImgType, user.getUserId()));
+            mediaService.insertSelective(media);
         } catch (Exception e) {
             log.warn(e.getMessage());
             newFile.delete();
             throw new ControllerException(MsgEnums.INTERNAL_ERROR);
+        }
+        if(!algorithmService.checkPicture(Constants.StaticUrl + relativePath)){
+            newFile.delete();
+            mediaService.deleteByPrimaryKey(media.getMediaId());
+            throw new ControllerException(MsgEnums.FAIL);
         }
         return Results.OkWithData(relativePath);
     }

@@ -33,7 +33,7 @@ public enum MsgEnums implements BaseEnum<Integer, String> {
     VIDEO_NOT_FOUND(-600, "video not found"),
     // -700 order
     ORDER_STATUS_ERROR(-700, "order status error"),
-    // -800
+    // -800 community
     COMMUNITY_HAS_EXIST(-800, "community has exist 该up主类型社区已存在"),
     COMMUNITY_LABEL_NOT_EXIT(-801, "community label not exist"),
     COMMUNITY_CANT_MODIFY_COMMUNITY_NAME(-802, "up主类型社区不能修改社区名称"),

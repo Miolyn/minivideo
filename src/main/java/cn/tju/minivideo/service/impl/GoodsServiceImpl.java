@@ -106,6 +106,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public Goods getGoodsByGoodsIdWithoutError(Integer goodsId) {
+        return goodsMapper.findByGoodsId(goodsId);
+    }
+
+    @Override
     public int addGoodsSaleNum(Integer goodsId, Integer addNum) {
         return goodsMapper.updateSaleNumByGoodsId(addNum, goodsId);
     }

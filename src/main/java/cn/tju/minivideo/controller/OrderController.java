@@ -10,6 +10,7 @@ import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.BindUtil;
 import cn.tju.minivideo.core.util.Results;
 import cn.tju.minivideo.core.util.StringUtil;
+import cn.tju.minivideo.dto.GoodsDto;
 import cn.tju.minivideo.dto.OrderDto;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.Goods;
@@ -64,9 +65,9 @@ public class OrderController {
         Order order = modelMapper.map(orderDto, Order.class);
         Goods goods = goodsService.getGoodsByGoodsId(orderDto.getGoodsId());
         String userId = JwtInterceptor.getUser().getUserId();
-        if(userId.equals(goods.getUserId())){
-            throw new ControllerException(MsgEnums.GOODS_NOT_ALLOWED_TO_BUY);
-        }
+//        if(userId.equals(goods.getUserId())){
+//            throw new ControllerException(MsgEnums.GOODS_NOT_ALLOWED_TO_BUY);
+//        }
         order.setPayPrice(goods.getPrice().multiply(new BigDecimal(orderDto.getNumber())));
         order.setStatus(Constants.OrderConst.OrderWaitForPayStatus);
         order.setUserId(userId);
@@ -123,6 +124,9 @@ public class OrderController {
         for (Order order : orders) {
             List<OrderGoods> orderGoods = orderGoodsService.getOrderGoodsByOrderId(order.getOrderId());
             OrderDto orderDto = modelMapper.map(order, OrderDto.class);
+            Goods goods = goodsService.getGoodsByGoodsId(orderGoods.get(0).getGoodsId());
+            GoodsDto goodsDto = modelMapper.map(goods, GoodsDto.class);
+            orderDto.setGoodsDto(goodsDto);
             orderDto.setGoodsId(orderGoods.get(0).getGoodsId());
             orderDto.setNumber(orderGoods.get(0).getNumber());
             data.add(orderDto);

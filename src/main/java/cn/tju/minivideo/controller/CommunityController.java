@@ -8,10 +8,7 @@ import cn.tju.minivideo.core.constants.ProjectConstant;
 import cn.tju.minivideo.core.exception.ControllerException;
 import cn.tju.minivideo.core.interceptor.JwtInterceptor;
 import cn.tju.minivideo.core.util.*;
-import cn.tju.minivideo.dto.ActivityDto;
-import cn.tju.minivideo.dto.CommunityDto;
-import cn.tju.minivideo.dto.LabelDto;
-import cn.tju.minivideo.dto.TopicDto;
+import cn.tju.minivideo.dto.*;
 import cn.tju.minivideo.dto.validationGroup.ValidationGroups;
 import cn.tju.minivideo.entity.*;
 import cn.tju.minivideo.service.*;
@@ -59,6 +56,12 @@ public class CommunityController {
 
     @Autowired
     private HistoryService historyService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AlgorithmService algorithmService;
 
     @PostMapping("create_community")
     @ApiOperation("创建社区")
@@ -153,7 +156,7 @@ public class CommunityController {
     public Result joinInCommunity(@RequestBody @Validated(ValidationGroups.IdForm.class) CommunityDto communityDto, BindingResult bindingResult) {
         BindUtil.checkBindValid(bindingResult);
         String userId = JwtInterceptor.getUser().getUserId();
-        if (!communityMemberService.isExistByUserIdAndCommunityId(userId, communityDto.getCommunityId())) {
+        if (communityMemberService.isExistByUserIdAndCommunityId(userId, communityDto.getCommunityId())) {
             throw new ControllerException(MsgEnums.COMMUNITY_HAS_JOIN_COMMUNITY);
         }
         CommunityMember communityMember = new CommunityMember(userId, communityDto.getCommunityId(),
@@ -236,6 +239,8 @@ public class CommunityController {
         if (!communityMemberService.isExistByUserIdAndCommunityId(userId, activityDto.getCommunityId())) {
             throw new ControllerException(MsgEnums.PERMISSION_ERROR);
         }
+        String content = algorithmService.checkContentAndGetDealingContent(activityDto.getContent());
+        activityDto.setContent(content);
         Activity activity = modelMapper.map(activityDto, Activity.class);
         activity.setUserId(userId);
 //        List<String> topics = StringUtil.getTopicList(activityDto.getContent());
@@ -286,6 +291,8 @@ public class CommunityController {
         }
         Activity activity = activityService.getActivityByActivityId(activityId);
         ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+        User user = userService.findByUserId(activity.getUserId());
+        activityDto.setUserDto(modelMapper.map(user, UserDto.class));
         if (JwtInterceptor.getUser() != null) {
             historyService.addHistory(JwtInterceptor.getUser().getUserId(), activityId, Constants.HistoryConst.HistoryActivityType);
         }
@@ -341,7 +348,12 @@ public class CommunityController {
         List<Activity> activities = activityService.getActivities();
         List<ActivityDto> data = new ArrayList<>();
 //        pageInfo.getList().forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
-        activities.forEach(activity -> data.add(modelMapper.map(activity, ActivityDto.class)));
+        for (Activity activity : activities) {
+            ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+            User user = userService.findByUserId(activity.getUserId());
+            activityDto.setUserDto(modelMapper.map(user, UserDto.class));
+            data.add(activityDto);
+        }
 //        return Results.OkWithData(Paginators.paginator(pageInfo, data));
         return Results.OkWithData(data);
     }

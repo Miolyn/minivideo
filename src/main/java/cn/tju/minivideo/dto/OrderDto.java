@@ -48,6 +48,8 @@ public class OrderDto {
     @NotNull(message = "商品数量不能为空", groups = {ValidationGroups.Insert.class})
     @Min(value = 1, message = "最小购买数量为1", groups = {ValidationGroups.Insert.class})
     private Integer number;
+
+    private GoodsDto goodsDto;
     /**
      * 创建时间
      */
